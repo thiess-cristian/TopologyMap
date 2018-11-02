@@ -26,17 +26,17 @@ DocumentParser::~DocumentParser()
 
 }
 
-std::map<std::string, MotionBody> DocumentParser::getMotionBodies() const
+const std::map<std::string, MotionBody>& DocumentParser::getMotionBodies() const
 {
     return m_motionBodies;
 }
 
-std::map<std::string, Joint> DocumentParser::getJoints() const
+const std::map<std::string, Joint>& DocumentParser::getJoints() const
 {
     return m_joints;
 }
 
-std::map<std::string, Connector> DocumentParser::getConnectors() const
+const std::map<std::string, Connector>& DocumentParser::getConnectors() const
 {
     return m_connectors;
 }

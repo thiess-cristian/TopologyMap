@@ -14,9 +14,9 @@ public:
     DocumentParser(QFile& file);
     ~DocumentParser();
     
-    std::map<std::string, MotionBody> getMotionBodies()  const;
-    std::map<std::string, Joint> getJoints() const;
-    std::map<std::string, Connector> getConnectors() const;
+    const std::map<std::string, MotionBody>& getMotionBodies()  const;
+    const std::map<std::string, Joint>& getJoints() const;
+    const std::map<std::string, Connector>& getConnectors() const;
 
 private:
     void initMotionBodies();
