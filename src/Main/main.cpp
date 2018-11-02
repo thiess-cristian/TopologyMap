@@ -1,7 +1,11 @@
 #include "DocumentParser.h"
+#include <qfile.h>
 
 int main()
 {
-    DocumentParser d;
+    QFile file("D:/fac/siemens-project/resources/test.xml");
+    DocumentParser d(file);
+
+    d.getMotionBodies();
     return 0;
 }
