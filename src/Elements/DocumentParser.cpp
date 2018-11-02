@@ -1,6 +1,6 @@
 #include "DocumentParser.h"
 #include "qfile.h"
-
+#include <iostream>
 #include <string>
 
 DocumentParser::DocumentParser(QFile& file)
@@ -87,7 +87,45 @@ void DocumentParser::initJoints()
 
 void DocumentParser::initConnectors()
 {
+    QDomElement jointsParent = m_root.firstChildElement("Connectors");
 
+    QDomNodeList list = jointsParent.childNodes();
+
+    for (size_t i = 0; i < list.size(); i++) {
+        QDomNode item = list.at(i);
+
+        if (item.isElement()) {
+            QDomElement element = item.toElement();
+
+            std::string kind = element.nodeName().toStdString();
+
+            std::string nameAttribute = element.attribute("Name").toStdString();
+            std::string typeAttribute = element.attribute("Type").toStdString();
+
+            QDomElement action = element.firstChildElement("Action");
+            QDomElement base = element.firstChildElement("Base");
+
+            std::string actionAttribute = action.attribute("Name").toStdString();
+            std::string baseAttribute = base.attribute("Name").toStdString();
+
+
+            if (actionAttribute == "" && baseAttribute == "") {
+                QDomElement selectedJoint = element.firstChildElement("SelectedJoint");
+                std::string jointName = selectedJoint.attribute("Name").toStdString();
+
+                Joint joint = m_joints[jointName];
+
+                m_connectors[nameAttribute] = Connector(kind, nameAttribute, typeAttribute, joint);
+
+            } else {
+                MotionBody actionBody = m_motionBodies[actionAttribute];
+                MotionBody baseBody = m_motionBodies[baseAttribute];
+
+                m_connectors[nameAttribute] = Connector(kind, nameAttribute, typeAttribute, actionBody, baseBody);
+
+            }
+        }
+    }
 
 }
 
