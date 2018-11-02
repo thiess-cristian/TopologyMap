@@ -15,6 +15,10 @@ DocumentParser::DocumentParser(QFile& file)
 
     file.close();
     m_root = m_document.firstChildElement();
+
+    initMotionBodies();
+    initJoints();
+    initConnectors();
 }
 
 DocumentParser::~DocumentParser()
@@ -22,23 +26,69 @@ DocumentParser::~DocumentParser()
 
 }
 
-std::vector<MotionBody> DocumentParser::getMotionBodies() const
+std::map<std::string, MotionBody> DocumentParser::getMotionBodies() const
+{
+    return m_motionBodies;
+}
+
+std::map<std::string, Joint> DocumentParser::getJoints() const
+{
+    return m_joints;
+}
+
+std::map<std::string, Connector> DocumentParser::getConnectors() const
+{
+    return m_connectors;
+}
+
+void DocumentParser::initMotionBodies()
 {
     QDomElement motionbodiesParent = m_root.firstChildElement("MotionBodies");
 
     QDomNodeList list = motionbodiesParent.elementsByTagName("MotionBody");
 
-    std::vector<MotionBody> motionbodies(list.size());
-
-    for (size_t i = 0; i < list.size();i++) {
+    for (size_t i = 0; i < list.size(); i++) {
         QDomNode item = list.at(i);
 
         std::string nameAttribute = item.toElement().attribute("Name").toStdString();
-        motionbodies[i] = MotionBody(nameAttribute);
-
+        m_motionBodies[nameAttribute]= MotionBody(nameAttribute);     
     }
+}
 
-    return motionbodies;
+void DocumentParser::initJoints()
+{
+    QDomElement jointsParent = m_root.firstChildElement("Joints");
+
+    QDomNodeList list = jointsParent.elementsByTagName("Joint");
+    
+
+    for (size_t i = 0; i < list.size(); i++) {
+        QDomNode item = list.at(i);
+
+        if (item.isElement()) {
+            QDomElement element = item.toElement();
+
+            std::string nameAttribute = element.attribute("Name").toStdString();
+            std::string typeAttribute = element.attribute("Type").toStdString();
+
+            QDomElement action = element.firstChildElement("Action");
+            QDomElement base = element.firstChildElement("Base");
+
+            std::string actionAttribute=action.attribute("Name").toStdString();
+            std::string baseAttribute=base.attribute("Name").toStdString();
+
+            MotionBody actionBody = m_motionBodies[actionAttribute];
+            MotionBody baseBody = m_motionBodies[baseAttribute];
+
+            m_joints[nameAttribute] = Joint(nameAttribute, typeAttribute, actionBody, baseBody);
+        }
+    }
+}
+
+void DocumentParser::initConnectors()
+{
+
+
 }
 
 
