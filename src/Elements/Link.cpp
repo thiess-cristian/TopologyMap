@@ -1,7 +1,9 @@
 #include "Link.h"
 
 Link::Link(const std::string& name, const std::string& type, const MotionBody& action, const MotionBody& base):
-    Element(name)
+    Element(name),
+    m_action(action),
+    m_base(base)
 {}
 
 
