@@ -3,20 +3,6 @@
 #include <iostream>
 #include <string>
 
-DocumentParser::DocumentParser(QFile& file)
-{
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        throw "can't open";
-    }
-
-    if (!m_document.setContent(&file)) {
-        throw "can't load file";
-    }
-
-    file.close();
-    m_root = m_document.firstChildElement();
-}
-
 DocumentParser::DocumentParser()
 {
 
