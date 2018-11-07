@@ -15,10 +15,11 @@ DocumentParser::DocumentParser(QFile& file)
 
     file.close();
     m_root = m_document.firstChildElement();
+}
 
-    initMotionBodies();
-    initJoints();
-    initConnectors();
+DocumentParser::DocumentParser()
+{
+
 }
 
 DocumentParser::~DocumentParser()
@@ -26,41 +27,54 @@ DocumentParser::~DocumentParser()
 
 }
 
-const std::map<std::string, MotionBody>& DocumentParser::getMotionBodies() const
+std::shared_ptr<Mechanism> DocumentParser::createMechanism(QFile& file)
 {
-    return m_motionBodies;
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        throw "can't open";
+    }
+
+    if (!m_document.setContent(&file)) {
+        throw "can't load file";
+    }
+
+    file.close();
+    m_root = m_document.firstChildElement();
+
+    auto motionBodies=readMotionBodies();
+    auto joints=readJoints(motionBodies);
+    auto connectors=readConnectors(motionBodies, joints);
+
+    return std::make_shared<Mechanism>(motionBodies, joints, connectors);
 }
 
-const std::map<std::string, Joint>& DocumentParser::getJoints() const
-{
-    return m_joints;
-}
-
-const std::map<std::string, Connector>& DocumentParser::getConnectors() const
-{
-    return m_connectors;
-}
-
-void DocumentParser::initMotionBodies()
+std::map<std::string, MotionBody> DocumentParser::readMotionBodies()
 {
     QDomElement motionbodiesParent = m_root.firstChildElement("MotionBodies");
 
     QDomNodeList list = motionbodiesParent.elementsByTagName("MotionBody");
 
+    std::map<std::string, MotionBody> motionBodies;
+
     for (size_t i = 0; i < list.size(); i++) {
         QDomNode item = list.at(i);
 
         std::string nameAttribute = item.toElement().attribute("Name").toStdString();
-        m_motionBodies[nameAttribute]= MotionBody(nameAttribute);     
+        motionBodies[nameAttribute]= MotionBody(nameAttribute);     
     }
+
+    //add ground motion body
+    motionBodies["Ground"] = MotionBody("Ground");
+
+    return motionBodies;
 }
 
-void DocumentParser::initJoints()
+std::map<std::string, Joint> DocumentParser::readJoints(const std::map<std::string, MotionBody>& motionBodies)
 {
     QDomElement jointsParent = m_root.firstChildElement("Joints");
 
     QDomNodeList list = jointsParent.elementsByTagName("Joint");
     
+    std::map<std::string, Joint> joints;
 
     for (size_t i = 0; i < list.size(); i++) {
         QDomNode item = list.at(i);
@@ -74,22 +88,30 @@ void DocumentParser::initJoints()
             QDomElement action = element.firstChildElement("Action");
             QDomElement base = element.firstChildElement("Base");
 
-            std::string actionAttribute=action.attribute("Name").toStdString();
-            std::string baseAttribute=base.attribute("Name").toStdString();
+            std::string actionAttribute=action.firstChildElement("SelectedMotionBody").attribute("Name").toStdString();
+            std::string baseAttribute=base.firstChildElement("SelectedMotionBody").attribute("Name").toStdString();
 
-            MotionBody actionBody = m_motionBodies[actionAttribute];
-            MotionBody baseBody = m_motionBodies[baseAttribute];
+            MotionBody actionBody = motionBodies.at(actionAttribute);
+            MotionBody baseBody;
+            if (baseAttribute != "") {
+                baseBody = motionBodies.at(baseAttribute);
+            } else {
+                baseBody = motionBodies.at("Ground");
+            }
 
-            m_joints[nameAttribute] = Joint(nameAttribute, typeAttribute, actionBody, baseBody);
+            joints[nameAttribute] = Joint(nameAttribute, typeAttribute, actionBody, baseBody);
         }
     }
+    return joints;
 }
 
-void DocumentParser::initConnectors()
+std::map<std::string, Connector> DocumentParser::readConnectors(const std::map<std::string, MotionBody>& motionBodies,const std::map<std::string, Joint>& joints)
 {
     QDomElement jointsParent = m_root.firstChildElement("Connectors");
 
     QDomNodeList list = jointsParent.childNodes();
+
+    std::map<std::string, Connector> connectors;
 
     for (size_t i = 0; i < list.size(); i++) {
         QDomNode item = list.at(i);
@@ -105,28 +127,31 @@ void DocumentParser::initConnectors()
             QDomElement action = element.firstChildElement("Action");
             QDomElement base = element.firstChildElement("Base");
 
-            std::string actionAttribute = action.attribute("Name").toStdString();
-            std::string baseAttribute = base.attribute("Name").toStdString();
+            //std::string actionAttribute = action.attribute("Name").toStdString();
+            //std::string baseAttribute = base.attribute("Name").toStdString();
+
+            std::string actionAttribute = action.firstChildElement("SelectedMotionBody").attribute("Name").toStdString();
+            std::string baseAttribute = base.firstChildElement("SelectedMotionBody").attribute("Name").toStdString();
 
 
             if (actionAttribute == "" && baseAttribute == "") {
                 QDomElement selectedJoint = element.firstChildElement("SelectedJoint");
                 std::string jointName = selectedJoint.attribute("Name").toStdString();
 
-                Joint joint = m_joints[jointName];
+                Joint joint = joints.at(jointName);
 
-                m_connectors[nameAttribute] = Connector(kind, nameAttribute, typeAttribute, joint);
+                connectors[nameAttribute] = Connector(kind, nameAttribute, typeAttribute, joint);
 
             } else {
-                MotionBody actionBody = m_motionBodies[actionAttribute];
-                MotionBody baseBody = m_motionBodies[baseAttribute];
+                MotionBody actionBody = motionBodies.at(actionAttribute);
+                MotionBody baseBody = motionBodies.at(baseAttribute);
 
-                m_connectors[nameAttribute] = Connector(kind, nameAttribute, typeAttribute, actionBody, baseBody);
+                connectors[nameAttribute] = Connector(kind, nameAttribute, typeAttribute, actionBody, baseBody);
 
             }
         }
     }
-
+    return connectors;
 }
 
 

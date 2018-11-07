@@ -13,11 +13,13 @@ ElementsManager::ElementsManager()
 
 void ElementsManager::loadElements(QFile & file)
 {
-    DocumentParser parser(file);
+    DocumentParser parser;
 
-    auto bodies=parser.getMotionBodies();
-    auto joints=parser.getJoints();
-    auto connectors=parser.getConnectors();
+    std::shared_ptr<Mechanism> mechanism=parser.createMechanism(file);
+
+    auto bodies= mechanism->getMotionBodies();
+    auto joints= mechanism->getJoints();
+    auto connectors= mechanism->getConnectors();
 
     for (const auto& body : bodies) {
         m_motionBodies.push_back(new GraphicMotionBody(body.second));

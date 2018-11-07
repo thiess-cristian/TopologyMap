@@ -6,28 +6,23 @@
 #include <Joint.h>
 #include <Connector.h>
 
+#include <Mechanism.h>
+#include <memory>
 class QFile;
 
 class DocumentParser
 {
 public:
-    DocumentParser(QFile& file);
+    DocumentParser();
     ~DocumentParser();
-    
-    const std::map<std::string, MotionBody>& getMotionBodies()  const;
-    const std::map<std::string, Joint>& getJoints() const;
-    const std::map<std::string, Connector>& getConnectors() const;
+   
+    std::shared_ptr<Mechanism> createMechanism(QFile& file);
 
 private:
-    void initMotionBodies();
-    void initJoints();
-    void initConnectors();
+    std::map<std::string, MotionBody> readMotionBodies();
+    std::map<std::string, Joint> readJoints(const std::map<std::string, MotionBody>& m_motionBodies);
+    std::map<std::string, Connector> readConnectors(const std::map<std::string, MotionBody>& m_motionBodies,const std::map<std::string, Joint>& m_joints);
 
     QDomDocument m_document;
     QDomElement m_root;
-
-    std::map<std::string, MotionBody> m_motionBodies;
-    std::map<std::string, Joint> m_joints;
-    std::map<std::string, Connector> m_connectors;
-
 };
