@@ -35,12 +35,42 @@
     </property>
     <addaction name="actionOpen"/>
    </widget>
+   <widget class="QMenu" name="menuview">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <widget class="QMenu" name="menuPerspective">
+     <property name="title">
+      <string>Perspective</string>
+     </property>
+     <addaction name="actionTop"/>
+     <addaction name="actionSide"/>
+     <addaction name="actionFront"/>
+    </widget>
+    <addaction name="menuPerspective"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuview"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpen">
    <property name="text">
     <string>Open</string>
+   </property>
+  </action>
+  <action name="actionTop">
+   <property name="text">
+    <string>Top</string>
+   </property>
+  </action>
+  <action name="actionSide">
+   <property name="text">
+    <string>Side</string>
+   </property>
+  </action>
+  <action name="actionFront">
+   <property name="text">
+    <string>Front</string>
    </property>
   </action>
  </widget>

@@ -1,20 +1,22 @@
 #include "MotionBody.h"
 
-MotionBody::MotionBody(const std::string& name):Element(name)
+MotionBody::MotionBody(const std::string& name,const Point3D& origin):
+    Element(name),
+    m_origin(origin)
 {
-    m_coord.setX(rand() % 300);
-    m_coord.setY(rand() % 300);
 }
 
-MotionBody::MotionBody() : Element("")
-{}
-
-int MotionBody::getX()const
+int MotionBody::getX() const
 {
-    return m_coord.x();
+    return 0;
 }
 
-int MotionBody::getY()const
+int MotionBody::getY() const
 {
-    return m_coord.y();
+    return 0;//m_coord.y();
+}
+
+int MotionBody::getZ() const
+{
+    return 0;
 }

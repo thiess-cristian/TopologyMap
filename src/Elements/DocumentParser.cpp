@@ -1,5 +1,6 @@
 #include "DocumentParser.h"
 #include "qfile.h"
+#include "Point3D.h"
 #include <iostream>
 #include <string>
 
@@ -42,10 +43,17 @@ std::map<std::string, MotionBody> DocumentParser::readMotionBodies()
     std::map<std::string, MotionBody> motionBodies;
 
     for (size_t i = 0; i < list.size(); i++) {
-        QDomNode item = list.at(i);
+        QDomElement item = list.at(i).toElement();
 
-        std::string nameAttribute = item.toElement().attribute("Name").toStdString();
-        motionBodies[nameAttribute]= MotionBody(nameAttribute);     
+        std::string nameAttribute = item.attribute("Name").toStdString();
+
+        QDomElement origin = item.firstChildElement("MassAndInertia").firstChildElement("TransformationMatrix").firstChildElement("Origin");
+
+        double originX = origin.firstChildElement("X").attribute("Value").toDouble();
+        double originY = origin.firstChildElement("Y").attribute("Value").toDouble();
+        double originZ = origin.firstChildElement("Z").attribute("Value").toDouble();
+
+        motionBodies[nameAttribute]= MotionBody(nameAttribute,Point3D(originX,originY,originZ));     
     }
 
     //add ground motion body
