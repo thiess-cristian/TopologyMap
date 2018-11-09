@@ -8,15 +8,15 @@ MotionBody::MotionBody(const std::string& name,const Point3D& origin):
 
 int MotionBody::getX() const
 {
-    return 0;
+    return m_origin.getX();
 }
 
 int MotionBody::getY() const
 {
-    return 0;//m_coord.y();
+    return m_origin.getY();
 }
 
 int MotionBody::getZ() const
 {
-    return 0;
+    return m_origin.getZ();
 }

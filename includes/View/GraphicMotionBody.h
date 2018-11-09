@@ -14,4 +14,5 @@ public:
 
 private:
     MotionBody m_motionBody;
+    QPoint m_origin;
 };

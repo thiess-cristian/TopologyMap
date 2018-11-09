@@ -3,6 +3,7 @@
 #include "GraphicMotionBody.h"
 #include "GraphicJoint.h"
 #include "GraphicConnector.h"
+#include "Enums.h"
 
 #include "qfile.h"
 
@@ -15,37 +16,27 @@ void ElementsManager::loadElements(QFile & file)
 {
     DocumentParser parser;
 
-    std::shared_ptr<Mechanism> mechanism=parser.createMechanism(file);
+    m_mechanism = parser.createMechanism(file);
+}
 
-    auto bodies= mechanism->getMotionBodies();
-    auto joints= mechanism->getJoints();
-    auto connectors= mechanism->getConnectors();
+void ElementsManager::addElementsToScene(TopologyMapScene * scene,Perspective perspective)
+{
+    scene->clear();
 
-    for (const auto& body : bodies) {
-        m_motionBodies.push_back(new GraphicMotionBody(body.second));
-    }
+    auto bodies = m_mechanism->getMotionBodies();
+    auto joints = m_mechanism->getJoints();
+    auto connectors = m_mechanism->getConnectors();
 
     for (const auto& joint : joints) {
-        m_joints.push_back(new GraphicJoint(joint.second));
+        scene->addItem(new GraphicJoint(joint.second,perspective));
     }
 
     for (const auto& connector : connectors) {
-        m_connectors.push_back(new GraphicConnector(connector.second));
-    }
-}
-
-void ElementsManager::addElementsToScene(TopologyMapScene * scene)
-{
-    for (const auto& joint : m_joints) {
-        scene->addItem(joint);
+        scene->addItem(new GraphicConnector(connector.second,perspective));
     }
 
-    for (const auto& connector : m_connectors) {
-        scene->addItem(connector);
-    }
-
-    for (const auto& body : m_motionBodies) {
-        scene->addItem(body);
+    for (const auto& body : bodies) {
+        scene->addItem(new GraphicMotionBody(body.second, perspective));
     }
 }
 

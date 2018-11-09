@@ -16,10 +16,11 @@ public:
 
 protected slots:
     void openFile();
+    void changePerspective();
 
 private:
     std::unique_ptr<Ui_TopologyMapWindow> m_ui;
 
     TopologyMapScene* m_scene;
-    ElementsManager manager;
+    ElementsManager m_manager;
 };

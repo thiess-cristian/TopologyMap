@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DocumentParser.h"
+#include "Enums.h"
 #include <vector>
 
 class TopologyMapScene;
@@ -14,11 +15,9 @@ public:
     ElementsManager();
     
     void loadElements(QFile& file);
-    void addElementsToScene(TopologyMapScene* scene);
+    void addElementsToScene(TopologyMapScene * scene, Perspective perspective);
 
 private:
+    std::shared_ptr<Mechanism> m_mechanism = nullptr;
 
-    std::vector<GraphicMotionBody*> m_motionBodies;
-    std::vector<GraphicJoint*> m_joints;
-    std::vector<GraphicConnector*> m_connectors;
 };
