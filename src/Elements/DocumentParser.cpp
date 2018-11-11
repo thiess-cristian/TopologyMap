@@ -62,7 +62,15 @@ std::map<std::string, MotionBody> DocumentParser::readMotionBodies()
     return motionBodies;
 }
 
-std::map<std::string, Joint> DocumentParser::readJoints(const std::map<std::string, MotionBody>& motionBodies)
+auto findPoint = [](QDomElement origin) {
+    double x = origin.firstChildElement("X").attribute("Value").toDouble();
+    double y = origin.firstChildElement("Y").attribute("Value").toDouble();
+    double z = origin.firstChildElement("Z").attribute("Value").toDouble();
+
+    return Point3D(x, y, z);
+};
+
+std::map<std::string, Joint> DocumentParser::readJoints(std::map<std::string, MotionBody>& motionBodies)
 {
     QDomElement jointsParent = m_root.firstChildElement("Joints");
 
@@ -85,21 +93,29 @@ std::map<std::string, Joint> DocumentParser::readJoints(const std::map<std::stri
             std::string actionAttribute=action.firstChildElement("SelectedMotionBody").attribute("Name").toStdString();
             std::string baseAttribute=base.firstChildElement("SelectedMotionBody").attribute("Name").toStdString();
 
-            MotionBody actionBody = motionBodies.at(actionAttribute);
-            MotionBody baseBody;
-            if (baseAttribute != "") {
-                baseBody = motionBodies.at(baseAttribute);
-            } else {
-                baseBody = motionBodies.at("Ground");
-            }
+            MotionBody& actionBody = motionBodies.at(actionAttribute);
+            //if the base is missing then its connected to the ground
+            MotionBody& baseBody = baseAttribute != "" ? motionBodies.at(baseAttribute) : motionBodies.at("Ground");
+            
+            //the connection point for the action motionbody
+            QDomElement actionOrigin = action.firstChildElement("Point").firstChildElement("Origin");
+            Point3D actionConnection = findPoint(actionOrigin);
+            actionBody.addConnection(actionConnection);
 
-            joints[nameAttribute] = Joint(nameAttribute, typeAttribute, actionBody, baseBody);
+            //the connection point for the base motionbody
+            QDomElement baseOrigin = action.firstChildElement("Point").firstChildElement("Origin");
+            Point3D baseConnection = findPoint(baseOrigin);
+            baseBody.addConnection(baseConnection);
+           
+            joints[nameAttribute] = Joint(nameAttribute, typeAttribute, actionBody, baseBody,Point3D(), Point3D());
+
+            
         }
     }
     return joints;
 }
 
-std::map<std::string, Connector> DocumentParser::readConnectors(const std::map<std::string, MotionBody>& motionBodies,const std::map<std::string, Joint>& joints)
+std::map<std::string, Connector> DocumentParser::readConnectors(std::map<std::string, MotionBody>& motionBodies,const std::map<std::string, Joint>& joints)
 {
     QDomElement jointsParent = m_root.firstChildElement("Connectors");
 
@@ -137,10 +153,20 @@ std::map<std::string, Connector> DocumentParser::readConnectors(const std::map<s
                 connectors[nameAttribute] = Connector(kind, nameAttribute, typeAttribute, joint);
 
             } else {
-                MotionBody actionBody = motionBodies.at(actionAttribute);
-                MotionBody baseBody = motionBodies.at(baseAttribute);
+                MotionBody& actionBody = motionBodies.at(actionAttribute);
+                MotionBody& baseBody = motionBodies.at(baseAttribute);
 
-                connectors[nameAttribute] = Connector(kind, nameAttribute, typeAttribute, actionBody, baseBody);
+                QDomElement actionOrigin = action.firstChildElement("Point").firstChildElement("Origin");
+                Point3D actionConnection = findPoint(actionOrigin);
+                actionBody.addConnection(actionConnection);
+                //the connection point for the base motionbody
+
+                QDomElement baseOrigin = action.firstChildElement("Point").firstChildElement("Origin");
+                Point3D baseConnection = findPoint(baseOrigin);
+                baseBody.addConnection(baseConnection);
+
+
+                connectors[nameAttribute] = Connector(kind, nameAttribute, typeAttribute, actionBody, baseBody, actionConnection, baseConnection);
 
             }
         }

@@ -2,7 +2,7 @@
 #include "MotionBody.h"
 #include "Enums.h"
 #include <qgraphicsitem.h>
-
+#include <qrect.h>
 
 class GraphicMotionBody :public QGraphicsItem
 {
@@ -13,6 +13,12 @@ public:
     virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = nullptr) override;
 
 private:
+
+    void setOriginRelatedToPerspective();
+    void setBoundingRectRelatedToPerspective();
+
+    Perspective m_perspective;
     MotionBody m_motionBody;
     QPoint m_origin;
+    QRectF m_boundingRect;
 };

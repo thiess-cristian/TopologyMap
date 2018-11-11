@@ -1,12 +1,17 @@
 #include "Joint.h"
 
-Joint::Joint(const std::string& name, const std::string& type, const MotionBody& action, const MotionBody& base):
-    Link(name,type,action,base)
+Joint::Joint(const std::string& name,
+             const std::string& type,
+             const MotionBody& action,
+             const MotionBody& base,
+             const Point3D& actionConnection,
+             const Point3D& baseConnection) :
+    Link(name, type, action, base, actionConnection, baseConnection)
 {
 
 }
 
-Joint::Joint():Link("","",MotionBody(),MotionBody())
+Joint::Joint():Link("","",MotionBody(),MotionBody(),Point3D(),Point3D())
 {}
 
 

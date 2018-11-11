@@ -20,8 +20,8 @@ public:
 
 private:
     std::map<std::string, MotionBody> readMotionBodies();
-    std::map<std::string, Joint> readJoints(const std::map<std::string, MotionBody>& m_motionBodies);
-    std::map<std::string, Connector> readConnectors(const std::map<std::string, MotionBody>& m_motionBodies,const std::map<std::string, Joint>& m_joints);
+    std::map<std::string, Joint> readJoints(std::map<std::string, MotionBody>& m_motionBodies);
+    std::map<std::string, Connector> readConnectors(std::map<std::string, MotionBody>& m_motionBodies,const std::map<std::string, Joint>& m_joints);
 
     QDomDocument m_document;
     QDomElement m_root;

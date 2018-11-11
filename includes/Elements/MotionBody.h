@@ -2,6 +2,7 @@
 #include "Element.h"
 #include "Point3D.h"
 #include <qpoint.h>
+#include <vector>
 
 class MotionBody :public Element
 {
@@ -12,9 +13,11 @@ public:
     int getY() const;
     int getZ() const;
 
+    void addConnection(const Point3D& connection);
+    std::vector<Point3D> getConnectionPoints() const;
 private:
-    //QPoint m_coord;
-
+    
+    std::vector<Point3D> m_connections;
     Point3D m_origin;
 
 };
