@@ -18,8 +18,9 @@ QRectF GraphicMotionBody::boundingRect() const
 void GraphicMotionBody::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
     //QGraphicsItem::paint(painter, option, widget);
+    //painter->drawRect(boundingRect());
 
-    painter->drawRect(boundingRect());
+    painter->fillRect(boundingRect(), QBrush(QColor(128, 128, 255, 128)));
     painter->drawText(boundingRect(), m_motionBody.getName().c_str());
 
 }
@@ -27,12 +28,12 @@ void GraphicMotionBody::paint(QPainter * painter, const QStyleOptionGraphicsItem
 void GraphicMotionBody::setOriginRelatedToPerspective()
 {
     switch (m_perspective) {
-        case Perspective::TOP: {
+        case Perspective::SIDE: {
             m_origin.setX(m_motionBody.getX());
             m_origin.setY(m_motionBody.getZ());
             break;
         }
-        case Perspective::SIDE: {
+        case Perspective::TOP: {
             m_origin.setX(m_motionBody.getX());
             m_origin.setY(m_motionBody.getY());
             break;
@@ -56,9 +57,10 @@ void GraphicMotionBody::setBoundingRectRelatedToPerspective()
     double minY = DBL_MAX;
     double maxY = -DBL_MAX;
     auto connections = m_motionBody.getConnectionPoints();
+    connections.push_back(m_motionBody.getOrigin());
 
     switch (m_perspective) {
-        case Perspective::TOP: {
+        case Perspective::SIDE: {
             for (const auto& point : connections) {
                 if (point.getX() > maxX) {
                     maxX = point.getX();
@@ -78,7 +80,7 @@ void GraphicMotionBody::setBoundingRectRelatedToPerspective()
             }
             break;
         }
-        case Perspective::SIDE: {
+        case Perspective::TOP: {
             for (const auto& point : connections) {
                 if (point.getX() > maxX) {
                     maxX = point.getX();

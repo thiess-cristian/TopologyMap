@@ -30,3 +30,8 @@ std::vector<Point3D> MotionBody::getConnectionPoints() const
 {
     return m_connections;
 }
+
+Point3D MotionBody::getOrigin() const
+{
+    return m_origin;
+}
