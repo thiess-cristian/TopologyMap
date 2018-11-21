@@ -16,7 +16,9 @@ public:
 
 protected slots:
     void openFile();
-    void changePerspective();
+    void changePerspectiveToTop();
+    void changePerspectiveToSide();
+    void changePerspectiveToFront();
 
 private:
     std::unique_ptr<Ui_TopologyMapWindow> m_ui;

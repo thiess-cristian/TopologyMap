@@ -103,7 +103,7 @@ std::map<std::string, Joint> DocumentParser::readJoints(std::map<std::string, Mo
             actionBody.addConnection(actionConnection);
 
             //the connection point for the base motionbody
-            QDomElement baseOrigin = action.firstChildElement("Point").firstChildElement("Origin");
+            QDomElement baseOrigin = base.firstChildElement("Point").firstChildElement("Origin");
             Point3D baseConnection = findPoint(baseOrigin);
             baseBody.addConnection(baseConnection);
            
@@ -161,7 +161,7 @@ std::map<std::string, Connector> DocumentParser::readConnectors(std::map<std::st
                 actionBody.addConnection(actionConnection);
                 //the connection point for the base motionbody
 
-                QDomElement baseOrigin = action.firstChildElement("Point").firstChildElement("Origin");
+                QDomElement baseOrigin = base.firstChildElement("Point").firstChildElement("Origin");
                 Point3D baseConnection = findPoint(baseOrigin);
                 baseBody.addConnection(baseConnection);
 
