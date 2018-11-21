@@ -1,13 +1,10 @@
 #include "GraphicMotionBody.h"
 #include "qpainter.h"
 
-GraphicMotionBody::GraphicMotionBody(MotionBody body, Perspective perspective):
+GraphicMotionBody::GraphicMotionBody(MotionBody body):
     m_motionBody(body),
-    m_perspective(perspective),
     m_boundingRect(QRectF())
 {
-    setOriginRelatedToPerspective();
-    setBoundingRectRelatedToPerspective();
 }
 
 QRectF GraphicMotionBody::boundingRect() const
@@ -25,104 +22,13 @@ void GraphicMotionBody::paint(QPainter * painter, const QStyleOptionGraphicsItem
 
 }
 
-void GraphicMotionBody::setOriginRelatedToPerspective()
+void GraphicMotionBody::setBoundingRect(QRectF boundingRect)
 {
-    switch (m_perspective) {
-        case Perspective::SIDE: {
-            m_origin.setX(m_motionBody.getX());
-            m_origin.setY(m_motionBody.getZ());
-            break;
-        }
-        case Perspective::TOP: {
-            m_origin.setX(m_motionBody.getX());
-            m_origin.setY(m_motionBody.getY());
-            break;
-        }
-        case Perspective::FRONT: {
-            m_origin.setX(m_motionBody.getZ());
-            m_origin.setY(m_motionBody.getY());
-            break;
-        }
-        default: {
-            break;
-        }
-    }
-
+    m_boundingRect = boundingRect;
 }
 
-void GraphicMotionBody::setBoundingRectRelatedToPerspective()
+void GraphicMotionBody::setOrigin(QPoint origin)
 {
-    double minX = DBL_MAX;
-    double maxX = -DBL_MAX;
-    double minY = DBL_MAX;
-    double maxY = -DBL_MAX;
-    auto connections = m_motionBody.getConnectionPoints();
-    connections.push_back(m_motionBody.getOrigin());
-
-    switch (m_perspective) {
-        case Perspective::SIDE: {
-            for (const auto& point : connections) {
-                if (point.getX() > maxX) {
-                    maxX = point.getX();
-                }
-
-                if (point.getX() < minX) {
-                    minX = point.getX();
-                }
-
-                if (point.getZ() > maxY) {
-                    maxY = point.getZ();
-                }
-
-                if (point.getZ() < minY) {
-                    minY = point.getZ();
-                }
-            }
-            break;
-        }
-        case Perspective::TOP: {
-            for (const auto& point : connections) {
-                if (point.getX() > maxX) {
-                    maxX = point.getX();
-                }
-
-                if (point.getX() < minX) {
-                    minX = point.getX();
-                }
-
-                if (point.getY() > maxY) {
-                    maxY = point.getY();
-                }
-
-                if (point.getY() < minY) {
-                    minY = point.getY();
-                }
-            }
-            break;
-        }
-        case Perspective::FRONT: {
-            for (const auto& point : connections) {
-                if (point.getZ() > maxX) {
-                    maxX = point.getZ();
-                }
-
-                if (point.getZ() < minX) {
-                    minX = point.getZ();
-                }
-
-                if (point.getY() > maxY) {
-                    maxY = point.getY();
-                }
-
-                if (point.getY() < minY) {
-                    minY = point.getY();
-                }
-            }
-            break;
-        }
-        default: {
-            break;
-        }
-    }
-    m_boundingRect = QRectF(minX, minY, maxX-minX, maxY-minY);
+    m_origin = origin;
 }
+

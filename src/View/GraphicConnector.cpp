@@ -1,40 +1,8 @@
 #include "GraphicConnector.h"
 #include <qpainter.h>
 
-GraphicConnector::GraphicConnector(Connector connector, Perspective perspective):m_connector(connector)
+GraphicConnector::GraphicConnector(Connector connector):m_connector(connector)
 {
-    auto action=m_connector.getAction();
-    auto base = m_connector.getBase();
-
-    switch (perspective) {
-        case Perspective::SIDE: {
-            m_action.setX(action.getX());
-            m_action.setY(action.getZ());
-
-            m_base.setX(base.getX());
-            m_base.setY(base.getZ());
-            break;
-        }
-        case Perspective::TOP: {
-            m_action.setX(action.getX());
-            m_action.setY(action.getY());
-
-            m_base.setX(base.getX());
-            m_base.setY(base.getY());
-            break;
-        }
-        case Perspective::FRONT: {
-            m_action.setX(action.getZ());
-            m_action.setY(action.getY());
-
-            m_base.setX(base.getZ());
-            m_base.setY(base.getY());
-            break;
-        }
-        default: {
-            break;
-        }
-    }
 }
 
 QRectF GraphicConnector::boundingRect() const
@@ -64,4 +32,14 @@ void GraphicConnector::paint(QPainter * painter, const QStyleOptionGraphicsItem 
 
     painter->setPen(Qt::red);
     painter->drawLine(begin, end);
+}
+
+void GraphicConnector::setAction(const QPoint & action)
+{
+    m_action = action;
+}
+
+void GraphicConnector::setBase(const QPoint & base)
+{
+    m_base = base;
 }

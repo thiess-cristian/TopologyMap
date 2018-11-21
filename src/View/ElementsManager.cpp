@@ -4,8 +4,12 @@
 #include "GraphicJoint.h"
 #include "GraphicConnector.h"
 #include "Enums.h"
+#include "TopPerspectiveElementsCreator.h"
+#include "SidePerspectiveElementsCreator.h"
+#include "FrontPerspectiveElementsCreator.h"
 
 #include "qfile.h"
+#include <memory>
 
 ElementsManager::ElementsManager()
 {
@@ -26,7 +30,7 @@ void ElementsManager::addElementsToScene(TopologyMapScene * scene,Perspective pe
     auto bodies = m_mechanism->getMotionBodies();
     auto joints = m_mechanism->getJoints();
     auto connectors = m_mechanism->getConnectors();
-
+    /*
     for (const auto& joint : joints) {
         scene->addItem(new GraphicJoint(joint.second,perspective));
     }
@@ -37,6 +41,37 @@ void ElementsManager::addElementsToScene(TopologyMapScene * scene,Perspective pe
 
     for (const auto& body : bodies) {
         scene->addItem(new GraphicMotionBody(body.second, perspective));
+    }
+    */
+
+    std::unique_ptr<IPerspectiveElementsCreator> creator;
+
+    switch (perspective) {
+        case Perspective::TOP: {
+            creator = std::make_unique<TopPerspectiveElementsCreator>(m_mechanism);
+            break;
+        }
+        case Perspective::SIDE: {
+            creator = std::make_unique<SidePerspectiveElementsCreator>(m_mechanism);
+            break;
+        }
+        case Perspective::FRONT: {
+            creator = std::make_unique<FrontPerspectiveElementsCreator>(m_mechanism);
+            break;
+        }
+        default:
+            break;
+    }
+
+    for (const auto& joint : creator->createJoints()) {
+        scene->addItem(joint);
+    }
+
+    for (const auto& connector : creator->createConnectors()) {
+        scene->addItem(connector);
+    }
+    for (const auto& motionBody : creator->createMotionBodies()) {
+        scene->addItem(motionBody);
     }
 }
 

@@ -6,12 +6,15 @@
 class GraphicConnector :public QGraphicsItem
 {
 public:
-    GraphicConnector(Connector connector, Perspective perspective);
+    GraphicConnector(Connector connector);
 
     // Inherited via QGraphicsItem
     virtual QRectF boundingRect() const override;
 
     virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = nullptr) override;
+
+    void setAction(const QPoint& action);
+    void setBase(const QPoint& base);
 
 private:
     Connector m_connector;
