@@ -25,16 +25,21 @@ TopologyMapWindow::~TopologyMapWindow()
 void TopologyMapWindow::changePerspectiveToTop()
 {
     m_manager.addElementsToScene(m_scene, Perspective::TOP);
+   // m_ui->graphicsView->fitInView(m_scene->sceneRect());
 }
 
 void TopologyMapWindow::changePerspectiveToSide()
 {
     m_manager.addElementsToScene(m_scene, Perspective::SIDE);
+    double factor = std::max(size().width() / m_scene->sceneRect().width(), size().height() / m_scene->sceneRect().height());
+    m_ui->graphicsView->scale(factor, factor);
+    //m_ui->graphicsView->fitInView(m_scene->sceneRect());
 }
 
 void TopologyMapWindow::changePerspectiveToFront()
 {
     m_manager.addElementsToScene(m_scene, Perspective::FRONT);
+   // m_ui->graphicsView->fitInView(m_scene->sceneRect());
 }
 
 void TopologyMapWindow::openFile()
@@ -46,5 +51,5 @@ void TopologyMapWindow::openFile()
 
     QFile file(imagePath);
     m_manager.loadElements(file);
-    m_manager.addElementsToScene(m_scene,Perspective::SIDE);
+    changePerspectiveToSide();
 }

@@ -2,5 +2,4 @@
 
 TopologyMapScene::TopologyMapScene()
 {
-
 }

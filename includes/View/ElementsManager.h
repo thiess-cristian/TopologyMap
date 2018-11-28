@@ -18,6 +18,7 @@ public:
     void addElementsToScene(TopologyMapScene * scene, Perspective perspective);
 
 private:
+    void scaleMechanism(size_t windowHeight,size_t windowWidth);
     std::shared_ptr<Mechanism> m_mechanism = nullptr;
 
 };

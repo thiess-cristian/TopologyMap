@@ -30,19 +30,6 @@ void ElementsManager::addElementsToScene(TopologyMapScene * scene,Perspective pe
     auto bodies = m_mechanism->getMotionBodies();
     auto joints = m_mechanism->getJoints();
     auto connectors = m_mechanism->getConnectors();
-    /*
-    for (const auto& joint : joints) {
-        scene->addItem(new GraphicJoint(joint.second,perspective));
-    }
-
-    for (const auto& connector : connectors) {
-        scene->addItem(new GraphicConnector(connector.second,perspective));
-    }
-
-    for (const auto& body : bodies) {
-        scene->addItem(new GraphicMotionBody(body.second, perspective));
-    }
-    */
 
     std::unique_ptr<IPerspectiveElementsCreator> creator;
 
@@ -66,12 +53,17 @@ void ElementsManager::addElementsToScene(TopologyMapScene * scene,Perspective pe
     for (const auto& joint : creator->createJoints()) {
         scene->addItem(joint);
     }
-
     for (const auto& connector : creator->createConnectors()) {
         scene->addItem(connector);
     }
     for (const auto& motionBody : creator->createMotionBodies()) {
         scene->addItem(motionBody);
     }
+}
+
+void ElementsManager::scaleMechanism(size_t windowHeight, size_t windowWidth)
+{
+
+
 }
 

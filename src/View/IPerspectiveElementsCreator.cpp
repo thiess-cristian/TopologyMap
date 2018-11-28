@@ -37,9 +37,31 @@ std::vector<GraphicMotionBody*> IPerspectiveElementsCreator::createMotionBodies(
                 minY = projectedPoint.y();
             }
         }
+        QPoint origin = projectPoint(motionBody.getOrigin());
+
+        double mirrorMaxX = 2 * origin.x() -  maxX;
+        double mirrorMaxY = 2 * origin.y() -  maxY;
+
+        double mirrorMinX = 2 * origin.x() -  minX;
+        double mirrorMinY = 2 * origin.y() -  minY;
+
+        if (mirrorMaxX < minX) {
+            minX = mirrorMaxX;
+        }
+
+        if (mirrorMaxY < minY) {
+            minY = mirrorMaxY;
+        }
+
+        if (mirrorMinX > maxX) {
+            maxX = mirrorMinX;
+        }
+
+        if (mirrorMinY > maxY) {
+            maxY = mirrorMinY;
+        }
 
         graphicMotionBody->setBoundingRect(QRectF(minX, minY, maxX - minX, maxY - minY));
-        QPoint origin = projectPoint(motionBody.getOrigin());
         graphicMotionBody->setOrigin(origin);
         graphicMotionBody->setFlag(QGraphicsItem::ItemIsMovable);
         motionBodies.push_back(graphicMotionBody);

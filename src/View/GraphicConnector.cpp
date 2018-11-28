@@ -30,7 +30,10 @@ void GraphicConnector::paint(QPainter * painter, const QStyleOptionGraphicsItem 
     QPoint begin(m_action.x(), m_action.y());
     QPoint end(m_base.x(), m_base.y());
 
-    painter->setPen(Qt::red);
+    QPen pen(Qt::red);
+    pen.setCosmetic(true);
+    painter->setPen(pen);
+    
     painter->drawLine(begin, end);
 }
 
