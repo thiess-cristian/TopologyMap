@@ -21,4 +21,5 @@ public:
 
 protected:
     std::shared_ptr<Mechanism> m_mechanism;
+    double m_scaleFactor;
 };

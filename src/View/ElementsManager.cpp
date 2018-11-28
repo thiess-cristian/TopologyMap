@@ -8,8 +8,6 @@
 #include "SidePerspectiveElementsCreator.h"
 #include "FrontPerspectiveElementsCreator.h"
 
-#include <Normalization.h>
-
 #include "qfile.h"
 #include <memory>
 #include <iostream>
@@ -24,7 +22,6 @@ void ElementsManager::loadElements(QFile & file)
     DocumentParser parser;
 
     m_mechanism = parser.createMechanism(file);
-    //scaleMechanism();
 }
 
 void ElementsManager::addElementsToScene(TopologyMapScene * scene,Perspective perspective)
@@ -39,15 +36,15 @@ void ElementsManager::addElementsToScene(TopologyMapScene * scene,Perspective pe
 
     switch (perspective) {
         case Perspective::TOP: {
-            creator = std::make_unique<TopPerspectiveElementsCreator>(m_mechanism);
+            creator = std::make_unique<TopPerspectiveElementsCreator>(m_mechanism,m_scaleFactor);
             break;
         }
         case Perspective::SIDE: {
-            creator = std::make_unique<SidePerspectiveElementsCreator>(m_mechanism);
+            creator = std::make_unique<SidePerspectiveElementsCreator>(m_mechanism, m_scaleFactor);
             break;
         }
         case Perspective::FRONT: {
-            creator = std::make_unique<FrontPerspectiveElementsCreator>(m_mechanism);
+            creator = std::make_unique<FrontPerspectiveElementsCreator>(m_mechanism, m_scaleFactor);
             break;
         }
         default:
@@ -56,8 +53,6 @@ void ElementsManager::addElementsToScene(TopologyMapScene * scene,Perspective pe
 
     for (const auto& joint : creator->createJoints()) {
         scene->addItem(joint);
-
-        std::cout << joint->x()<<" "<<joint->y();
     }
 
     for (const auto& connector : creator->createConnectors()) {
@@ -69,7 +64,7 @@ void ElementsManager::addElementsToScene(TopologyMapScene * scene,Perspective pe
     }
 }
 
-void ElementsManager::scaleMechanism()
+void ElementsManager::scaleMechanism(size_t windowHeight, size_t windowWidth)
 {
     double maxX = -DBL_MAX;
     double maxY = -DBL_MAX;
@@ -103,26 +98,10 @@ void ElementsManager::scaleMechanism()
         }
     }
     //set new values
-    for (auto& body : m_mechanism->getMotionBodies()) {
-        
-        double newX=Utils::normalize(body.second.getX(), 0, maxX, 0, 500);
-        double newY= Utils::normalize(body.second.getY(), 0, maxY, 0, 500);
-        double newZ= Utils::normalize(body.second.getZ(), 0, maxZ, 0, 500);
+    double xFactor=std::min(windowHeight/maxX,windowWidth/maxX);
+    double yFactor = std::min(windowHeight / maxY, windowWidth / maxY);
+    double zFactor = std::min(windowHeight / maxZ, windowWidth / maxZ);
 
-        body.second.setX(newX);
-        body.second.setY(newY);
-        body.second.setZ(newZ);
-
-        for (auto& connection : body.second.getConnectionPoints()) {
-            double newX = Utils::normalize(connection.getX(), 0, maxX, 0, 500);
-            double newY = Utils::normalize(connection.getY(), 0, maxY, 0, 500);
-            double newZ = Utils::normalize(connection.getZ(), 0, maxZ, 0, 500);
-
-            connection.setX(newX);
-            connection.setY(newY);
-            connection.setZ(newZ);
-
-        }
-    }
+    m_scaleFactor = std::min(std::min(xFactor, yFactor), zFactor);
 }
 

@@ -16,10 +16,11 @@ public:
     
     void loadElements(QFile& file);
     void addElementsToScene(TopologyMapScene * scene, Perspective perspective);
-
-private:
     void scaleMechanism(size_t windowHeight,size_t windowWidth);
 
+private:
+
     std::shared_ptr<Mechanism> m_mechanism = nullptr;
+    double m_scaleFactor;
 
 };
