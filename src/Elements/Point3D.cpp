@@ -19,3 +19,18 @@ double Point3D::getZ() const
 {
     return m_z;
 }
+
+void Point3D::setX(double value)
+{
+    m_x = value;
+}
+
+void Point3D::setY(double value)
+{
+    m_y = value;
+}
+
+void Point3D::setZ(double value)
+{
+    m_z = value;
+}

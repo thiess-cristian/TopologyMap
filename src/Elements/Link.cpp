@@ -2,8 +2,8 @@
 
 Link::Link(const std::string& name,
            const std::string& type,
-           const MotionBody& action,
-           const MotionBody& base,
+           MotionBody& action,
+           MotionBody& base,
            const Point3D& actionConnection,
            const Point3D& baseConnection):
     Element(name),
@@ -14,12 +14,12 @@ Link::Link(const std::string& name,
 {}
 
 
-MotionBody Link::getAction() const
+MotionBody& Link::getAction() const
 {
     return m_action;
 }
 
-MotionBody Link::getBase() const
+MotionBody& Link::getBase() const
 {
     return m_base;
 }
@@ -33,4 +33,5 @@ Point3D Link::getBaseConnection() const
 {
     return m_baseConnection;
 }
+
 

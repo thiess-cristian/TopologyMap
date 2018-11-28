@@ -19,6 +19,7 @@ public:
 
 private:
     void scaleMechanism(size_t windowHeight,size_t windowWidth);
+
     std::shared_ptr<Mechanism> m_mechanism = nullptr;
 
 };

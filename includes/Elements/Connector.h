@@ -9,8 +9,8 @@ public:
     Connector(const std::string& kind,
               const std::string& name, 
               const std::string& type, 
-              const MotionBody& action, 
-              const MotionBody& base, 
+              MotionBody& action, 
+              MotionBody& base, 
               const Point3D& actionConnection,
               const Point3D& baseConnection);
     Connector(const std::string& kind, const std::string& name, const std::string& type, const Joint& joint);

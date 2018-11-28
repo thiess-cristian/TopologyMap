@@ -107,7 +107,8 @@ std::map<std::string, Joint> DocumentParser::readJoints(std::map<std::string, Mo
             Point3D baseConnection = findPoint(baseOrigin);
             baseBody.addConnection(baseConnection);
            
-            joints[nameAttribute] = Joint(nameAttribute, typeAttribute, actionBody, baseBody, actionConnection, baseConnection);
+            //joints[nameAttribute] = Joint(nameAttribute, typeAttribute, actionBody, baseBody, actionConnection, baseConnection);
+            joints.emplace(nameAttribute, Joint(nameAttribute, typeAttribute, actionBody, baseBody, actionConnection, baseConnection));
 
             
         }
@@ -150,7 +151,8 @@ std::map<std::string, Connector> DocumentParser::readConnectors(std::map<std::st
 
                 Joint joint = joints.at(jointName);
 
-                connectors[nameAttribute] = Connector(kind, nameAttribute, typeAttribute, joint);
+                //connectors[nameAttribute] = Connector(kind, nameAttribute, typeAttribute, joint);
+                connectors.emplace(nameAttribute, Connector(kind, nameAttribute, typeAttribute, joint));
 
             } else {
                 MotionBody& actionBody = motionBodies.at(actionAttribute);
@@ -166,7 +168,9 @@ std::map<std::string, Connector> DocumentParser::readConnectors(std::map<std::st
                 baseBody.addConnection(baseConnection);
 
 
-                connectors[nameAttribute] = Connector(kind, nameAttribute, typeAttribute, actionBody, baseBody, actionConnection, baseConnection);
+                //connectors[nameAttribute] = Connector(kind, nameAttribute, typeAttribute, actionBody, baseBody, actionConnection, baseConnection);
+                connectors.emplace(nameAttribute, Connector(kind, nameAttribute, typeAttribute, actionBody, baseBody, actionConnection, baseConnection));
+
             }
         }
     }

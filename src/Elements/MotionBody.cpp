@@ -4,6 +4,7 @@ MotionBody::MotionBody(const std::string& name,const Point3D& origin):
     Element(name),
     m_origin(origin)
 {
+
 }
 
 int MotionBody::getX() const
@@ -19,6 +20,21 @@ int MotionBody::getY() const
 int MotionBody::getZ() const
 {
     return m_origin.getZ();
+}
+
+void MotionBody::setX(double value)
+{
+    m_origin.setX(value);
+}
+
+void MotionBody::setY(double value)
+{
+    m_origin.setY(value);
+}
+
+void MotionBody::setZ(double value)
+{
+    m_origin.setZ(value);
 }
 
 void MotionBody::addConnection(const Point3D& connection)

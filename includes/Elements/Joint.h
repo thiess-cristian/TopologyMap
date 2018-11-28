@@ -7,8 +7,8 @@ class Joint :public Link
 public:
     Joint(const std::string& name,
           const std::string& type,
-          const MotionBody& action,
-          const MotionBody& base,
+          MotionBody& action,
+          MotionBody& base,
           const Point3D& actionConnection,
           const Point3D& baseConnection);
     Joint();
