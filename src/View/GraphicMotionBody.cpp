@@ -5,6 +5,7 @@ GraphicMotionBody::GraphicMotionBody(MotionBody body):
     m_motionBody(body),
     m_boundingRect(QRectF())
 {
+
 }
 
 QRectF GraphicMotionBody::boundingRect() const
@@ -16,15 +17,28 @@ void GraphicMotionBody::paint(QPainter * painter, const QStyleOptionGraphicsItem
 {
     //QGraphicsItem::paint(painter, option, widget);
     //painter->drawRect(boundingRect());
-
-    painter->fillRect(boundingRect(), QBrush(QColor(128, 128, 255, 128)));
-    painter->drawText(boundingRect(), m_motionBody.getName().c_str());
+    painter->drawEllipse(m_origin, 10, 10);
+    QRectF rect(m_boundingRect.x() + 10, m_boundingRect.y() + 10, m_boundingRect.width() - 10, m_boundingRect.height() -10);
+    painter->fillRect(rect, QBrush(QColor(128, 128, 255, 128)));
+    painter->drawText(rect, m_motionBody.getName().c_str());
 
 }
 
 void GraphicMotionBody::setBoundingRect(QRectF boundingRect)
 {
-    m_boundingRect = boundingRect;
+    QRectF rect(boundingRect.x() - 10, boundingRect.y() - 10, boundingRect.width() + 10, boundingRect.height() + 10);
+    m_boundingRect = rect;
+
+    double minWidth = 50;
+    double minHeight = 50;
+
+    if (rect.width() < minWidth) {
+        m_boundingRect.setWidth(minWidth);
+    }
+
+    if (rect.height() < minWidth) {
+        m_boundingRect.setHeight(minWidth);
+    }
 }
 
 void GraphicMotionBody::setOrigin(QPoint origin)

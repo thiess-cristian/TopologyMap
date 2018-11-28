@@ -12,16 +12,6 @@ class TopPerspectiveElementsCreator:public IPerspectiveElementsCreator
 {
 public:
     TopPerspectiveElementsCreator(std::shared_ptr<Mechanism> mechanism);
-
     // Inherited via IPerspectiveElementsCreator
-    virtual std::vector<GraphicMotionBody*> createMotionBodies() const override;
-    virtual std::vector<GraphicJoint*> createJoints() const override;
-    virtual std::vector<GraphicConnector*> createConnectors() const override;
-
-
-private:
-    std::shared_ptr<Mechanism> m_mechanism;
-
-
-
+    virtual QPoint projectPoint(const Point3D & point) const override;
 };

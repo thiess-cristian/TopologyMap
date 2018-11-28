@@ -107,7 +107,7 @@ std::map<std::string, Joint> DocumentParser::readJoints(std::map<std::string, Mo
             Point3D baseConnection = findPoint(baseOrigin);
             baseBody.addConnection(baseConnection);
            
-            joints[nameAttribute] = Joint(nameAttribute, typeAttribute, actionBody, baseBody,Point3D(), Point3D());
+            joints[nameAttribute] = Joint(nameAttribute, typeAttribute, actionBody, baseBody, actionConnection, baseConnection);
 
             
         }
@@ -167,7 +167,6 @@ std::map<std::string, Connector> DocumentParser::readConnectors(std::map<std::st
 
 
                 connectors[nameAttribute] = Connector(kind, nameAttribute, typeAttribute, actionBody, baseBody, actionConnection, baseConnection);
-
             }
         }
     }

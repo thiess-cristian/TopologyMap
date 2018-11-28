@@ -7,7 +7,7 @@ GraphicJoint::GraphicJoint(Joint joint):m_joint(joint)
 }
 
 QRectF GraphicJoint::boundingRect() const
-{
+{  
     double width = fabs(m_action.x() - m_base.x());
     double height = fabs(m_action.y() - m_base.y());
 
@@ -22,7 +22,7 @@ QRectF GraphicJoint::boundingRect() const
     bounding.setTopRight(QPoint(xMax,yMin));
     bounding.setBottomRight(QPoint(xMax,yMax));
     bounding.setBottomLeft(QPoint(xMin,yMax));
-
+ 
     return bounding;
 }
 
@@ -33,6 +33,8 @@ void GraphicJoint::paint(QPainter * painter, const QStyleOptionGraphicsItem * op
 
     painter->drawLine(begin, end);
 
+    painter->drawEllipse(begin, 5,5);
+    painter->drawEllipse(end, 7, 7);
 }
 
 void GraphicJoint::setAction(const QPoint& action)
