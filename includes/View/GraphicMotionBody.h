@@ -13,10 +13,12 @@ public:
     virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = nullptr) override;
 
     void setBoundingRect(QRectF boundingRect);
-    void setOrigin(QPoint origin);
+    void setOrigin(QPointF origin);
+
+    const MotionBody& getModel() const;
 
 private:
     MotionBody m_motionBody;
-    QPoint m_origin;
+    QPointF m_origin;
     QRectF m_boundingRect;
 };

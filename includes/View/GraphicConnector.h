@@ -13,13 +13,15 @@ public:
 
     virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = nullptr) override;
 
-    void setAction(const QPoint& action);
-    void setBase(const QPoint& base);
+    void setActionConnection(const QPointF& action);
+    void setBaseConnection(const QPointF& base);
+
+    const Connector& getModel() const;
 
 private:
     Connector m_connector;
 
-    QPoint m_action;
-    QPoint m_base;
+    QPointF m_actionConnection;
+    QPointF m_baseConnection;
 
 };

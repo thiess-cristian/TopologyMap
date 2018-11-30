@@ -1,4 +1,5 @@
 #include "GraphicConnector.h"
+#include "Bounder.h"
 #include <qpainter.h>
 
 GraphicConnector::GraphicConnector(Connector connector):m_connector(connector)
@@ -7,28 +8,14 @@ GraphicConnector::GraphicConnector(Connector connector):m_connector(connector)
 
 QRectF GraphicConnector::boundingRect() const
 {
-    double width = fabs(m_action.x() - m_base.x());
-    double height = fabs(m_action.y() - m_base.y());
-
-    QRectF bounding;
-
-    double xMin = m_action.x() < m_base.x() ? m_action.x() : m_base.x();
-    double xMax = m_action.x() > m_base.x() ? m_action.x() : m_base.x();
-    double yMin = m_action.y() < m_base.y() ? m_action.y() : m_base.y();
-    double yMax = m_action.y() > m_base.y() ? m_action.y() : m_base.y();
-
-    bounding.setTopLeft(QPoint(xMin, yMin));
-    bounding.setTopRight(QPoint(xMax, yMin));
-    bounding.setBottomRight(QPoint(xMax, yMax));
-    bounding.setBottomLeft(QPoint(xMin, yMax));
-
-    return bounding;
+    Bounder bounder;
+    return  bounder.createBoundingRect({m_actionConnection,m_baseConnection});
 }
 
 void GraphicConnector::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
-    QPoint begin(m_action.x(), m_action.y());
-    QPoint end(m_base.x(), m_base.y());
+    QPointF begin(m_actionConnection.x(), m_actionConnection.y());
+    QPointF end(m_baseConnection.x(), m_baseConnection.y());
 
     QPen pen(Qt::red);
     pen.setCosmetic(true);
@@ -37,12 +24,17 @@ void GraphicConnector::paint(QPainter * painter, const QStyleOptionGraphicsItem 
     painter->drawLine(begin, end);
 }
 
-void GraphicConnector::setAction(const QPoint & action)
+void GraphicConnector::setActionConnection(const QPointF & action)
 {
-    m_action = action;
+    m_actionConnection = action;
 }
 
-void GraphicConnector::setBase(const QPoint & base)
+void GraphicConnector::setBaseConnection(const QPointF & base)
 {
-    m_base = base;
+    m_baseConnection = base;
+}
+
+const Connector & GraphicConnector::getModel() const
+{
+    return m_connector;
 }

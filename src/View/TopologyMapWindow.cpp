@@ -1,6 +1,9 @@
 #include "TopologyMapWindow.h"
 #include "ui_TopologyMapWindow.h"
 #include "TopologyMapScene.h"
+#include "TopPerspective.h"
+#include "SidePerspective.h"
+#include "FrontPerspective.h"
 
 #include <qfiledialog.h>
 
@@ -24,17 +27,20 @@ TopologyMapWindow::~TopologyMapWindow()
 
 void TopologyMapWindow::changePerspectiveToTop()
 {
-    m_manager.addElementsToScene(m_scene, Perspective::TOP);
+    TopPerspective top;
+    m_manager.changePerspective(&top);
 }
 
 void TopologyMapWindow::changePerspectiveToSide()
 {
-    m_manager.addElementsToScene(m_scene, Perspective::SIDE);
+    SidePerspective side;
+    m_manager.changePerspective(&side);
 }
 
 void TopologyMapWindow::changePerspectiveToFront()
 {
-    m_manager.addElementsToScene(m_scene, Perspective::FRONT);
+    FrontPerspective front;
+    m_manager.changePerspective(&front);
 }
 
 void TopologyMapWindow::openFile()
@@ -47,5 +53,5 @@ void TopologyMapWindow::openFile()
     QFile file(imagePath);
     m_manager.loadElements(file);
     m_manager.scaleMechanism(size().height(),size().width());
-    changePerspectiveToSide();
+    m_manager.addElementsToScene(m_scene);
 }

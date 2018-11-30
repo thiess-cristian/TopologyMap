@@ -32,17 +32,17 @@ void GraphicMotionBody::setBoundingRect(QRectF boundingRect)
     double minWidth = 100;
     double minHeight = 100;
 
-    if (rect.width() < minWidth) {
-        m_boundingRect.setWidth(minWidth);
-    }
-
-    if (rect.height() < minWidth) {
-        m_boundingRect.setHeight(minWidth);
-    }
+    m_boundingRect.setWidth(std::min(rect.width(), minWidth));
+    m_boundingRect.setHeight(std::min(rect.height(), minHeight));
 }
 
-void GraphicMotionBody::setOrigin(QPoint origin)
+void GraphicMotionBody::setOrigin(QPointF origin)
 {
     m_origin = origin;
+}
+
+const MotionBody & GraphicMotionBody::getModel() const
+{
+    return m_motionBody;
 }
 

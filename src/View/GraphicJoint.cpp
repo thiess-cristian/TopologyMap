@@ -2,34 +2,40 @@
 
 #include <qpainter.h>
 
-GraphicJoint::GraphicJoint(Joint joint):m_joint(joint)
+GraphicJoint::GraphicJoint(const Joint & joint, GraphicMotionBody * action, GraphicMotionBody * base) :
+    m_joint(joint),
+    m_action(action),
+    m_base(base)
 {
+
 }
 
 QRectF GraphicJoint::boundingRect() const
 {  
-    double width = fabs(m_action.x() - m_base.x());
-    double height = fabs(m_action.y() - m_base.y());
+    double width = fabs(m_actionConnection.x() - m_baseConnection.x());
+    double height = fabs(m_actionConnection.y() - m_baseConnection.y());
 
     QRectF bounding;
-
-    double xMin = m_action.x() < m_base.x() ? m_action.x() : m_base.x();
-    double xMax = m_action.x() > m_base.x() ? m_action.x() : m_base.x();
-    double yMin = m_action.y() < m_base.y() ? m_action.y() : m_base.y();
-    double yMax = m_action.y() > m_base.y() ? m_action.y() : m_base.y();
+    //TODO: change
+    double xMin = m_actionConnection.x() < m_baseConnection.x() ? m_actionConnection.x() : m_baseConnection.x();
+    double xMax = m_actionConnection.x() > m_baseConnection.x() ? m_actionConnection.x() : m_baseConnection.x();
+    double yMin = m_actionConnection.y() < m_baseConnection.y() ? m_actionConnection.y() : m_baseConnection.y();
+    double yMax = m_actionConnection.y() > m_baseConnection.y() ? m_actionConnection.y() : m_baseConnection.y();
 
     bounding.setTopLeft(QPoint(xMin,yMin));
     bounding.setTopRight(QPoint(xMax,yMin));
     bounding.setBottomRight(QPoint(xMax,yMax));
     bounding.setBottomLeft(QPoint(xMin,yMax));
+
+
  
     return bounding;
 }
 
 void GraphicJoint::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
-    QPoint begin(m_action.x(), m_action.y());
-    QPoint end(m_base.x(), m_base.y());
+    QPointF begin(m_actionConnection.x(), m_actionConnection.y());
+    QPointF end(m_baseConnection.x(), m_baseConnection.y());
 
     painter->drawLine(begin, end);
 
@@ -37,12 +43,17 @@ void GraphicJoint::paint(QPainter * painter, const QStyleOptionGraphicsItem * op
     painter->drawEllipse(end, 7, 7);
 }
 
-void GraphicJoint::setAction(const QPoint& action)
+void GraphicJoint::setActionConnection(const QPointF& action)
 {
-    m_action = action;
+    m_actionConnection = action;
 }
 
-void GraphicJoint::setBase(const QPoint& base)
+void GraphicJoint::setBaseConnection(const QPointF& base)
 {
-    m_base = base;
+    m_baseConnection = base;
+}
+
+const Joint & GraphicJoint::getModel() const
+{
+    return m_joint;
 }

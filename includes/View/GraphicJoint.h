@@ -3,23 +3,30 @@
 #include "Enums.h"
 #include <qgraphicsitem.h>
 
+class GraphicMotionBody;
+
 class GraphicJoint :public QGraphicsItem
 {
 public:
-    GraphicJoint(Joint joint);
+    GraphicJoint(const Joint& joint,GraphicMotionBody* action, GraphicMotionBody* base);
 
     // Inherited via QGraphicsItem
     virtual QRectF boundingRect() const override;
-
     virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = nullptr) override;
 
-    void setAction(const QPoint& action);
-    void setBase(const QPoint& base);
+    void setActionConnection(const QPointF& action);
+    void setBaseConnection(const QPointF& base);
+
+    const Joint& getModel() const;
 
 private:
     Joint m_joint;
 
-    QPoint m_action;
-    QPoint m_base;
+    QPointF m_actionConnection;
+    QPointF m_baseConnection;
+
+    GraphicMotionBody* m_action;
+    GraphicMotionBody* m_base;
+
 
 };

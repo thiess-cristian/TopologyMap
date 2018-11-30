@@ -42,7 +42,7 @@ std::map<std::string, MotionBody> DocumentParser::readMotionBodies()
 
     std::map<std::string, MotionBody> motionBodies;
 
-    for (size_t i = 0; i < list.size(); i++) {
+    for (int i = 0; i < list.size(); i++) {
         QDomElement item = list.at(i).toElement();
 
         std::string nameAttribute = item.attribute("Name").toStdString();
@@ -78,7 +78,7 @@ std::map<std::string, Joint> DocumentParser::readJoints(std::map<std::string, Mo
     
     std::map<std::string, Joint> joints;
 
-    for (size_t i = 0; i < list.size(); i++) {
+    for (int i = 0; i < list.size(); i++) {
         QDomNode item = list.at(i);
 
         if (item.isElement()) {
@@ -124,7 +124,7 @@ std::map<std::string, Connector> DocumentParser::readConnectors(std::map<std::st
 
     std::map<std::string, Connector> connectors;
 
-    for (size_t i = 0; i < list.size(); i++) {
+    for (int i = 0; i < list.size(); i++) {
         QDomNode item = list.at(i);
 
         if (item.isElement()) {
