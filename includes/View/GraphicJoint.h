@@ -19,6 +19,9 @@ public:
 
     const Joint& getModel() const;
 
+    void connectionTranslate(QPointF translate);
+    void connectionScale(double scaleFactor);
+
 private:
     Joint m_joint;
 

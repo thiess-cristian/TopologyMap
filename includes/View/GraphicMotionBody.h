@@ -17,6 +17,9 @@ public:
 
     const MotionBody& getModel() const;
 
+    void boundingRectTranslate(QPointF translation);
+    void boundingRectScale(double scaleFactor);
+
 private:
     MotionBody m_motionBody;
     QPointF m_origin;

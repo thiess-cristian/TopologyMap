@@ -16,6 +16,9 @@ public:
     void setActionConnection(const QPointF& action);
     void setBaseConnection(const QPointF& base);
 
+    void connectionTranslate(QPointF translate);
+    void connectionScale(double scaleFactor);
+
     const Connector& getModel() const;
 
 private:

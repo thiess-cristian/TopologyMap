@@ -34,6 +34,18 @@ void GraphicConnector::setBaseConnection(const QPointF & base)
     m_baseConnection = base;
 }
 
+void GraphicConnector::connectionTranslate(QPointF translate)
+{
+    m_baseConnection += translate;
+    m_actionConnection += translate;
+}
+
+void GraphicConnector::connectionScale(double scaleFactor)
+{
+    m_baseConnection*=scaleFactor;
+    m_actionConnection *= scaleFactor;
+}
+
 const Connector & GraphicConnector::getModel() const
 {
     return m_connector;

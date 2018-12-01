@@ -8,7 +8,8 @@
 #include "SidePerspective.h"
 #include "Bounder.h"
 
-#include "qfile.h"
+#include <qfile.h>
+#include <qtransform.h>
 #include <memory>
 #include <iostream>
 
@@ -46,47 +47,11 @@ void ElementsManager::addElementsToScene(TopologyMapScene * scene)
     changePerspective(&side);
 }
 
-void ElementsManager::scaleMechanism(size_t windowHeight, size_t windowWidth)
+void ElementsManager::setWindowSize(size_t windowHeight, size_t windowWidth)
 {
-    double maxX = -DBL_MAX;
-    double maxY = -DBL_MAX;
-    double maxZ = -DBL_MAX;
-
-    for (const auto& body : m_mechanism->getMotionBodies()) {
-        if (body.second.getX() > maxX) {
-            maxX = body.second.getX();
-        }
-
-        if (body.second.getY() > maxY) {
-            maxY = body.second.getY();
-        }
-
-        if (body.second.getZ() > maxZ) {
-            maxZ = body.second.getZ();
-        }
-
-        for (const auto& connection : body.second.getConnectionPoints()) {
-            if (connection.getX() > maxX) {
-                maxX = connection.getX();
-            }
-
-            if (connection.getY() > maxY) {
-                maxY = connection.getY();
-            }
-
-            if (connection.getZ() > maxZ) {
-                maxZ = connection.getZ();
-            }
-        }
-    }
-    //set new values
-    double xFactor = std::min(windowHeight / maxX, windowWidth / maxX);
-    double yFactor = std::min(windowHeight / maxY, windowWidth / maxY);
-    double zFactor = std::min(windowHeight / maxZ, windowWidth / maxZ);
-
-    m_scaleFactor = std::min(std::min(xFactor, yFactor), zFactor);
+    m_windowHeight = windowHeight;
+    m_windowWidth = windowWidth;
 }
-
 
 
 void ElementsManager::changePerspective(IPerspective* perspective)
@@ -94,6 +59,68 @@ void ElementsManager::changePerspective(IPerspective* perspective)
     changeMotionBodiesPerspective(perspective);
     changeJointsPerspective(perspective);
     changeConnectorsPerspective(perspective);
+
+    auto translationPoint = computeTranslationPoint();
+    applyTranslation(translationPoint);
+
+    double scaleFactor=computeScaleFactor();
+    applyScale(scaleFactor);
+}
+
+double ElementsManager::computeScaleFactor()
+{
+    double maxX = -DBL_MAX;
+    double maxY = -DBL_MAX;
+
+    for (const auto& motionBody : m_graphicsMechanism->getGraphicMotionBodies()) {
+        maxX = std::max(maxX, motionBody->boundingRect().right());
+        maxY = std::max(maxY, motionBody->boundingRect().bottom());
+    }
+
+    return std::min((double)m_windowHeight / maxY, (double)m_windowWidth / maxX);
+}
+
+QPointF ElementsManager::computeTranslationPoint()
+{
+    double minX = 0;
+    double minY = 0;
+
+    for (const auto& motionBody : m_graphicsMechanism->getGraphicMotionBodies()) {
+        minX = std::min(minX, motionBody->boundingRect().left());
+        minY = std::min(minY, motionBody->boundingRect().top());
+    }
+
+    return QPointF(std::abs(minX),std::abs(minY));
+}
+
+void ElementsManager::applyScale(double scaleFactor)
+{
+    for (auto& motionBody : m_graphicsMechanism->getGraphicMotionBodies()) {
+        motionBody->boundingRectScale(scaleFactor);    
+    }
+
+    for (auto & joint : m_graphicsMechanism->getGraphicJoints()) {
+        joint->connectionScale(scaleFactor);
+    }
+
+    for (auto& connector : m_graphicsMechanism->getGraphicConnectors()) {
+        connector->connectionScale(scaleFactor);
+    }
+}
+
+void ElementsManager::applyTranslation(QPointF translatePoint)
+{
+    for (auto& motionBody : m_graphicsMechanism->getGraphicMotionBodies()) {
+        motionBody->boundingRectTranslate(translatePoint);
+    }
+
+    for (auto & joint : m_graphicsMechanism->getGraphicJoints()) {
+        joint->connectionTranslate(translatePoint);
+    }
+
+    for (auto& connector : m_graphicsMechanism->getGraphicConnectors()) {
+        connector->connectionTranslate(translatePoint);
+    }
 }
 
 std::vector<GraphicMotionBody*> ElementsManager::createMotionBodies() const

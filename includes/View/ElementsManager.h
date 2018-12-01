@@ -18,8 +18,12 @@ public:
     
     void loadElements(QFile& file);
     void addElementsToScene(TopologyMapScene * scene);
-    void scaleMechanism(size_t windowHeight,size_t windowWidth);
+    void setWindowSize(size_t windowHeight,size_t windowWidth);
     void changePerspective(IPerspective* perspective);
+    double computeScaleFactor();
+    QPointF computeTranslationPoint();
+    void applyScale(double scaleFactor);
+    void applyTranslation(QPointF translatePoint);
 
 private:
     std::vector<GraphicMotionBody*> createMotionBodies() const;
@@ -33,4 +37,7 @@ private:
     std::shared_ptr<Mechanism> m_mechanism = nullptr;
     std::shared_ptr<GraphicMechanism> m_graphicsMechanism = nullptr;
     double m_scaleFactor;
+
+    size_t m_windowHeight;
+    size_t m_windowWidth;
 };

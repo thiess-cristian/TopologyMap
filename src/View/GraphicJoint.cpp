@@ -57,3 +57,15 @@ const Joint & GraphicJoint::getModel() const
 {
     return m_joint;
 }
+
+void GraphicJoint::connectionTranslate(QPointF translate)
+{
+    m_baseConnection += translate;
+    m_actionConnection += translate;
+}
+
+void GraphicJoint::connectionScale(double scaleFactor)
+{
+    m_baseConnection *= scaleFactor;
+    m_actionConnection *= scaleFactor;
+}

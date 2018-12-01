@@ -18,15 +18,17 @@ void GraphicMotionBody::paint(QPainter * painter, const QStyleOptionGraphicsItem
     //QGraphicsItem::paint(painter, option, widget);
     //painter->drawRect(boundingRect());
     painter->drawEllipse(m_origin, 10, 10);
-    QRectF rect(m_boundingRect.x() + 10, m_boundingRect.y() + 10, m_boundingRect.width() - 10, m_boundingRect.height() -10);
+    QRectF rect(m_boundingRect.x(), m_boundingRect.y(), m_boundingRect.width(), m_boundingRect.height());
     
+   
+
     painter->fillRect(rect, QBrush(QColor(128, 128, 255, 128)));
     painter->drawText(m_origin, m_motionBody.getName().c_str());
 }
 
 void GraphicMotionBody::setBoundingRect(QRectF boundingRect)
 {
-    QRectF rect(boundingRect.x() - 10, boundingRect.y() - 10, boundingRect.width() + 10, boundingRect.height() + 10);
+    QRectF rect(boundingRect.x(), boundingRect.y(), boundingRect.width(), boundingRect.height());
     m_boundingRect = rect;
 
     double minWidth = 100;
@@ -44,5 +46,21 @@ void GraphicMotionBody::setOrigin(QPointF origin)
 const MotionBody & GraphicMotionBody::getModel() const
 {
     return m_motionBody;
+}
+
+void GraphicMotionBody::boundingRectTranslate(QPointF translation)
+{
+    m_origin += translation;
+    m_boundingRect.translate(translation);
+}
+
+void GraphicMotionBody::boundingRectScale(double scaleFactor)
+{
+    m_origin *= scaleFactor;
+    
+    m_boundingRect=QRectF(m_boundingRect.x()*scaleFactor,
+                          m_boundingRect.y()*scaleFactor, 
+                          m_boundingRect.width()*scaleFactor, 
+                          m_boundingRect.height()*scaleFactor);
 }
 

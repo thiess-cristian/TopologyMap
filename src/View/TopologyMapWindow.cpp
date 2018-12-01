@@ -52,6 +52,6 @@ void TopologyMapWindow::openFile()
 
     QFile file(imagePath);
     m_manager.loadElements(file);
-    m_manager.scaleMechanism(size().height(),size().width());
+    m_manager.setWindowSize(size().height(),size().width());
     m_manager.addElementsToScene(m_scene);
 }
