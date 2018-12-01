@@ -9,6 +9,8 @@ class MotionBody :public Element
 public:
     MotionBody(const std::string& name="", const Point3D& origin=Point3D());
 
+    std::string getName() const;
+
     int getX() const;
     int getY() const;
     int getZ() const;

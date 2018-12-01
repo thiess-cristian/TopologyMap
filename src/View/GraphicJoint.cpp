@@ -1,5 +1,8 @@
 #include "GraphicJoint.h"
+#include "GraphicMotionBody.h"
+#include "Bounder.h"
 
+#include <qrect.h>
 #include <qpainter.h>
 
 GraphicJoint::GraphicJoint(const Joint & joint, GraphicMotionBody * action, GraphicMotionBody * base) :
@@ -7,40 +10,22 @@ GraphicJoint::GraphicJoint(const Joint & joint, GraphicMotionBody * action, Grap
     m_action(action),
     m_base(base)
 {
-
+    connect(action, &GraphicMotionBody::offsetChanged, this, &GraphicJoint::changeActionPosition);
+    connect(base, &GraphicMotionBody::offsetChanged, this, &GraphicJoint::changeBasePosition);
 }
 
 QRectF GraphicJoint::boundingRect() const
 {  
-    double width = fabs(m_actionConnection.x() - m_baseConnection.x());
-    double height = fabs(m_actionConnection.y() - m_baseConnection.y());
-
-    QRectF bounding;
-    //TODO: change
-    double xMin = m_actionConnection.x() < m_baseConnection.x() ? m_actionConnection.x() : m_baseConnection.x();
-    double xMax = m_actionConnection.x() > m_baseConnection.x() ? m_actionConnection.x() : m_baseConnection.x();
-    double yMin = m_actionConnection.y() < m_baseConnection.y() ? m_actionConnection.y() : m_baseConnection.y();
-    double yMax = m_actionConnection.y() > m_baseConnection.y() ? m_actionConnection.y() : m_baseConnection.y();
-
-    bounding.setTopLeft(QPoint(xMin,yMin));
-    bounding.setTopRight(QPoint(xMax,yMin));
-    bounding.setBottomRight(QPoint(xMax,yMax));
-    bounding.setBottomLeft(QPoint(xMin,yMax));
-
-
- 
-    return bounding;
+    Bounder bounder;
+    return  bounder.createBoundingRect({m_actionConnection,m_baseConnection});
 }
 
 void GraphicJoint::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
-    QPointF begin(m_actionConnection.x(), m_actionConnection.y());
-    QPointF end(m_baseConnection.x(), m_baseConnection.y());
+    painter->drawLine(m_actionConnection, m_baseConnection);
 
-    painter->drawLine(begin, end);
-
-    painter->drawEllipse(begin, 5,5);
-    painter->drawEllipse(end, 7, 7);
+    painter->drawEllipse(m_actionConnection, 5,5);
+    painter->drawEllipse(m_baseConnection, 7, 7);
 }
 
 void GraphicJoint::setActionConnection(const QPointF& action)
@@ -68,4 +53,14 @@ void GraphicJoint::connectionScale(double scaleFactor)
 {
     m_baseConnection *= scaleFactor;
     m_actionConnection *= scaleFactor;
+}
+
+void GraphicJoint::changeActionPosition(const QPointF & offset)
+{
+    m_actionConnection += offset;
+}
+
+void GraphicJoint::changeBasePosition(const QPointF& offset)
+{
+    m_baseConnection += offset;
 }

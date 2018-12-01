@@ -2,11 +2,13 @@
 #include "Joint.h"
 #include "Enums.h"
 #include <qgraphicsitem.h>
+#include <qobject.h>
 
 class GraphicMotionBody;
 
-class GraphicJoint :public QGraphicsItem
+class GraphicJoint :public QObject,public QGraphicsItem
 {
+    Q_OBJECT
 public:
     GraphicJoint(const Joint& joint,GraphicMotionBody* action, GraphicMotionBody* base);
 
@@ -22,6 +24,10 @@ public:
     void connectionTranslate(QPointF translate);
     void connectionScale(double scaleFactor);
 
+public slots:
+    void changeBasePosition(const QPointF& offset);
+    void changeActionPosition(const QPointF& offset);
+
 private:
     Joint m_joint;
 
@@ -31,5 +37,5 @@ private:
     GraphicMotionBody* m_action;
     GraphicMotionBody* m_base;
 
-
+    QRectF m_boundingRect;
 };

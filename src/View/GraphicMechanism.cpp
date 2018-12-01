@@ -1,4 +1,5 @@
 #include "GraphicMechanism.h"
+#include "GraphicMotionBody.h"
 
 GraphicMechanism::GraphicMechanism(
     const std::vector<GraphicMotionBody*>& graphicMotionBodies, 
@@ -9,6 +10,24 @@ GraphicMechanism::GraphicMechanism(
     m_graphicConnector(graphicConnectors)
 {
 
+}
+
+GraphicMechanism::GraphicMechanism()
+{}
+
+void GraphicMechanism::setGraphicMotionBodies(const std::vector<GraphicMotionBody*>& graphicMotionBodies)
+{
+    m_graphicMotionBodies = graphicMotionBodies;
+}
+
+void GraphicMechanism::setGraphicJoints(const std::vector<GraphicJoint*>& graphicJoints)
+{
+    m_graphicJoints = graphicJoints;
+}
+
+void GraphicMechanism::setGraphicConnectors(const std::vector<GraphicConnector*>& graphicConnectors)
+{
+    m_graphicConnector = graphicConnectors;
 }
 
 const std::vector<GraphicMotionBody*>& GraphicMechanism::getGraphicMotionBodies() const
@@ -24,4 +43,14 @@ const std::vector<GraphicJoint*>& GraphicMechanism::getGraphicJoints() const
 const std::vector<GraphicConnector*>& GraphicMechanism::getGraphicConnectors() const
 {
     return m_graphicConnector;
+}
+
+GraphicMotionBody * GraphicMechanism::findMotionBody(const std::string & name) const
+{
+    for (const auto& motionBody : m_graphicMotionBodies) {
+        if (motionBody->getModel().getName() == name) {
+            return motionBody;
+        }
+    }
+    return nullptr;
 }

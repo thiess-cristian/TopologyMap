@@ -4,8 +4,9 @@
 #include <qgraphicsitem.h>
 #include <qrect.h>
 
-class GraphicMotionBody :public QGraphicsItem
+class GraphicMotionBody :public QObject,public QGraphicsItem
 {
+    Q_OBJECT
 public:
     GraphicMotionBody(MotionBody body);
     // Inherited via QGraphicsItem
@@ -20,7 +21,15 @@ public:
     void boundingRectTranslate(QPointF translation);
     void boundingRectScale(double scaleFactor);
 
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+
+signals:
+    void offsetChanged(const QPointF& offset);
 private:
+
+    QPointF m_shiftMouseCoords;
+
     MotionBody m_motionBody;
     QPointF m_origin;
     QRectF m_boundingRect;

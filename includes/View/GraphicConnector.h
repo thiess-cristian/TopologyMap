@@ -3,10 +3,13 @@
 #include "Enums.h"
 #include <qgraphicsitem.h>
 
-class GraphicConnector :public QGraphicsItem
+class GraphicMotionBody;
+
+class GraphicConnector :public QObject,public QGraphicsItem
 {
+    Q_OBJECT
 public:
-    GraphicConnector(Connector connector);
+    GraphicConnector(Connector connector, GraphicMotionBody * action, GraphicMotionBody * base);
 
     // Inherited via QGraphicsItem
     virtual QRectF boundingRect() const override;
@@ -21,10 +24,16 @@ public:
 
     const Connector& getModel() const;
 
+public slots:
+    void changeBasePosition(const QPointF& offset);
+    void changeActionPosition(const QPointF& offset);
+
 private:
     Connector m_connector;
 
     QPointF m_actionConnection;
     QPointF m_baseConnection;
 
+    GraphicMotionBody* m_action;
+    GraphicMotionBody* m_base;
 };

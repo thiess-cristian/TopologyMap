@@ -29,7 +29,12 @@ void ElementsManager::addElementsToScene(TopologyMapScene * scene)
 {
     scene->clear();
 
-    m_graphicsMechanism = std::make_shared<GraphicMechanism>(createMotionBodies(), createJoints(), createConnectors());
+    m_graphicsMechanism = std::make_shared<GraphicMechanism>();
+
+    m_graphicsMechanism->setGraphicMotionBodies(createMotionBodies());
+    m_graphicsMechanism->setGraphicJoints(createJoints());
+    m_graphicsMechanism->setGraphicConnectors(createConnectors());
+
 
     for (const auto& joint : m_graphicsMechanism->getGraphicJoints()) {
         scene->addItem(joint);
@@ -137,7 +142,9 @@ std::vector<GraphicJoint*> ElementsManager::createJoints() const
     std::vector<GraphicJoint*> graphicJoints;
 
     for (const auto& item : m_mechanism->getJoints()) {
-        graphicJoints.push_back(new GraphicJoint(item.second,nullptr,nullptr));
+        auto actionBody = m_graphicsMechanism->findMotionBody(item.second.getAction().getName());
+        auto baseBody = m_graphicsMechanism->findMotionBody(item.second.getBase().getName());
+        graphicJoints.push_back(new GraphicJoint(item.second, actionBody, baseBody));
     }
     return graphicJoints;;
 }
@@ -147,7 +154,9 @@ std::vector<GraphicConnector*> ElementsManager::createConnectors() const
     std::vector<GraphicConnector*> graphicConnectors;
 
     for (const auto& item : m_mechanism->getConnectors()) {
-        graphicConnectors.push_back(new GraphicConnector(item.second));
+        auto actionBody = m_graphicsMechanism->findMotionBody(item.second.getAction().getName());
+        auto baseBody = m_graphicsMechanism->findMotionBody(item.second.getBase().getName());
+        graphicConnectors.push_back(new GraphicConnector(item.second, actionBody, baseBody));
     }
     return graphicConnectors;
 }
@@ -157,7 +166,6 @@ void ElementsManager::changeMotionBodiesPerspective(IPerspective * perspective)
     Bounder bounder;
     for (auto& motionbody : m_graphicsMechanism->getGraphicMotionBodies()) {
         auto origin = perspective->projectPoint(motionbody->getModel().getOrigin());
-
         auto connections = motionbody->getModel().getConnectionPoints();
         connections.push_back(motionbody->getModel().getOrigin());
       

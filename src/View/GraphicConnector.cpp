@@ -1,9 +1,16 @@
 #include "GraphicConnector.h"
 #include "Bounder.h"
+#include "GraphicMotionBody.h"
 #include <qpainter.h>
+#include <iostream>
 
-GraphicConnector::GraphicConnector(Connector connector):m_connector(connector)
+GraphicConnector::GraphicConnector(Connector connector, GraphicMotionBody * action, GraphicMotionBody * base):
+    m_connector(connector),
+    m_action(action),
+    m_base(base)
 {
+    connect(action, &GraphicMotionBody::offsetChanged, this, &GraphicConnector::changeActionPosition);
+    connect(base, &GraphicMotionBody::offsetChanged, this, &GraphicConnector::changeBasePosition);
 }
 
 QRectF GraphicConnector::boundingRect() const
@@ -49,4 +56,14 @@ void GraphicConnector::connectionScale(double scaleFactor)
 const Connector & GraphicConnector::getModel() const
 {
     return m_connector;
+}
+
+void GraphicConnector::changeActionPosition(const QPointF & offset)
+{
+    m_actionConnection += offset;
+}
+
+void GraphicConnector::changeBasePosition(const QPointF& offset)
+{
+    m_baseConnection += offset;
 }

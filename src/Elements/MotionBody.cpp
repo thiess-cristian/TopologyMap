@@ -7,6 +7,11 @@ MotionBody::MotionBody(const std::string& name,const Point3D& origin):
 
 }
 
+std::string MotionBody::getName() const
+{
+    return m_name;
+}
+
 int MotionBody::getX() const
 {
     return m_origin.getX();

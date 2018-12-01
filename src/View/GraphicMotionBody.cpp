@@ -1,5 +1,8 @@
 #include "GraphicMotionBody.h"
 #include "qpainter.h"
+#include <iostream>
+#include <qgraphicssceneevent.h>
+#include <qcursor.h>
 
 GraphicMotionBody::GraphicMotionBody(MotionBody body):
     m_motionBody(body),
@@ -62,5 +65,17 @@ void GraphicMotionBody::boundingRectScale(double scaleFactor)
                           m_boundingRect.y()*scaleFactor, 
                           m_boundingRect.width()*scaleFactor, 
                           m_boundingRect.height()*scaleFactor);
+}
+
+void GraphicMotionBody::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
+{    
+    setPos(mapToScene(event->pos() + m_shiftMouseCoords));
+    emit offsetChanged(event->pos() + m_shiftMouseCoords);
+}
+
+void GraphicMotionBody::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    m_shiftMouseCoords = pos() - mapToScene(event->pos());
+    setCursor(QCursor(Qt::ClosedHandCursor));
 }
 
