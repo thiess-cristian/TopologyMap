@@ -13,7 +13,7 @@ GraphicMotionBody::GraphicMotionBody(MotionBody body):
 
 QRectF GraphicMotionBody::boundingRect() const
 {
-    return m_boundingRect;
+    return m_boundingRect.adjusted(-10,-10,10,10);
 }
 
 void GraphicMotionBody::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
@@ -34,8 +34,8 @@ void GraphicMotionBody::setBoundingRect(QRectF boundingRect)
     QRectF rect(boundingRect.x(), boundingRect.y(), boundingRect.width(), boundingRect.height());
     m_boundingRect = rect;
 
-    double minWidth = 100;
-    double minHeight = 100;
+    double minWidth = 150;
+    double minHeight = 150;
 
     m_boundingRect.setWidth(std::max(rect.width(), minWidth));
     m_boundingRect.setHeight(std::max(rect.height(), minHeight));
@@ -43,7 +43,8 @@ void GraphicMotionBody::setBoundingRect(QRectF boundingRect)
 
 void GraphicMotionBody::setOrigin(QPointF origin)
 {
-    m_origin = origin;
+    m_origin.setX(std::max(m_boundingRect.center().x(), origin.x()));
+    m_origin.setY(std::max(m_boundingRect.center().y(), origin.y()));
 }
 
 const MotionBody & GraphicMotionBody::getModel() const
@@ -53,12 +54,14 @@ const MotionBody & GraphicMotionBody::getModel() const
 
 void GraphicMotionBody::boundingRectTranslate(QPointF translation)
 {
+    prepareGeometryChange();
     m_origin += translation;
     m_boundingRect.translate(translation);
 }
 
 void GraphicMotionBody::boundingRectScale(double scaleFactor)
 {
+    prepareGeometryChange();
     m_origin *= scaleFactor;
     
     m_boundingRect=QRectF(m_boundingRect.x()*scaleFactor,

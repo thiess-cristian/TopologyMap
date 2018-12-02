@@ -33,22 +33,26 @@ void GraphicConnector::paint(QPainter * painter, const QStyleOptionGraphicsItem 
 
 void GraphicConnector::setActionConnection(const QPointF & action)
 {
+    prepareGeometryChange();
     m_actionConnection = action;
 }
 
 void GraphicConnector::setBaseConnection(const QPointF & base)
 {
+    prepareGeometryChange();
     m_baseConnection = base;
 }
 
 void GraphicConnector::connectionTranslate(QPointF translate)
 {
+    prepareGeometryChange();
     m_baseConnection += translate;
     m_actionConnection += translate;
 }
 
 void GraphicConnector::connectionScale(double scaleFactor)
 {
+    prepareGeometryChange();
     m_baseConnection*=scaleFactor;
     m_actionConnection *= scaleFactor;
 }
@@ -60,10 +64,12 @@ const Connector & GraphicConnector::getModel() const
 
 void GraphicConnector::changeActionPosition(const QPointF & offset)
 {
+    prepareGeometryChange();
     m_actionConnection += offset;
 }
 
 void GraphicConnector::changeBasePosition(const QPointF& offset)
 {
+    prepareGeometryChange();
     m_baseConnection += offset;
 }

@@ -30,11 +30,13 @@ void GraphicJoint::paint(QPainter * painter, const QStyleOptionGraphicsItem * op
 
 void GraphicJoint::setActionConnection(const QPointF& action)
 {
+    prepareGeometryChange();
     m_actionConnection = action;
 }
 
 void GraphicJoint::setBaseConnection(const QPointF& base)
 {
+    prepareGeometryChange();
     m_baseConnection = base;
 }
 
@@ -45,22 +47,26 @@ const Joint & GraphicJoint::getModel() const
 
 void GraphicJoint::connectionTranslate(QPointF translate)
 {
+    prepareGeometryChange();
     m_baseConnection += translate;
     m_actionConnection += translate;
 }
 
 void GraphicJoint::connectionScale(double scaleFactor)
 {
+    prepareGeometryChange();
     m_baseConnection *= scaleFactor;
     m_actionConnection *= scaleFactor;
 }
 
 void GraphicJoint::changeActionPosition(const QPointF & offset)
 {
+    prepareGeometryChange();
     m_actionConnection += offset;
 }
 
 void GraphicJoint::changeBasePosition(const QPointF& offset)
 {
+    prepareGeometryChange();
     m_baseConnection += offset;
 }
