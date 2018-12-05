@@ -70,6 +70,8 @@ void ElementsManager::changePerspective(IPerspective* perspective)
 
     double scaleFactor=computeScaleFactor();
     applyScale(scaleFactor);
+
+    setStackingOrder();
 }
 
 double ElementsManager::computeScaleFactor()
@@ -210,6 +212,13 @@ void ElementsManager::changeConnectorsPerspective(IPerspective * perspective)
         connector->setActionConnection(actionConnection);
         QPointF baseConnection = perspective->projectPoint(connector->getModel().getBaseConnection());
         connector->setBaseConnection(baseConnection);
+    }
+}
+
+void ElementsManager::setStackingOrder()
+{
+    for (auto& motionbody : m_graphicsMechanism->getGraphicMotionBodies()) {
+        motionbody->setZValue(-1*motionbody->boundingRect().height()*motionbody->boundingRect().width());
     }
 }
 

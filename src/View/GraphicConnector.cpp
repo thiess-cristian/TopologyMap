@@ -27,7 +27,6 @@ void GraphicConnector::paint(QPainter * painter, const QStyleOptionGraphicsItem 
     QPen pen(Qt::red);
     pen.setCosmetic(true);
     painter->setPen(pen);
-    
     painter->drawLine(begin, end);
 }
 

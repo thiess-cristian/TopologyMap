@@ -34,6 +34,8 @@ private:
     void changeJointsPerspective(IPerspective* perspective);
     void changeConnectorsPerspective(IPerspective* perspective);
 
+    void setStackingOrder();
+
     std::shared_ptr<Mechanism> m_mechanism = nullptr;
     std::shared_ptr<GraphicMechanism> m_graphicsMechanism = nullptr;
     double m_scaleFactor;

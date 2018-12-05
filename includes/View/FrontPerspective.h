@@ -6,6 +6,6 @@
 class FrontPerspective :public IPerspective
 {
 public:
-    FrontPerspective(double scaleFactor=1);
+    FrontPerspective();
     virtual QPointF projectPoint(const Point3D& point) const override;
 };

@@ -12,36 +12,6 @@ std::string MotionBody::getName() const
     return m_name;
 }
 
-int MotionBody::getX() const
-{
-    return m_origin.getX();
-}
-
-int MotionBody::getY() const
-{
-    return m_origin.getY();
-}
-
-int MotionBody::getZ() const
-{
-    return m_origin.getZ();
-}
-
-void MotionBody::setX(double value)
-{
-    m_origin.setX(value);
-}
-
-void MotionBody::setY(double value)
-{
-    m_origin.setY(value);
-}
-
-void MotionBody::setZ(double value)
-{
-    m_origin.setZ(value);
-}
-
 void MotionBody::addConnection(const Point3D& connection)
 {
     m_connections.push_back(connection);

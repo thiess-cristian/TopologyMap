@@ -4,12 +4,11 @@
 #include "GraphicConnector.h"
 #include "Mechanism.h"
 
-SidePerspective::SidePerspective(double scaleFactor)
+SidePerspective::SidePerspective()
 {
-    m_scaleFactor = scaleFactor;
 }
 
 QPointF SidePerspective::projectPoint(const Point3D & point) const
 {
-    return QPointF(point.getX(),point.getZ())*m_scaleFactor;
+    return QPointF(point.getX(), -point.getZ());
 }

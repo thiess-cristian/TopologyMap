@@ -6,7 +6,7 @@
 class SidePerspective :public IPerspective
 {
 public:
-    SidePerspective(double scaleFactor = 1);
+    SidePerspective();
     // Inherited via IPerspectiveElementsCreator
     virtual QPointF projectPoint(const Point3D & point) const override;
 };

@@ -11,14 +11,6 @@ public:
 
     std::string getName() const;
 
-    int getX() const;
-    int getY() const;
-    int getZ() const;
-
-    void setX(double value);
-    void setY(double value);
-    void setZ(double value);
-
     void addConnection(const Point3D& connection);
     std::vector<Point3D> getConnectionPoints() const;
     Point3D getOrigin()const;

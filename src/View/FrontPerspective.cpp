@@ -4,12 +4,11 @@
 #include "GraphicConnector.h"
 #include "Mechanism.h"
 
-FrontPerspective::FrontPerspective(double scaleFactor)
+FrontPerspective::FrontPerspective()
 {
-    m_scaleFactor = scaleFactor;
 }
 
 QPointF FrontPerspective::projectPoint(const Point3D& point) const
 {
-    return QPointF(point.getZ(), point.getY())*m_scaleFactor;
+    return QPointF(point.getZ(), -point.getY());
 }
