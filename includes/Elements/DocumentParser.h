@@ -10,10 +10,16 @@
 #include <memory>
 class QFile;
 
+enum class Version
+{
+    V_12,
+    V_13
+};
+
 class DocumentParser
 {
 public:
-    DocumentParser();
+    DocumentParser(const Version& version=Version::V_12);
     ~DocumentParser();
    
     std::shared_ptr<Mechanism> createMechanism(QFile& file);
@@ -25,4 +31,10 @@ private:
 
     QDomDocument m_document;
     QDomElement m_root;
+
+    Version m_version;
+
+    std::map<Version, const char*> m_motionBodyName;
+    std::map<Version, const char*> m_motionBodiesName;
+    std::map<Version, const char*> m_selectedMotionBodyName;
 };

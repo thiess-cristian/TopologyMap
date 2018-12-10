@@ -25,9 +25,8 @@ QRectF GraphicMotionBody::boundingRect() const
     QGraphicsTextItem textItem;
     textItem.font();
     QFontMetrics metrics(textItem.font());
-    int textLength = std::min(metrics.width(m_motionBody.getName().c_str()),(int)m_boundingRect.right()- metrics.width(m_motionBody.getName().c_str()));
-
-    return bounding.adjusted(-1 * textLength, -7, textLength, 7);
+    int textLength = std::max(0, static_cast<int>(metrics.width(m_motionBody.getName().c_str()) - m_boundingRect.width() / 2));
+    return bounding.adjusted(0, 0, textLength, 0);
 }
 
 void GraphicMotionBody::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
@@ -45,6 +44,7 @@ void GraphicMotionBody::paint(QPainter * painter, const QStyleOptionGraphicsItem
     m_origin.setY(std::max(rect.center().y(), m_origin.y()));
 
     painter->fillRect(rect, QBrush(QColor(128, 128, 255, 128)));
+    painter->fillRect(boundingRect(), QBrush(QColor(128, 255, 255, 128)));
     painter->drawText(m_origin, m_motionBody.getName().c_str());
 }
 

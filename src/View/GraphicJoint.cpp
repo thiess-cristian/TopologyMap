@@ -17,7 +17,7 @@ GraphicJoint::GraphicJoint(const Joint & joint, GraphicMotionBody * action, Grap
 QRectF GraphicJoint::boundingRect() const
 {  
     Bounder bounder;
-    return  bounder.createBoundingRect({m_actionConnection,m_baseConnection});
+    return  bounder.createBoundingRect({m_actionConnection,m_baseConnection}).adjusted(-7,-7,7,7);
 }
 
 void GraphicJoint::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
