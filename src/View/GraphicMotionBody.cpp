@@ -44,16 +44,15 @@ void GraphicMotionBody::paint(QPainter * painter, const QStyleOptionGraphicsItem
     m_origin.setY(std::max(rect.center().y(), m_origin.y()));
 
     painter->fillRect(rect, QBrush(QColor(128, 128, 255, 128)));
-    painter->fillRect(boundingRect(), QBrush(QColor(128, 255, 255, 128)));
     painter->drawText(m_origin, m_motionBody.getName().c_str());
 }
 
-void GraphicMotionBody::setBoundingRect(QRectF boundingRect)
+void GraphicMotionBody::setBoundingRect(const QRectF& boundingRect)
 {
     m_boundingRect = boundingRect;
 }
 
-void GraphicMotionBody::setOrigin(QPointF origin)
+void GraphicMotionBody::setOrigin(const QPointF& origin)
 {
     m_origin = origin;
 }

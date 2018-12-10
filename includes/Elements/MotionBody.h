@@ -14,9 +14,8 @@ public:
     void addConnection(const Point3D& connection);
     std::vector<Point3D> getConnectionPoints() const;
     Point3D getOrigin()const;
+
 private:
-    
     std::vector<Point3D> m_connections;
     Point3D m_origin;
-
 };

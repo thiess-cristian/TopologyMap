@@ -13,7 +13,6 @@ DocumentParser::DocumentParser():m_version(Version::V_13)
     m_motionBodyName[Version::V_12] = "Link";
     m_motionBodiesName[Version::V_12] = "Links";
     m_selectedMotionBodyName[Version::V_12] = "SelectedLink";
-
 }
 
 DocumentParser::~DocumentParser()

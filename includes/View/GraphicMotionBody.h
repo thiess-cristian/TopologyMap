@@ -13,8 +13,8 @@ public:
     virtual QRectF boundingRect() const override;
     virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = nullptr) override;
 
-    void setBoundingRect(QRectF boundingRect);
-    void setOrigin(QPointF origin);
+    void setBoundingRect(const QRectF& boundingRect);
+    void setOrigin(const QPointF& origin);
 
     const MotionBody& getModel() const;
 

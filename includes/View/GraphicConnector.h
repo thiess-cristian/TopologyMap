@@ -9,7 +9,7 @@ class GraphicConnector :public QObject,public QGraphicsItem
 {
     Q_OBJECT
 public:
-    GraphicConnector(Connector connector, GraphicMotionBody * action, GraphicMotionBody * base);
+    GraphicConnector(const Connector& connector, GraphicMotionBody * action, GraphicMotionBody * base);
 
     // Inherited via QGraphicsItem
     virtual QRectF boundingRect() const override;
@@ -19,7 +19,7 @@ public:
     void setActionConnection(const QPointF& action);
     void setBaseConnection(const QPointF& base);
 
-    void connectionTranslate(QPointF translate);
+    void connectionTranslate(const QPointF& translate);
     void connectionScale(double scaleFactor);
 
     const Connector& getModel() const;

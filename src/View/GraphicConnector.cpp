@@ -4,7 +4,7 @@
 #include <qpainter.h>
 #include <iostream>
 
-GraphicConnector::GraphicConnector(Connector connector, GraphicMotionBody * action, GraphicMotionBody * base):
+GraphicConnector::GraphicConnector(const Connector& connector, GraphicMotionBody * action, GraphicMotionBody * base):
     m_connector(connector),
     m_action(action),
     m_base(base)
@@ -42,7 +42,7 @@ void GraphicConnector::setBaseConnection(const QPointF & base)
     m_baseConnection = base;
 }
 
-void GraphicConnector::connectionTranslate(QPointF translate)
+void GraphicConnector::connectionTranslate(const QPointF& translate)
 {
     prepareGeometryChange();
     m_baseConnection += translate;
