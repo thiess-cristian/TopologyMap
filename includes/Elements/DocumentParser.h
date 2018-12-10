@@ -19,12 +19,13 @@ enum class Version
 class DocumentParser
 {
 public:
-    DocumentParser(const Version& version=Version::V_12);
+    DocumentParser();
     ~DocumentParser();
    
     std::shared_ptr<Mechanism> createMechanism(QFile& file);
 
 private:
+    void readFileVersion();
     std::map<std::string, MotionBody> readMotionBodies();
     std::map<std::string, Joint> readJoints(std::map<std::string, MotionBody>& m_motionBodies);
     std::map<std::string, Connector> readConnectors(std::map<std::string, MotionBody>& m_motionBodies,const std::map<std::string, Joint>& m_joints);

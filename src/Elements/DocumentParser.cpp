@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 
-DocumentParser::DocumentParser(const Version& version):m_version(version)
+DocumentParser::DocumentParser():m_version(Version::V_13)
 {
     m_motionBodyName[Version::V_13] = "MotionBody";
     m_motionBodiesName[Version::V_13] = "MotionBodies";
@@ -34,6 +34,8 @@ std::shared_ptr<Mechanism> DocumentParser::createMechanism(QFile& file)
     file.close();
     m_root = m_document.firstChildElement();
 
+    readFileVersion();
+
     auto motionBodies=readMotionBodies();
     auto joints=readJoints(motionBodies);
     auto connectors=readConnectors(motionBodies, joints);
@@ -48,6 +50,17 @@ auto findPoint = [](QDomElement origin) {
 
     return Point3D(x, y, z);
 };
+
+void DocumentParser::readFileVersion()
+{
+    auto version = m_root.attribute("Version").toDouble();
+
+    if (version == 12) {
+        m_version = Version::V_12;
+    } else {
+        m_version = Version::V_13;
+    }
+}
 
 std::map<std::string, MotionBody> DocumentParser::readMotionBodies()
 {
