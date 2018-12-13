@@ -7,6 +7,7 @@
 #include "Enums.h"
 #include "SidePerspective.h"
 #include "Bounder.h"
+#include "LinkAtachment.h"
 
 #include <qfile.h>
 #include <qtransform.h>
@@ -168,14 +169,8 @@ void ElementsManager::changeMotionBodiesPerspective(IPerspective * perspective)
     Bounder bounder;
     for (auto& motionbody : m_graphicsMechanism->getGraphicMotionBodies()) {
         auto origin = perspective->projectPoint(motionbody->getModel().getOrigin());
-        auto connections = motionbody->getModel().getConnectionPoints();
-        connections.push_back(motionbody->getModel().getOrigin());
-      
-        std::vector<QPointF> projectedPoints;
-
-        for (const auto& point : connections) {
-            projectedPoints.push_back(perspective->projectPoint(point));
-        }
+     
+        std::vector<QPointF> projectedPoints=perspective->projectMotionBody(motionbody->getModel());
 
         QRectF box=bounder.createBoundingRect(projectedPoints);
         QRectF bounding = bounder.createBoundingRect({
@@ -198,9 +193,9 @@ void ElementsManager::changeMotionBodiesPerspective(IPerspective * perspective)
 void ElementsManager::changeJointsPerspective(IPerspective * perspective)
 {
     for (auto& joint : m_graphicsMechanism->getGraphicJoints()) {
-        QPointF actionConnection = perspective->projectPoint(joint->getModel().getActionConnection());
+        QPointF actionConnection = perspective->projectLinkAtachment(joint->getModel(), LinkType::Action);
         joint->setActionConnection(actionConnection);
-        QPointF baseConnection = perspective->projectPoint(joint->getModel().getBaseConnection());
+        QPointF baseConnection = perspective->projectLinkAtachment(joint->getModel(), LinkType::Base);
         joint->setBaseConnection(baseConnection);
     }
 }
@@ -208,9 +203,9 @@ void ElementsManager::changeJointsPerspective(IPerspective * perspective)
 void ElementsManager::changeConnectorsPerspective(IPerspective * perspective)
 {
     for (auto& connector : m_graphicsMechanism->getGraphicConnectors()) {
-        QPointF actionConnection = perspective->projectPoint(connector->getModel().getActionConnection());
+        QPointF actionConnection = perspective->projectLinkAtachment(connector->getModel(), LinkType::Action);
         connector->setActionConnection(actionConnection);
-        QPointF baseConnection = perspective->projectPoint(connector->getModel().getBaseConnection());
+        QPointF baseConnection = perspective->projectLinkAtachment(connector->getModel(), LinkType::Base);
         connector->setBaseConnection(baseConnection);
     }
 }
