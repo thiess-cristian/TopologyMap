@@ -14,21 +14,3 @@ LinkType LinkAtachment::getLinkType() const
 {
     return m_type;
 }
-
-MotionBody LinkAtachment::getMotionBody() const
-{
-    MotionBody type;
-    switch (m_type) {
-        case LinkType::Action:{
-            type = m_link.getAction();
-            break;
-        }
-        case LinkType::Base: {
-            type = m_link.getBase();
-            break;
-        }
-        default:
-            break;
-    }
-    return type;
-}

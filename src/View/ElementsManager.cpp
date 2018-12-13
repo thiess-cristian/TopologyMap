@@ -168,10 +168,17 @@ void ElementsManager::changeMotionBodiesPerspective(IPerspective * perspective)
 {
     Bounder bounder;
     for (auto& motionbody : m_graphicsMechanism->getGraphicMotionBodies()) {
-        auto origin = perspective->projectPoint(motionbody->getModel().getOrigin());
-     
-        std::vector<QPointF> projectedPoints=perspective->projectMotionBody(motionbody->getModel());
+        auto connections = motionbody->getModel().getConnectionPoints();
+       // connections.push_back(motionbody->getModel().getOrigin());
+      
+        std::vector<QPointF> projectedPoints;
 
+        for (const auto& link : motionbody->getModel().getLinkAtachments()) {
+            projectedPoints.push_back(perspective->projectLinkAtachment(*link.get()));
+        }
+
+        auto origin = perspective->projectMotionBody(motionbody->getModel());
+        projectedPoints.push_back(origin);
         QRectF box=bounder.createBoundingRect(projectedPoints);
         QRectF bounding = bounder.createBoundingRect({
             origin * 2 - box.bottomRight(),

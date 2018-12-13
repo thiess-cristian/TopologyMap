@@ -1,4 +1,5 @@
 #include "DocumentParser.h"
+#include "LinkAtachment.h"
 #include "qfile.h"
 #include "Point3D.h"
 #include <iostream>
@@ -125,6 +126,9 @@ std::map<std::string, Joint> DocumentParser::readJoints(std::map<std::string, Mo
                 baseBody.addConnection(baseConnection);
 
                 joints[nameAttribute] = Joint(nameAttribute, typeAttribute, actionBody, baseBody, actionConnection, baseConnection);
+
+                actionBody.addLinkAtachment(LinkAtachment(joints[nameAttribute], LinkType::Action));
+                baseBody.addLinkAtachment(LinkAtachment(joints[nameAttribute], LinkType::Base));
             }
         }
     }

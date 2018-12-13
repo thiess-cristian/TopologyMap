@@ -1,6 +1,5 @@
 #pragma once
 #include "Link.h"
-#include "MotionBody.h"
 #include "Joint.h"
 
 class Connector:public Link

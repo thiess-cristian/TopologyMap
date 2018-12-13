@@ -13,17 +13,9 @@ QPointF FrontPerspective::projectPoint(const Point3D& point) const
     return QPointF(point.getZ(), -point.getY());
 }
 
-std::vector<QPointF> FrontPerspective::projectMotionBody(const MotionBody & motionBody) const
+QPointF FrontPerspective::projectMotionBody(const MotionBody & motionBody) const
 {
-    auto connections = motionBody.getConnectionPoints();
-    connections.push_back(motionBody.getOrigin());
-
-    std::vector<QPointF> projectedPoints;
-
-    for (const auto& point : connections) {
-        projectedPoints.push_back(projectPoint(point));
-    }
-    return projectedPoints;
+    return projectPoint(motionBody.getOrigin());
 }
 
 QPointF FrontPerspective::projectLinkAtachment(const Link & link, LinkType type) const
