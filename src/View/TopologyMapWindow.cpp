@@ -4,6 +4,7 @@
 #include "TopPerspective.h"
 #include "SidePerspective.h"
 #include "FrontPerspective.h"
+#include "CirclePerspective.h"
 
 #include <qfiledialog.h>
 
@@ -19,6 +20,8 @@ TopologyMapWindow::TopologyMapWindow(QWidget *parent):QMainWindow(parent)
     QObject::connect(m_ui->actionFront, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToFront);
     QObject::connect(m_ui->actionSide, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToSide);
     QObject::connect(m_ui->actionTop, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToTop);
+    QObject::connect(m_ui->actionCircle, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveCircle);
+
 
 }
 
@@ -41,6 +44,12 @@ void TopologyMapWindow::changePerspectiveToFront()
 {
     FrontPerspective front;
     m_manager.changePerspective(&front);
+}
+
+void TopologyMapWindow::changePerspectiveCircle()
+{
+    CirclePerspective circle(m_manager.getMechanism());
+    m_manager.changePerspective(&circle);
 }
 
 void TopologyMapWindow::openFile()

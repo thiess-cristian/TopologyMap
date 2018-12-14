@@ -18,6 +18,5 @@ public:
     };
     virtual QPointF projectLinkAtachment(const Link& link,LinkType type)const = 0;
 
-protected:
-    std::shared_ptr<Mechanism> m_mechanism;
+
 };

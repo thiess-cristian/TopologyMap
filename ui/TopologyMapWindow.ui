@@ -48,6 +48,7 @@
      <addaction name="actionFront"/>
     </widget>
     <addaction name="menuPerspective"/>
+    <addaction name="actionCircle"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuview"/>
@@ -71,6 +72,11 @@
   <action name="actionFront">
    <property name="text">
     <string>Front</string>
+   </property>
+  </action>
+  <action name="actionCircle">
+   <property name="text">
+    <string>Circle</string>
    </property>
   </action>
  </widget>

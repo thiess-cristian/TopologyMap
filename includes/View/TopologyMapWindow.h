@@ -19,7 +19,7 @@ protected slots:
     void changePerspectiveToTop();
     void changePerspectiveToSide();
     void changePerspectiveToFront();
-
+    void changePerspectiveCircle();
 private:
     std::unique_ptr<Ui_TopologyMapWindow> m_ui;
 

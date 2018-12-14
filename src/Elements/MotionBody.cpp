@@ -13,16 +13,6 @@ std::string MotionBody::getName() const
     return m_name;
 }
 
-void MotionBody::addConnection(const Point3D& connection)
-{
-    m_connections.push_back(connection);
-}
-
-std::vector<Point3D> MotionBody::getConnectionPoints() const
-{
-    return m_connections;
-}
-
 void MotionBody::addLinkAtachment(const LinkAtachment & linkAtachment)
 {
     m_linkAtachments.push_back(std::make_shared<LinkAtachment>(linkAtachment));

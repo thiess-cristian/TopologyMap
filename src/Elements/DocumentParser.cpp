@@ -118,12 +118,10 @@ std::map<std::string, Joint> DocumentParser::readJoints(std::map<std::string, Mo
                 //the connection point for the action motionbody
                 QDomElement actionOrigin = action.firstChildElement("Point").firstChildElement("Origin");
                 Point3D actionConnection = findPoint(actionOrigin);
-                actionBody.addConnection(actionConnection);
 
                 //the connection point for the base motionbody
                 QDomElement baseOrigin = base.firstChildElement("Point").firstChildElement("Origin");
                 Point3D baseConnection = findPoint(baseOrigin);
-                baseBody.addConnection(baseConnection);
 
                 joints[nameAttribute] = Joint(nameAttribute, typeAttribute, actionBody, baseBody, actionConnection, baseConnection);
 
@@ -157,12 +155,8 @@ std::map<std::string, Connector> DocumentParser::readConnectors(std::map<std::st
             QDomElement action = element.firstChildElement("Action");
             QDomElement base = element.firstChildElement("Base");
 
-            //std::string actionAttribute = action.attribute("Name").toStdString();
-            //std::string baseAttribute = base.attribute("Name").toStdString();
-
             std::string actionAttribute = action.firstChildElement(m_selectedMotionBodyName[m_version]).attribute("Name").toStdString();
             std::string baseAttribute = base.firstChildElement(m_selectedMotionBodyName[m_version]).attribute("Name").toStdString();
-
 
             if (actionAttribute == "" && baseAttribute == "") {
                 QDomElement selectedJoint = element.firstChildElement("SelectedJoint");
@@ -170,8 +164,7 @@ std::map<std::string, Connector> DocumentParser::readConnectors(std::map<std::st
 
                 Joint joint = joints.at(jointName);
 
-                //connectors[nameAttribute] = Connector(kind, nameAttribute, typeAttribute, joint);
-                connectors.emplace(nameAttribute, Connector(kind, nameAttribute, typeAttribute, joint));
+                connectors[nameAttribute] = Connector(kind, nameAttribute, typeAttribute, joint);
 
             } else {
                 if (motionBodies.find(actionAttribute) != motionBodies.end() && motionBodies.find(baseAttribute) != motionBodies.end()) {
@@ -180,16 +173,12 @@ std::map<std::string, Connector> DocumentParser::readConnectors(std::map<std::st
 
                     QDomElement actionOrigin = action.firstChildElement("Point").firstChildElement("Origin");
                     Point3D actionConnection = findPoint(actionOrigin);
-                    actionBody.addConnection(actionConnection);
                     //the connection point for the base motionbody
 
                     QDomElement baseOrigin = base.firstChildElement("Point").firstChildElement("Origin");
                     Point3D baseConnection = findPoint(baseOrigin);
-                    baseBody.addConnection(baseConnection);
-
 
                     connectors[nameAttribute] = Connector(kind, nameAttribute, typeAttribute, actionBody, baseBody, actionConnection, baseConnection);
-                    //connectors.emplace(nameAttribute, Connector(kind, nameAttribute, typeAttribute, actionBody, baseBody, actionConnection, baseConnection));
                 }
             }
         }

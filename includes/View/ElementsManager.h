@@ -25,6 +25,8 @@ public:
     void applyScale(double scaleFactor);
     void applyTranslation(QPointF translatePoint);
 
+    std::shared_ptr<Mechanism> getMechanism()const;
+
 private:
     std::vector<GraphicMotionBody*> createMotionBodies() const;
     std::vector<GraphicJoint*> createJoints() const;

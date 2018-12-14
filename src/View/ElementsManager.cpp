@@ -49,7 +49,7 @@ void ElementsManager::addElementsToScene(TopologyMapScene * scene)
         scene->addItem(motionBody);
     }
 
-    SidePerspective side;
+    SidePerspective side;    
     changePerspective(&side);
 }
 
@@ -131,6 +131,11 @@ void ElementsManager::applyTranslation(QPointF translatePoint)
     }
 }
 
+std::shared_ptr<Mechanism> ElementsManager::getMechanism() const
+{
+    return m_mechanism;
+}
+
 std::vector<GraphicMotionBody*> ElementsManager::createMotionBodies() const
 {
     std::vector<GraphicMotionBody*> motionBodies;
@@ -168,9 +173,6 @@ void ElementsManager::changeMotionBodiesPerspective(IPerspective * perspective)
 {
     Bounder bounder;
     for (auto& motionbody : m_graphicsMechanism->getGraphicMotionBodies()) {
-        auto connections = motionbody->getModel().getConnectionPoints();
-       // connections.push_back(motionbody->getModel().getOrigin());
-      
         std::vector<QPointF> projectedPoints;
 
         for (const auto& link : motionbody->getModel().getLinkAtachments()) {

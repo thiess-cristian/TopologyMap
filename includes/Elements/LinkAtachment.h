@@ -15,6 +15,7 @@ public:
 
     Link getLink()const;
     LinkType getLinkType()const;
+    MotionBody getMotionBody()const;
 
 private:
     Link m_link;

@@ -14,3 +14,8 @@ LinkType LinkAtachment::getLinkType() const
 {
     return m_type;
 }
+
+MotionBody LinkAtachment::getMotionBody() const
+{
+    return m_type == LinkType::Action ? m_link.getAction() : m_link.getBase();
+}

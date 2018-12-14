@@ -13,10 +13,6 @@ public:
     MotionBody(const std::string& name="", const Point3D& origin=Point3D());
 
     std::string getName() const;
-
-    void addConnection(const Point3D& connection);
-    std::vector<Point3D> getConnectionPoints() const;
-
     void addLinkAtachment(const LinkAtachment& linkAtachment);
 
     std::vector<std::shared_ptr<LinkAtachment>> getLinkAtachments()const;
@@ -24,7 +20,6 @@ public:
     Point3D getOrigin()const;
 
 private:
-    std::vector<Point3D> m_connections;
     std::vector<std::shared_ptr<LinkAtachment>> m_linkAtachments;
     Point3D m_origin;
 };
