@@ -22,8 +22,11 @@ QRectF GraphicJoint::boundingRect() const
 
 void GraphicJoint::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
-    painter->drawLine(m_actionConnection, m_baseConnection);
+    QPen pen(Qt::black);
+    pen.setCosmetic(true);
+    painter->setPen(pen);
 
+    painter->drawLine(m_actionConnection, m_baseConnection);
     painter->drawEllipse(m_actionConnection, 5,5);
     painter->drawEllipse(m_baseConnection, 7, 7);
 }

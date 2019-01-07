@@ -23,8 +23,6 @@ TopologyMapWindow::TopologyMapWindow(QWidget *parent):QMainWindow(parent)
     QObject::connect(m_ui->actionTop, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToTop);
     QObject::connect(m_ui->actionCircle, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveCircle);
     QObject::connect(m_ui->actionForce_Directed, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveForceDirected);
-
-
 }
 
 TopologyMapWindow::~TopologyMapWindow()

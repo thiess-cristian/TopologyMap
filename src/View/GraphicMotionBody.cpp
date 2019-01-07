@@ -31,6 +31,11 @@ QRectF GraphicMotionBody::boundingRect() const
 
 void GraphicMotionBody::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
+
+    QPen pen(Qt::black);
+    pen.setCosmetic(true);
+    painter->setPen(pen);
+
     painter->drawEllipse(m_origin, 10, 10);
     QRectF rect(m_boundingRect.x(), m_boundingRect.y(), m_boundingRect.width(), m_boundingRect.height());
     
