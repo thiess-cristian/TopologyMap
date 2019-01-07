@@ -12,6 +12,8 @@ public:
     void setX(double value);
     void setY(double value);
     void setZ(double value);
+
+    bool operator==(const Point3D& point)const;
     
 private:
     double m_x;

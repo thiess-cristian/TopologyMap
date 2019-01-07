@@ -34,3 +34,8 @@ void Point3D::setZ(double value)
 {
     m_z = value;
 }
+
+bool Point3D::operator==(const Point3D & point) const
+{
+    return m_x == point.m_x && m_y == point.m_y && m_z == point.m_z;
+}

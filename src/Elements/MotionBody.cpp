@@ -27,3 +27,19 @@ Point3D MotionBody::getOrigin() const
 {
     return m_origin;
 }
+
+void MotionBody::setOrigin(const Point3D & point) const
+{
+    m_origin = point;
+}
+
+bool MotionBody::operator==(const MotionBody & motionbody) const
+{
+    return m_name == motionbody.m_name;
+}
+
+bool MotionBody::operator<(const MotionBody & motionbody) const
+{
+    return m_name < motionbody.m_name;
+}
+

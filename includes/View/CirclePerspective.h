@@ -1,5 +1,6 @@
 #pragma once
 #include "IPerspective.h";
+#include "Graph.h"
 #include <memory>
 
 class Mechanism;
@@ -16,6 +17,9 @@ public:
 
 private:
     std::shared_ptr<Mechanism> m_mechanism;
+
+    Graph m_graph;
+
 };
 
 

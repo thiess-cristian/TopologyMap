@@ -18,8 +18,12 @@ public:
     std::vector<std::shared_ptr<LinkAtachment>> getLinkAtachments()const;
 
     Point3D getOrigin()const;
+    void setOrigin(const Point3D& point) const;
+
+    bool operator==(const MotionBody& motionbody) const;
+    bool operator<(const MotionBody& motionbody)const;
 
 private:
     std::vector<std::shared_ptr<LinkAtachment>> m_linkAtachments;
-    Point3D m_origin;
+    mutable Point3D m_origin;
 };

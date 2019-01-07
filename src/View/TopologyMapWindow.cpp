@@ -5,6 +5,7 @@
 #include "SidePerspective.h"
 #include "FrontPerspective.h"
 #include "CirclePerspective.h"
+#include "ForceDirectedPerspective.h"
 
 #include <qfiledialog.h>
 
@@ -21,6 +22,7 @@ TopologyMapWindow::TopologyMapWindow(QWidget *parent):QMainWindow(parent)
     QObject::connect(m_ui->actionSide, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToSide);
     QObject::connect(m_ui->actionTop, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToTop);
     QObject::connect(m_ui->actionCircle, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveCircle);
+    QObject::connect(m_ui->actionForce_Directed, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveForceDirected);
 
 
 }
@@ -50,6 +52,12 @@ void TopologyMapWindow::changePerspectiveCircle()
 {
     CirclePerspective circle(m_manager.getMechanism());
     m_manager.changePerspective(&circle);
+}
+
+void TopologyMapWindow::changePerspectiveForceDirected()
+{
+    ForceDirectedPerspective force(m_manager.getMechanism(), size().height(), size().width());
+    m_manager.changePerspective(&force);
 }
 
 void TopologyMapWindow::openFile()

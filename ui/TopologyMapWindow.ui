@@ -49,6 +49,7 @@
     </widget>
     <addaction name="menuPerspective"/>
     <addaction name="actionCircle"/>
+    <addaction name="actionForce_Directed"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuview"/>
@@ -77,6 +78,11 @@
   <action name="actionCircle">
    <property name="text">
     <string>Circle</string>
+   </property>
+  </action>
+  <action name="actionForce_Directed">
+   <property name="text">
+    <string>Force-Directed</string>
    </property>
   </action>
  </widget>
