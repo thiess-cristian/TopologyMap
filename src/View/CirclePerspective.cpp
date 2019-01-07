@@ -5,21 +5,7 @@
 
 CirclePerspective::CirclePerspective(std::shared_ptr<Mechanism> mechanism) :m_mechanism(mechanism)
 {
-    for (const auto& motionBody : m_mechanism->getMotionBodies()) {
-        m_graph.addNode(motionBody.second);
-    }
-
-    for (const auto& joint : m_mechanism->getJoints()) {
-        m_graph.addEdge(joint.second);
-    }
-
-    for (const auto& connector : m_mechanism->getConnectors()) {
-        m_graph.addEdge(connector.second);
-    }
-
-    auto gr = m_graph.split();
-
-    auto leaves = m_graph.popLeaves();
+   
 }
 
 QPointF CirclePerspective::projectPoint(const Point3D & point) const

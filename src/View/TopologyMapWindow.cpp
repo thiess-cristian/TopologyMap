@@ -56,7 +56,7 @@ void TopologyMapWindow::changePerspectiveCircle()
 
 void TopologyMapWindow::changePerspectiveForceDirected()
 {
-    ForceDirectedPerspective force(m_manager.getMechanism(), size().height(), size().width());
+    ForceDirectedPerspective force(m_manager.getMechanism());
     m_manager.changePerspective(&force);
 }
 

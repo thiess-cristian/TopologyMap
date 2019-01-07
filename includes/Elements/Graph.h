@@ -1,51 +1,110 @@
 #pragma once
-#include "MotionBody.h"
-#include "Link.h"
-#include "Element.h"
-#include <map>
 #include <vector>
-#include <set>
-#include <string>
-#include <utility>
-#include <list>
+#include <MotionBody.h>
+#include <Link.h>
+#include <random>
 
-struct Compare
+struct Coord
 {
-    bool operator() (const Element& l, const Element& r) const
+    Coord(double dx=0,double dy=0):x(dx),y(dy){}
+    double x;
+    double y;
+
+
+    double length()
     {
-        return l.getName() < r.getName();
+        return sqrt(x*x + y*y);
     }
+
+    double distance(const Coord& coord) const
+    {
+        return sqrt((x - coord.x)*(x - coord.x) + (y - coord.y)*(y - coord.y));
+    }
+
+    Coord unit()
+    {
+        double length = sqrt(x*x + y*y);
+        if (length == 0) {
+            return Coord(0.00001, 0.00001);
+        } else {
+            return Coord(x / length, y / length);
+        }
+    }
+
+    Coord operator-(const Coord& coord)
+    {
+        return Coord(x - coord.x, y - coord.y);
+    }
+
+    Coord operator/(double d)
+    {
+        return Coord(x / d, y / d);
+    }
+    Coord operator*(double d)
+    {
+        return Coord(x*d, y*d);
+    }
+
+    Coord& operator+=(const Coord& coord)
+    {
+        x += coord.x;
+        y += coord.y;
+        return *this;
+    }
+    Coord& operator-=(const Coord& coord)
+    {
+        x -= coord.x;
+        y -= coord.y;
+        return *this;
+    }
+};
+
+
+struct Node
+{
+    Node(const MotionBody& motionBody) :obj(motionBody) ,pos(motionBody.getOrigin().getX(), motionBody.getOrigin().getY()){
+        pos.x = rand() % 10;
+        pos.y = rand() % 10;
+    }
+    bool isAdjacent(const Node& node)
+    {
+        for (const auto& n : inc) {
+            if (n->obj == node.obj) {
+                return true;
+            }
+        }
+        return false;
+    }
+    MotionBody obj;
+    std::vector<Node*> inc;
+
+    Coord disp;
+    Coord pos;
+
 };
 
 class Graph
 {
 public:
     Graph();
-
     void addNode(const MotionBody& node);
     void addEdge(const Link& edge);
-    void addNodeNeighbors(const MotionBody& node,const std::vector<MotionBody>& neighbors);
 
-    std::set<Link, Compare> getEdges()const;
-    std::vector<MotionBody> getNodes()const;
+    Coord getNodeCoord(const MotionBody& motionBody) const;
 
-    std::pair<MotionBody, MotionBody> getIncidentNodes(const Link& link) const;
-    std::vector<MotionBody> getNeighbors(const MotionBody& motionBody) const;
-
-    MotionBody getNode(const MotionBody& motionBody) const;
-
-    void removeNode(const MotionBody& motionBody);
-    size_t nrOfNeighbors(const MotionBody& motionBody);
-
-    std::vector<Graph> split();
-
-    std::vector<MotionBody> popLeaves();
-
-    void setNodeCoords(const MotionBody& node, double x = 0, double y = 0, double z = 0);
-
-    bool areNeighbors(const MotionBody& m1, const MotionBody& m2);
-   
+    void forceDirectedLayout();
 private:
-    std::map<MotionBody, std::vector<MotionBody>, Compare> m_nodes;
+    void makeCircle();
+    void resetDisplacement();
+    void calculateRepulsiveForces();
+    void calculateAttractiveForces();
+    void setNewPosition();
+
+    std::vector<Node*> m_nodes;
+
+    size_t m_nodesSize;
+    const double m_k = 0.01;
+    const double m_e = 0.001;
+    bool m_convergent = false;
 
 };
