@@ -3,6 +3,7 @@
 #include "DocumentParser.h"
 #include "Enums.h"
 #include <vector>
+#include <qobject.h>
 
 class TopologyMapScene;
 class GraphicMotionBody;
@@ -11,8 +12,9 @@ class GraphicConnector;
 class GraphicMechanism;
 class IPerspective;
 
-class ElementsManager
+class ElementsManager:public QObject
 {
+    Q_OBJECT
 public:
     ElementsManager();
     
@@ -22,10 +24,11 @@ public:
     void changePerspective(IPerspective* perspective);
     double computeScaleFactor();
     QPointF computeTranslationPoint();
+    std::shared_ptr<Mechanism> getMechanism()const;
+public slots:
     void applyScale(double scaleFactor);
     void applyTranslation(QPointF translatePoint);
 
-    std::shared_ptr<Mechanism> getMechanism()const;
 
 private:
     std::vector<GraphicMotionBody*> createMotionBodies() const;

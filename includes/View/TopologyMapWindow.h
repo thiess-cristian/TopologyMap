@@ -6,6 +6,7 @@
 
 class Ui_TopologyMapWindow;
 class TopologyMapScene;
+class Zoom;
 
 class TopologyMapWindow : public QMainWindow
 {
@@ -26,4 +27,5 @@ private:
 
     TopologyMapScene* m_scene;
     ElementsManager m_manager;
+    std::unique_ptr<Zoom> m_zoom;
 };

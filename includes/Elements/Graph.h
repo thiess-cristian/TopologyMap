@@ -16,19 +16,14 @@ struct Coord
         return sqrt(x*x + y*y);
     }
 
+    double lengthSquared()
+    {
+        return x*x + y*y;
+    }
+
     double distance(const Coord& coord) const
     {
         return sqrt((x - coord.x)*(x - coord.x) + (y - coord.y)*(y - coord.y));
-    }
-
-    Coord unit()
-    {
-        double length = sqrt(x*x + y*y);
-        if (length == 0) {
-            return Coord(0.00001, 0.00001);
-        } else {
-            return Coord(x / length, y / length);
-        }
     }
 
     Coord operator-(const Coord& coord)
@@ -63,8 +58,8 @@ struct Coord
 struct Node
 {
     Node(const MotionBody& motionBody) :obj(motionBody) ,pos(motionBody.getOrigin().getX(), motionBody.getOrigin().getY()){
-        pos.x = rand() % 10;
-        pos.y = rand() % 10;
+       // pos.x = rand() % 10;
+        //pos.y = rand() % 10;
     }
     bool isAdjacent(const Node& node)
     {

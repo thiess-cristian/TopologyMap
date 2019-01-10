@@ -5,7 +5,6 @@
 #include <Joint.h>
 #include <Connector.h>
 
-#include <Graph2.h>
 
 void graphTest()
 {
@@ -99,7 +98,7 @@ void graphTest()
 
 void graph2Test()
 {
-    Graph2 g;
+    Graph g;
 
     Point3D origin;
 

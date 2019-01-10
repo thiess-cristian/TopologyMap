@@ -45,11 +45,11 @@ void GraphicMotionBody::paint(QPainter * painter, const QStyleOptionGraphicsItem
     rect.setWidth(std::max(rect.width(), minWidth));
     rect.setHeight(std::max(rect.height(), minHeight));
 
-    m_origin.setX(std::max(rect.center().x(), m_origin.x()));
-    m_origin.setY(std::max(rect.center().y(), m_origin.y()));
+   // m_origin.setX(std::max(rect.center().x(), m_origin.x()));
+    //m_origin.setY(std::max(rect.center().y(), m_origin.y()));
 
     painter->fillRect(rect, QBrush(QColor(128, 128, 255, 128)));
-    painter->drawText(m_origin, m_motionBody.getName().c_str());
+    painter->drawText(m_origin+QPoint(10,10), m_motionBody.getName().c_str());
 }
 
 void GraphicMotionBody::setBoundingRect(const QRectF& boundingRect)
