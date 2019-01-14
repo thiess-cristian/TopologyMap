@@ -24,9 +24,10 @@ TopologyMapWindow::TopologyMapWindow(QWidget *parent):QMainWindow(parent)
     QObject::connect(m_ui->actionTop, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToTop);
     QObject::connect(m_ui->actionCircle, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveCircle);
     QObject::connect(m_ui->actionForce_Directed, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveForceDirected);
-    m_ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
     
-    //Zoom* zoom = new Zoom(m_ui->graphicsView, &m_manager);
+    m_ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
+
+    m_ui->graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
     m_zoom = std::make_unique<Zoom>(m_ui->graphicsView, &m_manager);
 }

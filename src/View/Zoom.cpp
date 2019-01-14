@@ -17,6 +17,7 @@ void Zoom::zoom(double factor)
 {
     m_manager->applyScale(factor);
 
+    m_view->update();
 
    // m_view->centerOn(m_targetScenePos);
     QPointF deltaViewportPos = m_targetViewportPos - QPointF(m_view->viewport()->width() / 2.0, m_view->viewport()->height() / 2.0);
