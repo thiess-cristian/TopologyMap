@@ -21,7 +21,7 @@ enum class JointType
     Perpendicular
 };
 
-enum class ConnectorName
+enum class ConnectorKind
 {
     Spring,
     Damper,

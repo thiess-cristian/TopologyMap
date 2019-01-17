@@ -2,7 +2,7 @@
 #include "IElementStringToEnum.h"
 #include "XMLTagNames.h"
 
-class ConnectorStringToEnum :public IElementStringToEnum<ConnectorName>
+class ConnectorStringToEnum :public IElementStringToEnum<ConnectorKind>
 {
 public:
     ConnectorStringToEnum();

@@ -2,6 +2,6 @@
 
 ConnectorStringToEnum::ConnectorStringToEnum()
 {
-    m_names["Spring"] = ConnectorName::Spring;
-    m_names["Damper"] = ConnectorName::Damper;
+    m_names["Spring"] = ConnectorKind::Spring;
+    m_names["Damper"] = ConnectorKind::Damper;
 }

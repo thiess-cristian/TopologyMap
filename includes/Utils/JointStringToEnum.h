@@ -3,7 +3,7 @@
 #include "IElementStringToEnum.h"
 
 
-class JointStringToEnum :public IElementStringToEnum<JointName>
+class JointStringToEnum :public IElementStringToEnum<JointType>
 {
 public:
     JointStringToEnum(); 

@@ -4,6 +4,9 @@
 #include "Point3D.h"
 #include <iostream>
 #include <string>
+#include <JointStringToEnum.h>
+#include <ConnectorStringToEnum.h>
+
 
 DocumentParser::DocumentParser():m_version(Version::V_13)
 {
@@ -95,6 +98,9 @@ std::map<std::string, Joint> DocumentParser::readJoints(std::map<std::string, Mo
     
     std::map<std::string, Joint> joints;
 
+
+    JointStringToEnum converter;
+
     for (int i = 0; i < list.size(); i++) {
         QDomNode item = list.at(i);
 
@@ -103,6 +109,8 @@ std::map<std::string, Joint> DocumentParser::readJoints(std::map<std::string, Mo
 
             std::string nameAttribute = element.attribute("Name").toStdString();
             std::string typeAttribute = element.attribute("Type").toStdString();
+
+            auto type = converter.getType(typeAttribute);
 
             QDomElement action = element.firstChildElement("Action");
             QDomElement base = element.firstChildElement("Base");
@@ -122,8 +130,8 @@ std::map<std::string, Joint> DocumentParser::readJoints(std::map<std::string, Mo
                 //the connection point for the base motionbody
                 QDomElement baseOrigin = base.firstChildElement("Point").firstChildElement("Origin");
                 Point3D baseConnection = findPoint(baseOrigin);
-
-                joints[nameAttribute] = Joint(nameAttribute, typeAttribute, actionBody, baseBody, actionConnection, baseConnection);
+                
+                joints[nameAttribute] = Joint(nameAttribute, type, actionBody, baseBody, actionConnection, baseConnection);
 
                 actionBody.addLinkAtachment(LinkAtachment(joints[nameAttribute], LinkType::Action));
                 baseBody.addLinkAtachment(LinkAtachment(joints[nameAttribute], LinkType::Base));
@@ -141,13 +149,16 @@ std::map<std::string, Connector> DocumentParser::readConnectors(std::map<std::st
 
     std::map<std::string, Connector> connectors;
 
+    ConnectorStringToEnum converter;
+
     for (int i = 0; i < list.size(); i++) {
         QDomNode item = list.at(i);
 
         if (item.isElement()) {
             QDomElement element = item.toElement();
 
-            std::string kind = element.nodeName().toStdString();
+            std::string kindAttribute = element.nodeName().toStdString();
+            auto kind = converter.getType(kindAttribute);
 
             std::string nameAttribute = element.attribute("Name").toStdString();
             std::string typeAttribute = element.attribute("Type").toStdString();
@@ -163,7 +174,7 @@ std::map<std::string, Connector> DocumentParser::readConnectors(std::map<std::st
                 std::string jointName = selectedJoint.attribute("Name").toStdString();
 
                 Joint joint = joints.at(jointName);
-
+               
                 connectors[nameAttribute] = Connector(kind, nameAttribute, typeAttribute, joint);
 
             } else {
@@ -177,7 +188,7 @@ std::map<std::string, Connector> DocumentParser::readConnectors(std::map<std::st
 
                     QDomElement baseOrigin = base.firstChildElement("Point").firstChildElement("Origin");
                     Point3D baseConnection = findPoint(baseOrigin);
-
+                   
                     connectors[nameAttribute] = Connector(kind, nameAttribute, typeAttribute, actionBody, baseBody, actionConnection, baseConnection);
                 }
             }
