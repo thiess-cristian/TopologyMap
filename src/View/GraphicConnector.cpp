@@ -1,7 +1,9 @@
 #include "GraphicConnector.h"
 #include "Bounder.h"
 #include "GraphicMotionBody.h"
+#include "ConnectorPainterPathCreator.h"
 #include <qpainter.h>
+#include <qtransform>
 #include <iostream>
 
 GraphicConnector::GraphicConnector(const Connector& connector, GraphicMotionBody * action, GraphicMotionBody * base):
@@ -24,10 +26,17 @@ void GraphicConnector::paint(QPainter * painter, const QStyleOptionGraphicsItem 
     QPointF begin(m_actionConnection.x(), m_actionConnection.y());
     QPointF end(m_baseConnection.x(), m_baseConnection.y());
 
+    QLineF line(begin, end);
+
+    ConnectorPainterPathCreator creator(m_connector.getKind());
+
+    auto path=creator.getPath(begin, end);
+
     QPen pen(Qt::red);
     pen.setCosmetic(true);
     painter->setPen(pen);
-    painter->drawLine(begin, end);
+   // painter->drawLine(begin, end);
+    painter->drawPath(path);
 }
 
 void GraphicConnector::setActionConnection(const QPointF & action)

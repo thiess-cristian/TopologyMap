@@ -29,3 +29,8 @@ Connector::Connector():
 {
 
 }
+
+ConnectorKind Connector::getKind() const
+{
+    return m_kind;
+}

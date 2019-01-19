@@ -16,6 +16,8 @@ public:
     Connector(const ConnectorKind& kind, const std::string& name, const std::string& type, const Joint& joint);
     Connector();
 
+    ConnectorKind getKind()const;
+
 private:
     ConnectorKind m_kind;
 };
