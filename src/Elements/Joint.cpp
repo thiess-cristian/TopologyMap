@@ -13,4 +13,9 @@ Joint::Joint(const std::string & name,
 Joint::Joint():Link("","",MotionBody(),MotionBody(),Point3D(),Point3D())
 {}
 
+JointType Joint::getType() const
+{
+    return m_type;
+}
+
 

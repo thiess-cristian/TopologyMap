@@ -1,6 +1,7 @@
 #include "GraphicJoint.h"
 #include "GraphicMotionBody.h"
 #include "Bounder.h"
+#include "JointPainterPathCreator.h"
 
 #include <qrect.h>
 #include <qpainter.h>
@@ -26,7 +27,13 @@ void GraphicJoint::paint(QPainter * painter, const QStyleOptionGraphicsItem * op
     pen.setCosmetic(true);
     painter->setPen(pen);
 
-    painter->drawLine(m_actionConnection, m_baseConnection);
+    //painter->drawLine(m_actionConnection, m_baseConnection);
+
+    JointPainterPathCreator creator(m_joint.getType());
+
+    auto path = creator.getPath(m_actionConnection,m_baseConnection);
+
+    painter->drawPath(path);
     painter->drawEllipse(m_actionConnection, 5,5);
     painter->drawEllipse(m_baseConnection, 7, 7);
 }

@@ -12,21 +12,20 @@ QPainterPath ConnectorPainterPathCreator::getPath(QPointF begin, QPointF end) co
     double length = line.length();
 
     Turtle turtle(begin,-angle);
-    turtle.forward(length / 3, true);
     
     switch (m_kind) {
         case ConnectorKind::Spring: {
-            drawSpringPath(turtle);
+            drawSpringPath(turtle,length);
             break;
         }
         case ConnectorKind::Damper: {
-
+            drawDamperPath(turtle, length);
             break;
         }
         default:
             break;
     }
-
+    
     auto path = turtle.getPath();
 
     path.lineTo(end);
@@ -34,24 +33,55 @@ QPainterPath ConnectorPainterPathCreator::getPath(QPointF begin, QPointF end) co
     return path;
 }
 
-void ConnectorPainterPathCreator::drawSpringPath(Turtle & turtle) const
+void ConnectorPainterPathCreator::drawSpringPath(Turtle & turtle, double length) const
 {
-    const int segment = 7;
+    turtle.forward(length / 4);
 
-    turtle.rotate(M_PI / 3);
-    turtle.forward(segment, true);
+    const int segment = 5;
 
-    turtle.rotate(-2.0*M_PI / 3);
-    turtle.forward(2 * segment, true);
+    const int nrOfPeaks = length / 2 / segment / 2;
 
-    turtle.rotate(2.0*M_PI / 3);
-    turtle.forward(2 * segment, true);
+    for (int i = 0; i < nrOfPeaks; i++) {
+        turtle.rotate(M_PI / 3);
+        turtle.forward(segment);
 
-    turtle.rotate(-2.0*M_PI / 3);
-    turtle.forward(2 * segment, true);
+        turtle.rotate(-2.0*M_PI / 3);
+        turtle.forward(2 * segment);
 
-    turtle.rotate(2.0*M_PI / 3);
-    turtle.forward(segment, true);
+        turtle.rotate(2.0*M_PI / 3);
+        turtle.forward(segment);
+
+        turtle.rotate(-M_PI / 3);
+    }
 }
 
+void ConnectorPainterPathCreator::drawDamperPath(Turtle & turtle, double length) const
+{
+    turtle.forward(length / 6);
+
+    const int segment = 8;
+
+    turtle.rotate(-M_PI / 2);
+    turtle.forward(segment / 2);
+   
+    turtle.forward(segment / 2, false);
+
+    turtle.rotate(M_PI / 2);
+    turtle.forward(segment);
+
+    turtle.rotate(M_PI / 2);
+    turtle.forward(segment*2);
+
+    turtle.rotate(M_PI / 2);
+    turtle.forward(segment);
+
+    turtle.rotate(M_PI / 2);
+
+    turtle.forward(segment / 2, false);
+    turtle.forward(segment/2);
+
+    turtle.rotate(M_PI / 2);
+    turtle.forward(segment,false);
+
+}
 

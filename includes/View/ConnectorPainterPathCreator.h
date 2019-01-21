@@ -13,7 +13,8 @@ public:
 
 private:
 
-    void drawSpringPath(Turtle& turtle) const;
+    void drawSpringPath(Turtle& turtle,double length) const;
+    void drawDamperPath(Turtle& turtle,double length) const;
 
     ConnectorKind m_kind;
 

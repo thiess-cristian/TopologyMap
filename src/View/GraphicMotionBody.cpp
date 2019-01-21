@@ -36,7 +36,7 @@ void GraphicMotionBody::paint(QPainter * painter, const QStyleOptionGraphicsItem
     pen.setCosmetic(true);
     painter->setPen(pen);
 
-    painter->drawEllipse(m_origin, 10, 10);
+    //painter->drawEllipse(m_origin, 10, 10);
     QRectF rect(m_boundingRect.x(), m_boundingRect.y(), m_boundingRect.width(), m_boundingRect.height());
     
     double minWidth = 50;
@@ -49,6 +49,7 @@ void GraphicMotionBody::paint(QPainter * painter, const QStyleOptionGraphicsItem
     //m_origin.setY(std::max(rect.center().y(), m_origin.y()));
 
     painter->fillRect(rect, QBrush(QColor(128, 128, 255, 128)));
+   // painter->fillRect(rect, QBrush(QColor(128, 128, 255)));
     painter->drawText(m_origin+QPoint(10,10), m_motionBody.getName().c_str());
 }
 

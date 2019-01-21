@@ -14,7 +14,8 @@ public:
     }
 
 protected:
+    IElementStringToEnum()
+    {
+    }
     std::map<std::string, T> m_names;
 };
-
-

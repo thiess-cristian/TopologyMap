@@ -15,6 +15,8 @@ public:
           const Point3D& baseConnection);
     Joint();
 
+    JointType getType()const;
+
 private:
     JointType m_type;
 
