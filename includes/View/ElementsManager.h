@@ -18,13 +18,16 @@ class ElementsManager:public QObject
 public:
     ElementsManager();
     
-    void loadElements(QFile& file);
+    void openElements(QFile& file);
     void addElementsToScene(TopologyMapScene * scene);
     void setWindowSize(size_t windowHeight,size_t windowWidth);
     void changePerspective(IPerspective* perspective);
     double computeScaleFactor();
     QPointF computeTranslationPoint();
-    std::shared_ptr<Mechanism> getMechanism()const;
+    std::shared_ptr<Mechanism> getMechanism() const;
+    void saveElements(QFile & file);
+
+
 public slots:
     void applyScale(double scaleFactor);
     void applyTranslation(QPointF translatePoint);
@@ -43,6 +46,7 @@ private:
 
     std::shared_ptr<Mechanism> m_mechanism = nullptr;
     std::shared_ptr<GraphicMechanism> m_graphicsMechanism = nullptr;
+
     double m_scaleFactor;
 
     size_t m_windowHeight;

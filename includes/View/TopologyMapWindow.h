@@ -17,6 +17,7 @@ public:
 
 protected slots:
     void openFile();
+    void saveFile();
     void changePerspectiveToTop();
     void changePerspectiveToSide();
     void changePerspectiveToFront();

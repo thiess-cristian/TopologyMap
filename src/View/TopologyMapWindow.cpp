@@ -19,6 +19,7 @@ TopologyMapWindow::TopologyMapWindow(QWidget *parent):QMainWindow(parent)
     m_ui->graphicsView->setScene(m_scene);
 
     QObject::connect(m_ui->actionOpen, &QAction::triggered, this, &TopologyMapWindow::openFile);
+    QObject::connect(m_ui->actionSave, &QAction::triggered, this, &TopologyMapWindow::saveFile);
     QObject::connect(m_ui->actionFront, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToFront);
     QObject::connect(m_ui->actionSide, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToSide);
     QObject::connect(m_ui->actionTop, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToTop);
@@ -34,6 +35,22 @@ TopologyMapWindow::TopologyMapWindow(QWidget *parent):QMainWindow(parent)
 
 TopologyMapWindow::~TopologyMapWindow()
 {}
+
+void TopologyMapWindow::saveFile()
+{
+    QString filename = QFileDialog::getSaveFileName(this,tr("Save file"),"../../../saves",tr("Xml files(*.xml)"));
+    QFile file(filename);
+
+    if (filename.length() == 0) {
+        return;
+    }
+
+    if (!file.open(QFile::WriteOnly | QFile::Text)) {
+        return;
+    }
+
+    m_manager.saveElements(file);
+}
 
 void TopologyMapWindow::changePerspectiveToTop()
 {
@@ -67,13 +84,13 @@ void TopologyMapWindow::changePerspectiveForceDirected()
 
 void TopologyMapWindow::openFile()
 {
-    QString imagePath = QFileDialog::getOpenFileName(this, tr("Open file"), "", tr("file (*.xml *.mdef)"));
+    QString imagePath = QFileDialog::getOpenFileName(this, tr("Open file"), "../../../resources", tr("file (*.xml *.mdef)"));
     if (imagePath.length()==0) {
         return;
     }
 
     QFile file(imagePath);
-    m_manager.loadElements(file);
+    m_manager.openElements(file);
     m_manager.setWindowSize(size().height()-100,size().width()-100);
     m_manager.addElementsToScene(m_scene);
 }

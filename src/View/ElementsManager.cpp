@@ -8,6 +8,7 @@
 #include "SidePerspective.h"
 #include "Bounder.h"
 #include "LinkAtachment.h"
+#include "SceneToXML.h"
 
 #include <qfile.h>
 #include <qtransform.h>
@@ -19,7 +20,7 @@ ElementsManager::ElementsManager()
 
 }
 
-void ElementsManager::loadElements(QFile & file)
+void ElementsManager::openElements(QFile & file)
 {
     DocumentParser parser;
 
@@ -134,6 +135,13 @@ void ElementsManager::applyTranslation(QPointF translatePoint)
 std::shared_ptr<Mechanism> ElementsManager::getMechanism() const
 {
     return m_mechanism;
+}
+
+void ElementsManager::saveElements(QFile & file)
+{
+    SceneToXML sceneWriter;
+
+    sceneWriter.writeToXml(m_graphicsMechanism, file);
 }
 
 std::vector<GraphicMotionBody*> ElementsManager::createMotionBodies() const

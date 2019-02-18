@@ -17,6 +17,7 @@ public:
     void setOrigin(const QPointF& origin);
 
     const MotionBody& getModel() const;
+    QPointF getOrigin()const;
 
     void boundingRectTranslate(QPointF translation);
     void boundingRectScale(double scaleFactor);
@@ -29,7 +30,6 @@ signals:
 private:
 
     QPointF m_shiftMouseCoords;
-
     MotionBody m_motionBody;
     QPointF m_origin;
     QRectF m_boundingRect;

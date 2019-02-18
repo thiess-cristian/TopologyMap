@@ -45,7 +45,7 @@ void GraphicMotionBody::paint(QPainter * painter, const QStyleOptionGraphicsItem
     rect.setWidth(std::max(rect.width(), minWidth));
     rect.setHeight(std::max(rect.height(), minHeight));
 
-   // m_origin.setX(std::max(rect.center().x(), m_origin.x()));
+    //m_origin.setX(std::max(rect.center().x(), m_origin.x()));
     //m_origin.setY(std::max(rect.center().y(), m_origin.y()));
 
     painter->fillRect(rect, QBrush(QColor(128, 128, 255, 128)));
@@ -66,6 +66,11 @@ void GraphicMotionBody::setOrigin(const QPointF& origin)
 const MotionBody & GraphicMotionBody::getModel() const
 {
     return m_motionBody;
+}
+
+QPointF GraphicMotionBody::getOrigin() const
+{
+    return m_origin;
 }
 
 void GraphicMotionBody::boundingRectTranslate(QPointF translation)
