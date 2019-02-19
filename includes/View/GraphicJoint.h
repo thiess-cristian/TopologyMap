@@ -19,6 +19,9 @@ public:
     void setActionConnection(const QPointF& action);
     void setBaseConnection(const QPointF& base);
 
+    QPointF getActionConnection()const;
+    QPointF getBaseConnection()const;
+
     const Joint& getModel() const;
 
     void connectionTranslate(QPointF translate);

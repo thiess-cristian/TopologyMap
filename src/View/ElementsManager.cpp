@@ -9,11 +9,13 @@
 #include "Bounder.h"
 #include "LinkAtachment.h"
 #include "SceneToXML.h"
+#include "SceneFromXML.h"
 
 #include <qfile.h>
 #include <qtransform.h>
 #include <memory>
 #include <iostream>
+#include <map>
 
 ElementsManager::ElementsManager()
 {
@@ -39,15 +41,15 @@ void ElementsManager::addElementsToScene(TopologyMapScene * scene)
 
 
     for (const auto& joint : m_graphicsMechanism->getGraphicJoints()) {
-        scene->addItem(joint);
+        scene->addItem(joint.second);
     }
 
     for (const auto& connector : m_graphicsMechanism->getGraphicConnectors()) {
-        scene->addItem(connector);
+        scene->addItem(connector.second);
     }
 
     for (const auto& motionBody : m_graphicsMechanism->getGraphicMotionBodies()) {
-        scene->addItem(motionBody);
+        scene->addItem(motionBody.second);
     }
 
     SidePerspective side;    
@@ -82,8 +84,8 @@ double ElementsManager::computeScaleFactor()
     double maxY = -DBL_MAX;
 
     for (const auto& motionBody : m_graphicsMechanism->getGraphicMotionBodies()) {
-        maxX = std::max(maxX, motionBody->boundingRect().right());
-        maxY = std::max(maxY, motionBody->boundingRect().bottom());
+        maxX = std::max(maxX, motionBody.second->boundingRect().right());
+        maxY = std::max(maxY, motionBody.second->boundingRect().bottom());
     }
 
     return std::min((double)m_windowHeight / maxY, (double)m_windowWidth / maxX);
@@ -95,8 +97,8 @@ QPointF ElementsManager::computeTranslationPoint()
     double minY = 0;
 
     for (const auto& motionBody : m_graphicsMechanism->getGraphicMotionBodies()) {
-        minX = std::min(minX, motionBody->boundingRect().left());
-        minY = std::min(minY, motionBody->boundingRect().top());
+        minX = std::min(minX, motionBody.second->boundingRect().left());
+        minY = std::min(minY, motionBody.second->boundingRect().top());
     }
 
     return QPointF(std::abs(minX),std::abs(minY));
@@ -105,30 +107,30 @@ QPointF ElementsManager::computeTranslationPoint()
 void ElementsManager::applyScale(double scaleFactor)
 {
     for (auto& motionBody : m_graphicsMechanism->getGraphicMotionBodies()) {
-        motionBody->boundingRectScale(scaleFactor);    
+        motionBody.second->boundingRectScale(scaleFactor);    
     }
 
     for (auto & joint : m_graphicsMechanism->getGraphicJoints()) {
-        joint->connectionScale(scaleFactor);
+        joint.second->connectionScale(scaleFactor);
     }
 
     for (auto& connector : m_graphicsMechanism->getGraphicConnectors()) {
-        connector->connectionScale(scaleFactor);
+        connector.second->connectionScale(scaleFactor);
     }
 }
 
 void ElementsManager::applyTranslation(QPointF translatePoint)
 {
     for (auto& motionBody : m_graphicsMechanism->getGraphicMotionBodies()) {
-        motionBody->boundingRectTranslate(translatePoint);
+        motionBody.second->boundingRectTranslate(translatePoint);
     }
 
     for (auto & joint : m_graphicsMechanism->getGraphicJoints()) {
-        joint->connectionTranslate(translatePoint);
+        joint.second->connectionTranslate(translatePoint);
     }
 
     for (auto& connector : m_graphicsMechanism->getGraphicConnectors()) {
-        connector->connectionTranslate(translatePoint);
+        connector.second->connectionTranslate(translatePoint);
     }
 }
 
@@ -137,42 +139,49 @@ std::shared_ptr<Mechanism> ElementsManager::getMechanism() const
     return m_mechanism;
 }
 
-void ElementsManager::saveElements(QFile & file)
+void ElementsManager::saveElements(QFile & file, std::string modelName)
 {
-    SceneToXML sceneWriter;
+    SceneToXML sceneWriter(modelName);
 
     sceneWriter.writeToXml(m_graphicsMechanism, file);
 }
 
-std::vector<GraphicMotionBody*> ElementsManager::createMotionBodies() const
+void ElementsManager::loadElements(QFile & file, std::string modelName)
 {
-    std::vector<GraphicMotionBody*> motionBodies;
+    SceneFromXML sceneReader(modelName);
+
+    sceneReader.updateFromXML(m_graphicsMechanism, file);
+}
+
+std::map<std::string, GraphicMotionBody*> ElementsManager::createMotionBodies() const
+{
+    std::map<std::string, GraphicMotionBody*> motionBodies;
     for (const auto& item : m_mechanism->getMotionBodies()) {
-        motionBodies.push_back(new GraphicMotionBody(item.second));
+        motionBodies.emplace(item.second.getName(),new GraphicMotionBody(item.second));
     }
     return motionBodies;
 }
 
-std::vector<GraphicJoint*> ElementsManager::createJoints() const
+std::map<std::string, GraphicJoint*> ElementsManager::createJoints() const
 {
-    std::vector<GraphicJoint*> graphicJoints;
+    std::map<std::string, GraphicJoint*> graphicJoints;
 
     for (const auto& item : m_mechanism->getJoints()) {
         auto actionBody = m_graphicsMechanism->findMotionBody(item.second.getAction().getName());
         auto baseBody = m_graphicsMechanism->findMotionBody(item.second.getBase().getName());
-        graphicJoints.push_back(new GraphicJoint(item.second, actionBody, baseBody));
+        graphicJoints.emplace(item.second.getName(),new GraphicJoint(item.second, actionBody, baseBody));
     }
     return graphicJoints;;
 }
 
-std::vector<GraphicConnector*> ElementsManager::createConnectors() const
+std::map<std::string, GraphicConnector*> ElementsManager::createConnectors() const
 {
-    std::vector<GraphicConnector*> graphicConnectors;
+    std::map<std::string, GraphicConnector*> graphicConnectors;
 
     for (const auto& item : m_mechanism->getConnectors()) {
         auto actionBody = m_graphicsMechanism->findMotionBody(item.second.getAction().getName());
         auto baseBody = m_graphicsMechanism->findMotionBody(item.second.getBase().getName());
-        graphicConnectors.push_back(new GraphicConnector(item.second, actionBody, baseBody));
+        graphicConnectors.emplace(item.second.getName(),new GraphicConnector(item.second, actionBody, baseBody));
     }
     return graphicConnectors;
 }
@@ -183,11 +192,11 @@ void ElementsManager::changeMotionBodiesPerspective(IPerspective * perspective)
     for (auto& motionbody : m_graphicsMechanism->getGraphicMotionBodies()) {
         std::vector<QPointF> projectedPoints;
 
-        for (const auto& link : motionbody->getModel().getLinkAtachments()) {
+        for (const auto& link : motionbody.second->getModel().getLinkAtachments()) {
             projectedPoints.push_back(perspective->projectLinkAtachment(*link.get()));
         }
 
-        auto origin = perspective->projectMotionBody(motionbody->getModel());
+        auto origin = perspective->projectMotionBody(motionbody.second->getModel());
         projectedPoints.push_back(origin);
         QRectF box=bounder.createBoundingRect(projectedPoints);
         QRectF bounding = bounder.createBoundingRect({
@@ -201,36 +210,36 @@ void ElementsManager::changeMotionBodiesPerspective(IPerspective * perspective)
             box.topRight()            
         });
 
-        motionbody->setBoundingRect(bounding);
-        motionbody->setOrigin(origin);
-        motionbody->setFlag(QGraphicsItem::ItemIsMovable);
+        motionbody.second->setBoundingRect(bounding);
+        motionbody.second->setOrigin(origin);
+        motionbody.second->setFlag(QGraphicsItem::ItemIsMovable);
     }
 }
 
 void ElementsManager::changeJointsPerspective(IPerspective * perspective)
 {
     for (auto& joint : m_graphicsMechanism->getGraphicJoints()) {
-        QPointF actionConnection = perspective->projectLinkAtachment(joint->getModel(), LinkType::Action);
-        joint->setActionConnection(actionConnection);
-        QPointF baseConnection = perspective->projectLinkAtachment(joint->getModel(), LinkType::Base);
-        joint->setBaseConnection(baseConnection);
+        QPointF actionConnection = perspective->projectLinkAtachment(joint.second->getModel(), LinkType::Action);
+        joint.second->setActionConnection(actionConnection);
+        QPointF baseConnection = perspective->projectLinkAtachment(joint.second->getModel(), LinkType::Base);
+        joint.second->setBaseConnection(baseConnection);
     }
 }
 
 void ElementsManager::changeConnectorsPerspective(IPerspective * perspective)
 {
     for (auto& connector : m_graphicsMechanism->getGraphicConnectors()) {
-        QPointF actionConnection = perspective->projectLinkAtachment(connector->getModel(), LinkType::Action);
-        connector->setActionConnection(actionConnection);
-        QPointF baseConnection = perspective->projectLinkAtachment(connector->getModel(), LinkType::Base);
-        connector->setBaseConnection(baseConnection);
+        QPointF actionConnection = perspective->projectLinkAtachment(connector.second->getModel(), LinkType::Action);
+        connector.second->setActionConnection(actionConnection);
+        QPointF baseConnection = perspective->projectLinkAtachment(connector.second->getModel(), LinkType::Base);
+        connector.second->setBaseConnection(baseConnection);
     }
 }
 
 void ElementsManager::setStackingOrder()
 {
     for (auto& motionbody : m_graphicsMechanism->getGraphicMotionBodies()) {
-        motionbody->setZValue(-1*motionbody->boundingRect().height()*motionbody->boundingRect().width());
+        motionbody.second->setZValue(-1 * motionbody.second->boundingRect().height()*motionbody.second->boundingRect().width());
     }
 }
 

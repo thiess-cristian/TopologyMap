@@ -51,6 +51,16 @@ void GraphicConnector::setBaseConnection(const QPointF & base)
     m_baseConnection = base;
 }
 
+QPointF GraphicConnector::getActionConnection() const
+{
+    return m_actionConnection;
+}
+
+QPointF GraphicConnector::getBaseConnection() const
+{
+    return m_baseConnection;
+}
+
 void GraphicConnector::connectionTranslate(const QPointF& translate)
 {
     prepareGeometryChange();

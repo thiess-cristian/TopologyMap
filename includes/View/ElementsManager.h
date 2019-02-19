@@ -4,6 +4,7 @@
 #include "Enums.h"
 #include <vector>
 #include <qobject.h>
+#include <map>
 
 class TopologyMapScene;
 class GraphicMotionBody;
@@ -19,24 +20,23 @@ public:
     ElementsManager();
     
     void openElements(QFile& file);
+    void saveElements(QFile& file, std::string modelName);
+    void loadElements(QFile& file, std::string modelName);
     void addElementsToScene(TopologyMapScene * scene);
     void setWindowSize(size_t windowHeight,size_t windowWidth);
     void changePerspective(IPerspective* perspective);
     double computeScaleFactor();
     QPointF computeTranslationPoint();
     std::shared_ptr<Mechanism> getMechanism() const;
-    void saveElements(QFile & file);
-
 
 public slots:
     void applyScale(double scaleFactor);
     void applyTranslation(QPointF translatePoint);
 
-
 private:
-    std::vector<GraphicMotionBody*> createMotionBodies() const;
-    std::vector<GraphicJoint*> createJoints() const;
-    std::vector<GraphicConnector*> createConnectors() const;
+    std::map<std::string, GraphicMotionBody*> createMotionBodies() const;
+    std::map<std::string, GraphicJoint*> createJoints() const;
+    std::map<std::string, GraphicConnector*> createConnectors() const;
 
     void changeMotionBodiesPerspective(IPerspective* perspective);
     void changeJointsPerspective(IPerspective* perspective);

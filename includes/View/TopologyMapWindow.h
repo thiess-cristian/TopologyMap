@@ -17,7 +17,9 @@ public:
 
 protected slots:
     void openFile();
+    void saveAsFile();
     void saveFile();
+    void loadSceneFromFile();
     void changePerspectiveToTop();
     void changePerspectiveToSide();
     void changePerspectiveToFront();
@@ -25,6 +27,8 @@ protected slots:
     void changePerspectiveForceDirected();
 private:
     std::unique_ptr<Ui_TopologyMapWindow> m_ui;
+
+    QString m_filename;
 
     TopologyMapScene* m_scene;
     ElementsManager m_manager;

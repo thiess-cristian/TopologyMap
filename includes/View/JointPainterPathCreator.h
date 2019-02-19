@@ -21,5 +21,4 @@ private:
     void drawUniversalPath(Turtle& turtle, double length) const;
 
     JointType m_type;
-
 };

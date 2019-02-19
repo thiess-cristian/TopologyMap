@@ -27,8 +27,6 @@ void GraphicJoint::paint(QPainter * painter, const QStyleOptionGraphicsItem * op
     pen.setCosmetic(true);
     painter->setPen(pen);
 
-    //painter->drawLine(m_actionConnection, m_baseConnection);
-
     JointPainterPathCreator creator(m_joint.getType());
 
     auto path = creator.getPath(m_actionConnection,m_baseConnection);
@@ -40,7 +38,6 @@ void GraphicJoint::paint(QPainter * painter, const QStyleOptionGraphicsItem * op
 
 void GraphicJoint::setActionConnection(const QPointF& action)
 {
-    
     prepareGeometryChange();
     m_actionConnection = action;
 }
@@ -49,6 +46,16 @@ void GraphicJoint::setBaseConnection(const QPointF& base)
 {
     prepareGeometryChange();
     m_baseConnection = base;
+}
+
+QPointF GraphicJoint::getActionConnection() const
+{
+    return m_actionConnection;
+}
+
+QPointF GraphicJoint::getBaseConnection() const
+{
+    return m_baseConnection;
 }
 
 const Joint & GraphicJoint::getModel() const

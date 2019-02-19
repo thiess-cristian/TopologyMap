@@ -1,6 +1,7 @@
 #pragma once
 #include "Mechanism.h"
 #include <vector>
+#include <map>
 
 class GraphicMotionBody;
 class GraphicJoint;
@@ -9,23 +10,23 @@ class GraphicConnector;
 class GraphicMechanism
 {
 public:
-    GraphicMechanism(const std::vector<GraphicMotionBody*>& graphicMotionBodies,
-                     const std::vector<GraphicJoint*>& graphicJoints, 
-                     const std::vector<GraphicConnector*>& graphicConnectors);
+    GraphicMechanism(const std::map<std::string, GraphicMotionBody*>& graphicMotionBodies,
+                     const std::map<std::string, GraphicJoint*>& graphicJoints,
+                     const std::map<std::string, GraphicConnector*>& graphicConnectors);
     GraphicMechanism();
 
-    void setGraphicMotionBodies(const std::vector<GraphicMotionBody*>& graphicMotionBodies);
-    void setGraphicJoints(const std::vector<GraphicJoint*>& graphicJoints);
-    void setGraphicConnectors(const std::vector<GraphicConnector*>& graphicConnectors);
+    void setGraphicMotionBodies(const std::map<std::string, GraphicMotionBody*>& graphicMotionBodies);
+    void setGraphicJoints(const std::map<std::string, GraphicJoint*>& graphicJoints);
+    void setGraphicConnectors(const std::map<std::string, GraphicConnector*>& graphicConnectors);
 
-    const std::vector<GraphicMotionBody*>& getGraphicMotionBodies()const;
-    const std::vector<GraphicJoint*>& getGraphicJoints()const;
-    const std::vector<GraphicConnector*>& getGraphicConnectors()const;
+    std::map<std::string, GraphicMotionBody*> getGraphicMotionBodies()const;
+    std::map<std::string, GraphicJoint*> getGraphicJoints()const;
+    std::map<std::string, GraphicConnector*> getGraphicConnectors()const;
 
     GraphicMotionBody* findMotionBody(const std::string& name) const;
 
 private:
-     std::vector<GraphicMotionBody*> m_graphicMotionBodies;
-     std::vector<GraphicJoint*> m_graphicJoints;
-     std::vector<GraphicConnector*> m_graphicConnector;
+     std::map<std::string, GraphicMotionBody*> m_graphicMotionBodies;
+     std::map<std::string, GraphicJoint*> m_graphicJoints;
+     std::map<std::string, GraphicConnector*> m_graphicConnectors;
 };
