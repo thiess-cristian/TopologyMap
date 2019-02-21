@@ -25,7 +25,6 @@ void SceneFromXML::updateFromXML(std::shared_ptr<GraphicMechanism> mechanism, QF
         throw "wrong file";
     }
 
-
     updateMotionBodies(mechanism);
     updateJoints(mechanism->getGraphicJoints());
     updateConnectors(mechanism->getGraphicConnectors());

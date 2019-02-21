@@ -98,6 +98,7 @@ void graphTest()
 
 void graph2Test()
 {
+    /*
     Graph g;
 
     Point3D origin;
@@ -122,7 +123,7 @@ void graph2Test()
     g.addNode(m2);
 
     g.addEdge(j1);
-
+    */
 }
 
 int main()

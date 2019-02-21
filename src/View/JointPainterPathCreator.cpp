@@ -109,22 +109,29 @@ void JointPainterPathCreator::drawSphericalPath(Turtle & turtle, double length) 
 
 void JointPainterPathCreator::drawRevolutePath(Turtle & turtle, double length) const
 {
-    //drawing first circle
     const double radius = 5;
 
     turtle.forward((length / 2) - radius);
-    turtle.rotate(M_PI / 2);
 
+    //drawing first circle
+
+    turtle.save();
+
+    turtle.rotate(M_PI / 2);
     const int nrOfSegments = 32;
     const double angle = 2 * M_PI / nrOfSegments;
-    const double segmentLength = angle*radius;
+   // const double segmentLength = angle*radius;
+    const double segmentLength = radius*sqrt(2.0 - 2.0*cos(angle));
 
+    //turtle.rotate(-angle / 2);
     for (int i = 0; i < nrOfSegments; i++) {
         turtle.forward(segmentLength);
         turtle.rotate(-angle);
     }
 
-    turtle.rotate(-M_PI / 2);
+    //turtle.rotate(-M_PI / 2);
+
+    turtle.load();
     turtle.forward(2 * radius, false);
 
     //drawing cilinder upper line
@@ -136,19 +143,26 @@ void JointPainterPathCreator::drawRevolutePath(Turtle & turtle, double length) c
     turtle.forward(radius, false);
 
     turtle.rotate(-M_PI / 2);
-    turtle.forward(cilinderLength + 2);
+    turtle.forward(cilinderLength + 3);
     turtle.rotate(M_PI);
-    turtle.forward(cilinderLength + 2, false);
+    turtle.forward(cilinderLength + 3, false);
 
+    turtle.save();
+    //turtle.rotate(angle / 2);
     for (int i = 0; i < nrOfSegments / 2; i++) {
         turtle.forward(segmentLength);
         turtle.rotate(angle);
     }
 
-    //drawing cilinder upper line
-    turtle.forward(cilinderLength + 2);
+    turtle.load();
+    turtle.rotate(M_PI / 2);
+    turtle.forward(radius*2.0,false);
+    turtle.rotate(M_PI / 2);
+
+    //drawing cilinder lower line
+    turtle.forward(cilinderLength + 3);
     turtle.rotate(M_PI);
-    turtle.forward(cilinderLength + 2, false);
+    turtle.forward(cilinderLength + 3, false);
     turtle.rotate(-M_PI);
 
     turtle.rotate(M_PI / 2);

@@ -7,8 +7,12 @@
 #include "CirclePerspective.h"
 #include "ForceDirectedPerspective.h"
 #include "Zoom.h"
+#include "Legend.h"
 
+#include <qlabel.h>
 #include <qfiledialog.h>
+#include <qgraphicsview.h>
+#include <qpushbutton.h>
 
 TopologyMapWindow::TopologyMapWindow(QWidget *parent):QMainWindow(parent)
 {
@@ -22,6 +26,9 @@ TopologyMapWindow::TopologyMapWindow(QWidget *parent):QMainWindow(parent)
     QObject::connect(m_ui->actionSave_as, &QAction::triggered, this, &TopologyMapWindow::saveAsFile);
     QObject::connect(m_ui->actionSave, &QAction::triggered, this, &TopologyMapWindow::saveFile);
     QObject::connect(m_ui->actionLoad, &QAction::triggered, this, &TopologyMapWindow::loadSceneFromFile);
+
+    QObject::connect(m_ui->actionLegend, &QAction::triggered, this, &TopologyMapWindow::displayLegend);
+
     QObject::connect(m_ui->actionFront, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToFront);
     QObject::connect(m_ui->actionSide, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToSide);
     QObject::connect(m_ui->actionTop, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToTop);
@@ -33,6 +40,10 @@ TopologyMapWindow::TopologyMapWindow(QWidget *parent):QMainWindow(parent)
     m_ui->graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
     m_zoom = std::make_unique<Zoom>(m_ui->graphicsView, &m_manager);
+
+    m_legend = std::make_unique<Legend>(m_ui->graphicsView);
+
+    m_ui->graphicsView->setRenderHint(QPainter::Antialiasing);
 }
 
 TopologyMapWindow::~TopologyMapWindow()
@@ -111,6 +122,11 @@ void TopologyMapWindow::changePerspectiveForceDirected()
 {
     ForceDirectedPerspective force(m_manager.getMechanism());
     m_manager.changePerspective(&force);
+}
+
+void TopologyMapWindow::displayLegend(bool checked)
+{
+    m_legend->display(checked);
 }
 
 void TopologyMapWindow::openFile()

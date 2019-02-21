@@ -7,6 +7,8 @@
 class Ui_TopologyMapWindow;
 class TopologyMapScene;
 class Zoom;
+class Legend;
+class QLabel;
 
 class TopologyMapWindow : public QMainWindow
 {
@@ -25,12 +27,18 @@ protected slots:
     void changePerspectiveToFront();
     void changePerspectiveCircle();
     void changePerspectiveForceDirected();
+    
+    void displayLegend(bool checked);
+
 private:
     std::unique_ptr<Ui_TopologyMapWindow> m_ui;
 
     QString m_filename;
 
+    QLabel* m_label;
+
     TopologyMapScene* m_scene;
     ElementsManager m_manager;
     std::unique_ptr<Zoom> m_zoom;
+    std::unique_ptr<Legend> m_legend;
 };

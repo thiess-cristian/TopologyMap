@@ -17,6 +17,4 @@ public:
         return projectLinkAtachment(linkAtachment.getLink(), linkAtachment.getLinkType());
     };
     virtual QPointF projectLinkAtachment(const Link& link,LinkType type)const = 0;
-
-
 };

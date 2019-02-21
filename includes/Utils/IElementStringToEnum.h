@@ -13,6 +13,11 @@ public:
         return m_names[type];
     }
 
+    std::map<std::string, T> getStrings() const
+    {
+        return m_names;
+    }
+
 protected:
     IElementStringToEnum()
     {
