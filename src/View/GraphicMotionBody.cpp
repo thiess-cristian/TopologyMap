@@ -5,12 +5,14 @@
 #include <qgraphicssceneevent.h>
 #include <qcursor.h>
 #include <qfontmetrics.h>
+#include <qmenu.h>
+#include <qaction.h>
 
 GraphicMotionBody::GraphicMotionBody(MotionBody body):
-    m_motionBody(body),
+    m_model(body),
     m_boundingRect(QRectF())
 {
-
+    GraphicElement::setColor(QColor(128, 128, 255, 128));
 }
 
 QRectF GraphicMotionBody::boundingRect() const
@@ -25,7 +27,7 @@ QRectF GraphicMotionBody::boundingRect() const
     QGraphicsTextItem textItem;
     textItem.font();
     QFontMetrics metrics(textItem.font());
-    int textLength = std::max(0, static_cast<int>(metrics.width(m_motionBody.getName().c_str()) - m_boundingRect.width() / 2));
+    int textLength = std::max(0, static_cast<int>(metrics.width(m_model.getName().c_str()) - m_boundingRect.width() / 2));
     return bounding.adjusted(0, 0, textLength, 0);
 }
 
@@ -48,9 +50,17 @@ void GraphicMotionBody::paint(QPainter * painter, const QStyleOptionGraphicsItem
     //m_origin.setX(std::max(rect.center().x(), m_origin.x()));
     //m_origin.setY(std::max(rect.center().y(), m_origin.y()));
 
-    painter->fillRect(rect, QBrush(QColor(128, 128, 255, 128)));
+    painter->fillRect(rect, QBrush(m_color));
    // painter->fillRect(rect, QBrush(QColor(128, 128, 255)));
-    painter->drawText(m_origin+QPoint(10,10), m_motionBody.getName().c_str());
+    painter->drawText(m_origin+QPoint(10,10), m_model.getName().c_str());
+}
+
+void GraphicMotionBody::contextMenuEvent(QGraphicsSceneContextMenuEvent * event)
+{
+    QMenu menu;
+    QAction *removeAction = menu.addAction("Remove");
+    QAction *changeColor = menu.addAction("Change color");
+    QAction *selectedAction = menu.exec(event->screenPos());
 }
 
 void GraphicMotionBody::setBoundingRect(const QRectF& boundingRect)
@@ -63,9 +73,14 @@ void GraphicMotionBody::setOrigin(const QPointF& origin)
     m_origin = origin;
 }
 
+void GraphicMotionBody::setColor(const QColor & color)
+{
+    m_color = color;
+}
+
 const MotionBody & GraphicMotionBody::getModel() const
 {
-    return m_motionBody;
+    return m_model;
 }
 
 QPointF GraphicMotionBody::getOrigin() const

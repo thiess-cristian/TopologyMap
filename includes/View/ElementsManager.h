@@ -28,6 +28,7 @@ public:
     double computeScaleFactor();
     QPointF computeTranslationPoint();
     std::shared_ptr<Mechanism> getMechanism() const;
+    std::shared_ptr<GraphicMechanism> getGraphicMechanism() const;
 
 public slots:
     void applyScale(double scaleFactor);

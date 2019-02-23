@@ -11,6 +11,7 @@ GraphicJoint::GraphicJoint(const Joint & joint, GraphicMotionBody * action, Grap
     m_action(action),
     m_base(base)
 {
+    GraphicElement::setColor(Qt::black);
     connect(action, &GraphicMotionBody::offsetChanged, this, &GraphicJoint::changeActionPosition);
     connect(base, &GraphicMotionBody::offsetChanged, this, &GraphicJoint::changeBasePosition);
 }
@@ -23,14 +24,12 @@ QRectF GraphicJoint::boundingRect() const
 
 void GraphicJoint::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
-    QPen pen(Qt::black);
-    pen.setCosmetic(true);
-    painter->setPen(pen);
-
     JointPainterPathCreator creator(m_joint.getType());
-
     auto path = creator.getPath(m_actionConnection,m_baseConnection);
 
+    QPen pen(m_color);
+    pen.setCosmetic(true);
+    painter->setPen(pen);
     painter->drawPath(path);
     painter->drawEllipse(m_actionConnection, 5,5);
     painter->drawEllipse(m_baseConnection, 7, 7);

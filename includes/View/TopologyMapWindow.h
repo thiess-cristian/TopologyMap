@@ -3,11 +3,13 @@
 #include <QMainWindow>
 #include <memory>
 #include "ElementsManager.h"
+#include "SearchManager.h"
 
 class Ui_TopologyMapWindow;
 class TopologyMapScene;
 class Zoom;
 class Legend;
+class SearchWindow;
 class QLabel;
 
 class TopologyMapWindow : public QMainWindow
@@ -29,9 +31,11 @@ protected slots:
     void changePerspectiveForceDirected();
     
     void displayLegend(bool checked);
+    void openSearchWindow();
 
 private:
     std::unique_ptr<Ui_TopologyMapWindow> m_ui;
+    std::unique_ptr<SearchWindow> m_searchWindow;
 
     QString m_filename;
 
@@ -39,6 +43,7 @@ private:
 
     TopologyMapScene* m_scene;
     ElementsManager m_manager;
+    std::unique_ptr<SearchManager> m_searchManager;
     std::unique_ptr<Zoom> m_zoom;
     std::unique_ptr<Legend> m_legend;
 };

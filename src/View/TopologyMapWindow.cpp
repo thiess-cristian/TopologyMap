@@ -8,6 +8,7 @@
 #include "ForceDirectedPerspective.h"
 #include "Zoom.h"
 #include "Legend.h"
+#include "SearchWindow.h"
 
 #include <qlabel.h>
 #include <qfiledialog.h>
@@ -28,6 +29,7 @@ TopologyMapWindow::TopologyMapWindow(QWidget *parent):QMainWindow(parent)
     QObject::connect(m_ui->actionLoad, &QAction::triggered, this, &TopologyMapWindow::loadSceneFromFile);
 
     QObject::connect(m_ui->actionLegend, &QAction::triggered, this, &TopologyMapWindow::displayLegend);
+    QObject::connect(m_ui->actionSearch, &QAction::triggered, this, &TopologyMapWindow::openSearchWindow);
 
     QObject::connect(m_ui->actionFront, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToFront);
     QObject::connect(m_ui->actionSide, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToSide);
@@ -36,14 +38,18 @@ TopologyMapWindow::TopologyMapWindow(QWidget *parent):QMainWindow(parent)
     QObject::connect(m_ui->actionForce_Directed, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveForceDirected);
     
     m_ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
-
     m_ui->graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+    m_ui->graphicsView->setRenderHint(QPainter::Antialiasing);
 
     m_zoom = std::make_unique<Zoom>(m_ui->graphicsView, &m_manager);
 
     m_legend = std::make_unique<Legend>(m_ui->graphicsView);
 
-    m_ui->graphicsView->setRenderHint(QPainter::Antialiasing);
+    m_searchManager = std::make_unique<SearchManager>();
+    m_searchWindow = std::make_unique<SearchWindow>();
+
+    QObject::connect(m_searchWindow.get(), &SearchWindow::sendSearchRequirements, m_searchManager.get(), &SearchManager::search);
+   
 }
 
 TopologyMapWindow::~TopologyMapWindow()
@@ -127,6 +133,12 @@ void TopologyMapWindow::changePerspectiveForceDirected()
 void TopologyMapWindow::displayLegend(bool checked)
 {
     m_legend->display(checked);
+}
+
+void TopologyMapWindow::openSearchWindow()
+{
+    m_searchManager->setGraphicMechanism(m_manager.getGraphicMechanism());
+    m_searchWindow->show();
 }
 
 void TopologyMapWindow::openFile()

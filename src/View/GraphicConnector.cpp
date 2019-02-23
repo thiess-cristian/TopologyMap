@@ -11,6 +11,7 @@ GraphicConnector::GraphicConnector(const Connector& connector, GraphicMotionBody
     m_action(action),
     m_base(base)
 {
+    GraphicElement::setColor(Qt::red);
     connect(action, &GraphicMotionBody::offsetChanged, this, &GraphicConnector::changeActionPosition);
     connect(base, &GraphicMotionBody::offsetChanged, this, &GraphicConnector::changeBasePosition);
 }
@@ -32,7 +33,7 @@ void GraphicConnector::paint(QPainter * painter, const QStyleOptionGraphicsItem 
 
     auto path=creator.getPath(begin, end);
 
-    QPen pen(Qt::red);
+    QPen pen(m_color);
     pen.setCosmetic(true);
     painter->setPen(pen);
    // painter->drawLine(begin, end);

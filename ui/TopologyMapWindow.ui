@@ -60,6 +60,7 @@
      <string>Help</string>
     </property>
     <addaction name="actionLegend"/>
+    <addaction name="actionSearch"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuview"/>
@@ -117,6 +118,11 @@
    </property>
    <property name="text">
     <string>Legend</string>
+   </property>
+  </action>
+  <action name="actionSearch">
+   <property name="text">
+    <string>Search</string>
    </property>
   </action>
  </widget>

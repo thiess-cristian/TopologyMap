@@ -16,14 +16,14 @@
 
 Legend::Legend(QGraphicsView* view)
 {   
-    m_tab = new QTabWidget;
+    m_tab = new QTabWidget(this);
     
     m_tab->setFixedWidth(170);
 
-    QWidget* m_joints = new QWidget();
+    m_joints = new QWidget(m_tab);
     m_joints->setLayout(createJointsLayout());
 
-    QWidget* m_connectors = new QWidget();
+    m_connectors = new QWidget(m_tab);
     m_connectors->setLayout(createConnectorsLayout());
 
     m_tab->addTab(m_joints, "Joints");
@@ -47,7 +47,7 @@ void Legend::display(bool checked)
 
 QFormLayout * Legend::createJointsLayout()
 {
-    QFormLayout* layout = new QFormLayout();
+    QFormLayout* layout = new QFormLayout(m_joints);
     JointStringToEnum strings;
 
     for (const auto& name : strings.getStrings()) {
@@ -74,7 +74,7 @@ QFormLayout * Legend::createJointsLayout()
 
 QFormLayout * Legend::createConnectorsLayout()
 {
-    QFormLayout* layout = new QFormLayout();
+    QFormLayout* layout = new QFormLayout(m_connectors);
     ConnectorStringToEnum strings;
 
     for (const auto& name : strings.getStrings()) {
@@ -89,7 +89,7 @@ QFormLayout * Legend::createConnectorsLayout()
         QPixmap pixmap(QPixmap::fromImage(image));
 
         QLabel* imageLabel = new QLabel();
-
+        
         imageLabel->setPixmap(pixmap);
 
         QLabel* textLabel = new QLabel(name.first.c_str());

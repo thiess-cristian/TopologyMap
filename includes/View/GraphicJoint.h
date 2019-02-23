@@ -1,12 +1,13 @@
 #pragma once
 #include "Joint.h"
 #include "Enums.h"
+#include "GraphicElement.h"
 #include <qgraphicsitem.h>
 #include <qobject.h>
 
 class GraphicMotionBody;
 
-class GraphicJoint :public QObject,public QGraphicsItem
+class GraphicJoint :public QObject,public QGraphicsItem, public GraphicElement
 {
     Q_OBJECT
 public:

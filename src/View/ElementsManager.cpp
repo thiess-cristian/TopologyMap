@@ -139,6 +139,11 @@ std::shared_ptr<Mechanism> ElementsManager::getMechanism() const
     return m_mechanism;
 }
 
+std::shared_ptr<GraphicMechanism> ElementsManager::getGraphicMechanism() const
+{
+    return m_graphicsMechanism;
+}
+
 void ElementsManager::saveElements(QFile & file, std::string modelName)
 {
     SceneToXML sceneWriter(modelName);
@@ -171,7 +176,7 @@ std::map<std::string, GraphicJoint*> ElementsManager::createJoints() const
         auto baseBody = m_graphicsMechanism->findMotionBody(item.second.getBase().getName());
         graphicJoints.emplace(item.second.getName(),new GraphicJoint(item.second, actionBody, baseBody));
     }
-    return graphicJoints;;
+    return graphicJoints;
 }
 
 std::map<std::string, GraphicConnector*> ElementsManager::createConnectors() const
