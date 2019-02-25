@@ -73,11 +73,6 @@ void GraphicMotionBody::setOrigin(const QPointF& origin)
     m_origin = origin;
 }
 
-void GraphicMotionBody::setColor(const QColor & color)
-{
-    m_color = color;
-}
-
 const MotionBody & GraphicMotionBody::getModel() const
 {
     return m_model;

@@ -4,7 +4,7 @@
 
 struct SearchRequirements
 {
-    std::string searchText="";
+    std::string searchText = "";
     bool motionBodyCheck = false;
     bool jointCheck = false;
     bool connectorCheck = false;

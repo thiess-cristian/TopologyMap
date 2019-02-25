@@ -49,7 +49,8 @@ TopologyMapWindow::TopologyMapWindow(QWidget *parent):QMainWindow(parent)
     m_searchWindow = std::make_unique<SearchWindow>();
 
     QObject::connect(m_searchWindow.get(), &SearchWindow::sendSearchRequirements, m_searchManager.get(), &SearchManager::search);
-   
+    QObject::connect(m_searchWindow.get(), &SearchWindow::reset, m_searchManager.get(), &SearchManager::reset);
+    QObject::connect(m_searchWindow.get(), &SearchWindow::changeColor, m_searchManager.get(), &SearchManager::changeColor);
 }
 
 TopologyMapWindow::~TopologyMapWindow()

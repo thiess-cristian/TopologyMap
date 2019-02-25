@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <string> 
 
-SearchManager::SearchManager()
+SearchManager::SearchManager() :m_highlightColor(QColor(0, 255, 0))
 {
 
 }
@@ -45,6 +45,28 @@ void SearchManager::setGraphicMechanism(std::shared_ptr<GraphicMechanism> mechan
     m_mechanism = mechanism;
 }
 
+void SearchManager::reset()
+{
+    QColor motionBodyColor(128, 128, 255, 128);
+    QColor connectorColor(Qt::red);
+    QColor jointColor(Qt::black);
+
+    auto resetColor = [this](auto elements,QColor color) {
+        for (auto& item : elements) {
+            item.second->setColor(color);
+        }
+    };
+
+    resetColor(m_mechanism->getGraphicMotionBodies(), motionBodyColor);
+    resetColor(m_mechanism->getGraphicJoints(), jointColor);
+    resetColor(m_mechanism->getGraphicConnectors(), connectorColor);
+}
+
+void SearchManager::changeColor(const QColor & color)
+{
+    m_highlightColor = color;
+}
+
 bool SearchManager::checkMatch(std::string name, const SearchRequirements & searchRequirements)
 {
     bool result = false;
@@ -54,13 +76,11 @@ bool SearchManager::checkMatch(std::string name, const SearchRequirements & sear
         QRegularExpressionMatch match = regEx.match(name.c_str());
 
         result = match.hasMatch();
-
     } else {
         //make string lowercase if its not match case
         if (!searchRequirements.matchCase) {
             std::transform(name.begin(), name.end(), name.begin(), ::tolower);
         }
-
         //if the match whole is set just check if the names are equal
         if (searchRequirements.matchWhole) {            
             result = name == searchRequirements.searchText;
@@ -74,8 +94,7 @@ bool SearchManager::checkMatch(std::string name, const SearchRequirements & sear
 
 void SearchManager::updateFoundElements()
 {
-    QColor green(0, 255, 0);
     for (const auto& motionBody : m_foundElements) {
-        motionBody->setColor(green);
+        motionBody->setColor(m_highlightColor);
     }
 }

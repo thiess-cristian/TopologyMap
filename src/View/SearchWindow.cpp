@@ -2,14 +2,21 @@
 #include "ui_SearchWindow.h"
 #include "SearchRequirements.h"
 
+#include <qcolor.h>
+#include <qcolordialog.h>
+
 SearchWindow::SearchWindow(QWidget * parent):QWidget(parent)
 {
     m_ui = std::make_unique<Ui_SearchWindow>();
     m_ui->setupUi(this);
 
     QObject::connect(m_ui->pushButtonSearch, &QPushButton::clicked, this, &SearchWindow::searchClicked);
-    
+    QObject::connect(m_ui->pushButtonSelectColor, &QPushButton::clicked, this, &SearchWindow::selectColorClicked);
+    QObject::connect(m_ui->pushButtonReset, &QPushButton::clicked, this, &SearchWindow::resetClicked);
 }
+
+SearchWindow::~SearchWindow()
+{}
 
 void SearchWindow::searchClicked()
 {
@@ -28,5 +35,16 @@ void SearchWindow::searchClicked()
     close();
 }
 
-SearchWindow::~SearchWindow()
-{}
+void SearchWindow::resetClicked()
+{
+    emit reset();
+    close();
+}
+
+void SearchWindow::selectColorClicked()
+{
+    QColor initial(0, 255, 0);
+    QColor color=QColorDialog::getColor(initial, this, "select color");
+
+    emit changeColor(color);
+}
