@@ -13,7 +13,7 @@ class SearchManager :public QObject
 public:
     SearchManager();
     void setGraphicMechanism(std::shared_ptr<GraphicMechanism> mechanism);
-
+    QColor getHighlightColor()const;
 
 public slots:
     void search(const SearchRequirements& searchRequirements);

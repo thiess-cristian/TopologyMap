@@ -1,18 +1,30 @@
 #include "SearchWindow.h"
 #include "ui_SearchWindow.h"
 #include "SearchRequirements.h"
+#include "SearchManager.h"
 
 #include <qcolor.h>
 #include <qcolordialog.h>
 
-SearchWindow::SearchWindow(QWidget * parent):QWidget(parent)
+SearchWindow::SearchWindow(std::shared_ptr<SearchManager> searchManager,QWidget * parent):m_searchManager(searchManager),QWidget(parent)
 {
     m_ui = std::make_unique<Ui_SearchWindow>();
     m_ui->setupUi(this);
 
+    QObject::connect(this, &SearchWindow::sendSearchRequirements, m_searchManager.get(), &SearchManager::search);
+    QObject::connect(this, &SearchWindow::reset, m_searchManager.get(), &SearchManager::reset);
+    QObject::connect(this, &SearchWindow::changeColor, m_searchManager.get(), &SearchManager::changeColor);
+
     QObject::connect(m_ui->pushButtonSearch, &QPushButton::clicked, this, &SearchWindow::searchClicked);
     QObject::connect(m_ui->pushButtonSelectColor, &QPushButton::clicked, this, &SearchWindow::selectColorClicked);
     QObject::connect(m_ui->pushButtonReset, &QPushButton::clicked, this, &SearchWindow::resetClicked);
+
+    QImage image(20, 20, QImage::Format_ARGB32);
+
+    image.fill(m_searchManager->getHighlightColor());
+
+    QPixmap pixmap(QPixmap::fromImage(image));
+    m_ui->labelColor->setPixmap(pixmap);
 }
 
 SearchWindow::~SearchWindow()
@@ -32,6 +44,7 @@ void SearchWindow::searchClicked()
 
     emit sendSearchRequirements(searchRequirements);
     
+    
     close();
 }
 
@@ -43,8 +56,14 @@ void SearchWindow::resetClicked()
 
 void SearchWindow::selectColorClicked()
 {
-    QColor initial(0, 255, 0);
-    QColor color=QColorDialog::getColor(initial, this, "select color");
+    QColor color=QColorDialog::getColor(m_searchManager->getHighlightColor(), this, "select color");
+
+    QImage image(20, 20, QImage::Format_ARGB32);
+
+    image.fill(color);
+
+    QPixmap pixmap(QPixmap::fromImage(image));
+    m_ui->labelColor->setPixmap(pixmap);
 
     emit changeColor(color);
 }

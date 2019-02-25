@@ -5,12 +5,13 @@
 #include <memory>
 
 class Ui_SearchWindow;
+class SearchManager;
 
 class SearchWindow: public QWidget
 {
     Q_OBJECT
 public:
-    explicit SearchWindow(QWidget *parent = 0);
+    explicit SearchWindow(std::shared_ptr<SearchManager> searchManager,QWidget *parent = 0);
     ~SearchWindow();
 
 protected slots:
@@ -25,4 +26,5 @@ signals:
 
 private:
     std::unique_ptr<Ui_SearchWindow> m_ui;
+    std::shared_ptr<SearchManager> m_searchManager;
 };

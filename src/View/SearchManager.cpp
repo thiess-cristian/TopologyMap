@@ -45,6 +45,11 @@ void SearchManager::setGraphicMechanism(std::shared_ptr<GraphicMechanism> mechan
     m_mechanism = mechanism;
 }
 
+QColor SearchManager::getHighlightColor() const
+{
+    return m_highlightColor;
+}
+
 void SearchManager::reset()
 {
     QColor motionBodyColor(128, 128, 255, 128);
@@ -97,4 +102,5 @@ void SearchManager::updateFoundElements()
     for (const auto& motionBody : m_foundElements) {
         motionBody->setColor(m_highlightColor);
     }
+    m_foundElements.clear();
 }

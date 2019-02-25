@@ -30,6 +30,7 @@ public:
 
 signals:
     void offsetChanged(const QPointF& offset);
+
 private:
     QPointF m_shiftMouseCoords;
     MotionBody m_model;

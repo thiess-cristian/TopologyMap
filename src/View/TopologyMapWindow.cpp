@@ -45,12 +45,8 @@ TopologyMapWindow::TopologyMapWindow(QWidget *parent):QMainWindow(parent)
 
     m_legend = std::make_unique<Legend>(m_ui->graphicsView);
 
-    m_searchManager = std::make_unique<SearchManager>();
-    m_searchWindow = std::make_unique<SearchWindow>();
-
-    QObject::connect(m_searchWindow.get(), &SearchWindow::sendSearchRequirements, m_searchManager.get(), &SearchManager::search);
-    QObject::connect(m_searchWindow.get(), &SearchWindow::reset, m_searchManager.get(), &SearchManager::reset);
-    QObject::connect(m_searchWindow.get(), &SearchWindow::changeColor, m_searchManager.get(), &SearchManager::changeColor);
+    m_searchManager = std::make_shared<SearchManager>();
+    m_searchWindow = std::make_unique<SearchWindow>(m_searchManager);
 }
 
 TopologyMapWindow::~TopologyMapWindow()

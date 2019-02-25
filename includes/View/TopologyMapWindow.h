@@ -43,7 +43,7 @@ private:
 
     TopologyMapScene* m_scene;
     ElementsManager m_manager;
-    std::unique_ptr<SearchManager> m_searchManager;
+    std::shared_ptr<SearchManager> m_searchManager;
     std::unique_ptr<Zoom> m_zoom;
     std::unique_ptr<Legend> m_legend;
 };
