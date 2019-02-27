@@ -6,7 +6,7 @@
 #include <qrect.h>
 #include <qcolor.h>
 
-class GraphicMotionBody :public QObject,public QGraphicsItem,public GraphicElement
+class GraphicMotionBody :public QObject,public GraphicElement
 {
     Q_OBJECT
 public:
@@ -14,7 +14,9 @@ public:
     // Inherited via QGraphicsItem
     virtual QRectF boundingRect() const override;
     virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = nullptr) override;
-    virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
+    
+    // Inherited via GraphicElement
+    virtual void resetColor() override;
 
     void setBoundingRect(const QRectF& boundingRect);
     void setOrigin(const QPointF& origin);

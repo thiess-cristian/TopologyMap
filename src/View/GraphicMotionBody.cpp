@@ -1,6 +1,8 @@
 #include "GraphicMotionBody.h"
 #include "qpainter.h"
 #include "Bounder.h"
+#include "ElementRightClickMenu.h"
+
 #include <iostream>
 #include <qgraphicssceneevent.h>
 #include <qcursor.h>
@@ -33,7 +35,6 @@ QRectF GraphicMotionBody::boundingRect() const
 
 void GraphicMotionBody::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
-
     QPen pen(Qt::black);
     pen.setCosmetic(true);
     painter->setPen(pen);
@@ -51,16 +52,8 @@ void GraphicMotionBody::paint(QPainter * painter, const QStyleOptionGraphicsItem
     //m_origin.setY(std::max(rect.center().y(), m_origin.y()));
 
     painter->fillRect(rect, QBrush(m_color));
-   // painter->fillRect(rect, QBrush(QColor(128, 128, 255)));
+    //painter->fillRect(rect, QBrush(QColor(128, 128, 255)));
     painter->drawText(m_origin+QPoint(10,10), m_model.getName().c_str());
-}
-
-void GraphicMotionBody::contextMenuEvent(QGraphicsSceneContextMenuEvent * event)
-{
-    QMenu menu;
-    QAction *removeAction = menu.addAction("Remove");
-    QAction *changeColor = menu.addAction("Change color");
-    QAction *selectedAction = menu.exec(event->screenPos());
 }
 
 void GraphicMotionBody::setBoundingRect(const QRectF& boundingRect)
@@ -114,5 +107,10 @@ void GraphicMotionBody::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     m_shiftMouseCoords = event->pos();
     setCursor(QCursor(Qt::ClosedHandCursor));
+}
+
+void GraphicMotionBody::resetColor()
+{
+    GraphicElement::setColor(QColor(128, 128, 255, 128));
 }
 

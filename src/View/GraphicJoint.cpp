@@ -35,6 +35,41 @@ void GraphicJoint::paint(QPainter * painter, const QStyleOptionGraphicsItem * op
     painter->drawEllipse(m_baseConnection, 7, 7);
 }
 
+QPainterPath GraphicJoint::shape() const
+{
+    QPainterPath shape;
+
+    QPointF begin(m_actionConnection.x(), m_actionConnection.y());
+    QPointF end(m_baseConnection.x(), m_baseConnection.y());
+
+    double dx = std::max(begin.x(), end.x()) - std::min(begin.x(), end.x());
+    double dy = std::max(begin.y(), end.y()) - std::min(begin.y(), end.y());
+
+    double width = 25;
+    double d = sqrt(dx*dx + dy*dy);
+
+    dx = 0.5*width*dx / d;
+    dy = 0.5*width*dy / d;
+
+    QPointF A(begin.x() - dy, begin.y() + dx);
+    QPointF B(begin.x() + dy, begin.y() - dx);
+    QPointF C(end.x() - dy, end.y() + dx);
+    QPointF D(end.x() + dy, end.y() - dx);
+
+    shape.moveTo(A);
+    shape.lineTo(B);
+    shape.lineTo(C);
+    shape.lineTo(D);
+    shape.lineTo(A);
+    
+    return shape;
+}
+
+void GraphicJoint::resetColor()
+{
+    GraphicElement::setColor(Qt::black);
+}
+
 void GraphicJoint::setActionConnection(const QPointF& action)
 {
     prepareGeometryChange();

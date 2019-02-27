@@ -52,19 +52,15 @@ QColor SearchManager::getHighlightColor() const
 
 void SearchManager::reset()
 {
-    QColor motionBodyColor(128, 128, 255, 128);
-    QColor connectorColor(Qt::red);
-    QColor jointColor(Qt::black);
-
-    auto resetColor = [this](auto elements,QColor color) {
+    auto resetColor = [this](auto elements) {
         for (auto& item : elements) {
-            item.second->setColor(color);
+            item.second->resetColor();
         }
     };
 
-    resetColor(m_mechanism->getGraphicMotionBodies(), motionBodyColor);
-    resetColor(m_mechanism->getGraphicJoints(), jointColor);
-    resetColor(m_mechanism->getGraphicConnectors(), connectorColor);
+    resetColor(m_mechanism->getGraphicMotionBodies());
+    resetColor(m_mechanism->getGraphicJoints());
+    resetColor(m_mechanism->getGraphicConnectors());
 }
 
 void SearchManager::changeColor(const QColor & color)

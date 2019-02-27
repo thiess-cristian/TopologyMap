@@ -6,7 +6,7 @@
 
 class GraphicMotionBody;
 
-class GraphicConnector :public QObject,public QGraphicsItem, public GraphicElement
+class GraphicConnector :public QObject, public GraphicElement
 {
     Q_OBJECT
 public:
@@ -14,6 +14,10 @@ public:
 
     // Inherited via QGraphicsItem
     virtual QRectF boundingRect() const override;
+    virtual QPainterPath shape() const override;
+
+    // Inherited via GraphicElement
+    virtual void resetColor() override;
 
     virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = nullptr) override;
 
