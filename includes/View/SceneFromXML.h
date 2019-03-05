@@ -20,6 +20,7 @@ private:
     void updateMotionBodies(std::shared_ptr<GraphicMechanism> mechanism);
     void updateJoints(std::map<std::string, GraphicJoint*> joints);
     void updateConnectors(std::map<std::string, GraphicConnector*> connectors);
+    void updateColor(GraphicElement& graphicElement,const QDomElement& domElement);
 
     QDomDocument m_document;
     QDomElement m_root;

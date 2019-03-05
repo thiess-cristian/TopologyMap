@@ -18,3 +18,8 @@ void GraphicElement::setColor(const QColor & color)
     QGraphicsItem::update();
     m_color = color;
 }
+
+QColor GraphicElement::getColor() const
+{
+    return m_color;
+}

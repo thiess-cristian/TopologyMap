@@ -60,6 +60,8 @@ void SceneFromXML::updateMotionBodies(std::shared_ptr<GraphicMechanism> mechanis
             double rectH = boundingRect.attribute("h").toDouble();
 
             motionBody->setBoundingRect(QRectF(rectX, rectY, rectW, rectH));
+
+            updateColor(*motionBody, element);
         }
     }
 }
@@ -90,6 +92,8 @@ void SceneFromXML::updateJoints(std::map<std::string, GraphicJoint*> joints)
 
             joints[name]->setBaseConnection(QPointF(baseX, baseY));
             joints[name]->setActionConnection(QPointF(actionX, actionY));
+
+            updateColor(*joints[name], element);
         }
     }
 }
@@ -120,6 +124,21 @@ void SceneFromXML::updateConnectors(std::map<std::string, GraphicConnector*> con
 
             connectors[name]->setBaseConnection(QPointF(baseX, baseY));
             connectors[name]->setActionConnection(QPointF(actionX, actionY));
+
+            updateColor(*connectors[name], element);
         }
     }
+}
+
+void SceneFromXML::updateColor(GraphicElement& graphicElement, const QDomElement& domElement)
+{
+    QDomElement tagColor = domElement.firstChildElement("Color");
+
+    int red= tagColor.attribute("r").toInt();
+    int green= tagColor.attribute("g").toInt();
+    int blue= tagColor.attribute("b").toInt();
+    int alpha= tagColor.attribute("a").toInt();
+
+    QColor color(red,green,blue,alpha);
+    graphicElement.setColor(color);
 }

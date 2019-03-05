@@ -11,6 +11,7 @@ public:
 
     virtual void resetColor() = 0;
     void setColor(const QColor& color);
+    QColor getColor()const;
 protected:
     QColor m_color;
 };

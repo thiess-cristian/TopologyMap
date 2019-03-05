@@ -4,6 +4,7 @@
 #include "GraphicJoint.h"
 #include "GraphicConnector.h"
 
+#include <qcolor.h>
 #include <qtextstream.h>
 
 SceneToXML::SceneToXML(std::string modelName):m_modelName(modelName)
@@ -53,6 +54,8 @@ void SceneToXML::writeMotionBodies(const std::map<std::string, GraphicMotionBody
         tagBoundingRect.setAttribute("h", boundingRect.height());
 
         tagMotionBody.appendChild(tagBoundingRect);
+
+        addColorTag(*graphicMotionBody.second,tagMotionBody);
     }
 }
 
@@ -78,6 +81,8 @@ void SceneToXML::writeJoints(const std::map<std::string, GraphicJoint*>& joints)
         tagAction.setAttribute("y", joint.second->getActionConnection().y());
 
         tagJoint.appendChild(tagAction);
+
+        addColorTag(*joint.second, tagJoint);
     }
 }
 
@@ -103,5 +108,19 @@ void SceneToXML::writeConnectors(const std::map<std::string, GraphicConnector*>&
         tagAction.setAttribute("y", connector.second->getActionConnection().y());
 
         tagConnector.appendChild(tagAction);
+
+        addColorTag(*connector.second, tagConnector);
     }
+}
+
+void SceneToXML::addColorTag(const GraphicElement& graphicElement, QDomElement& domElement)
+{
+    QDomElement tagColor = m_document.createElement("Color");
+    auto color = graphicElement.getColor();
+    tagColor.setAttribute("r", color.red());
+    tagColor.setAttribute("g", color.green());
+    tagColor.setAttribute("b", color.blue());
+    tagColor.setAttribute("a", color.alpha());
+
+    domElement.appendChild(tagColor);
 }

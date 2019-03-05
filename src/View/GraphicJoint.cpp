@@ -37,8 +37,6 @@ void GraphicJoint::paint(QPainter * painter, const QStyleOptionGraphicsItem * op
 
 QPainterPath GraphicJoint::shape() const
 {
-    QPainterPath shape;
-
     QPointF begin(m_actionConnection.x(), m_actionConnection.y());
     QPointF end(m_baseConnection.x(), m_baseConnection.y());
 
@@ -56,6 +54,7 @@ QPainterPath GraphicJoint::shape() const
     QPointF C(end.x() - dy, end.y() + dx);
     QPointF D(end.x() + dy, end.y() - dx);
 
+    QPainterPath shape;
     shape.moveTo(A);
     shape.lineTo(B);
     shape.lineTo(C);
