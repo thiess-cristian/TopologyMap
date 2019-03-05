@@ -7,7 +7,7 @@
 #include <qpainter.h>
 
 GraphicJoint::GraphicJoint(const Joint & joint, GraphicMotionBody * action, GraphicMotionBody * base) :
-    m_joint(joint),
+    m_model(joint),
     m_action(action),
     m_base(base)
 {
@@ -24,7 +24,7 @@ QRectF GraphicJoint::boundingRect() const
 
 void GraphicJoint::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
-    JointPainterPathCreator creator(m_joint.getType());
+    JointPainterPathCreator creator(m_model.getType());
     auto path = creator.getPath(m_actionConnection,m_baseConnection);
 
     QPen pen(m_color);
@@ -33,6 +33,9 @@ void GraphicJoint::paint(QPainter * painter, const QStyleOptionGraphicsItem * op
     painter->drawPath(path);
     painter->drawEllipse(m_actionConnection, 5,5);
     painter->drawEllipse(m_baseConnection, 7, 7);
+
+    QPointF middlePoint((m_actionConnection+m_baseConnection)/2);
+    painter->drawText(middlePoint + QPoint(10, 10), m_model.getName().c_str());
 }
 
 QPainterPath GraphicJoint::shape() const
@@ -93,7 +96,7 @@ QPointF GraphicJoint::getBaseConnection() const
 
 const Joint & GraphicJoint::getModel() const
 {
-    return m_joint;
+    return m_model;
 }
 
 void GraphicJoint::connectionTranslate(QPointF translate)

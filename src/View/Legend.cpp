@@ -13,6 +13,7 @@
 #include <qtableview.h>
 #include <qlabel.h>
 #include <qformlayout.h>
+#include <memory>
 
 Legend::Legend(QGraphicsView* view)
 {   
@@ -50,23 +51,27 @@ QFormLayout * Legend::createJointsLayout()
     QFormLayout* layout = new QFormLayout(m_joints);
     JointStringToEnum strings;
 
-    for (const auto& name : strings.getStrings()) {
-        JointPainterPathCreator pathCreator(name.second);
-        QImage image(50,50, QImage::Format_ARGB32);
-        QPainterPath path = pathCreator.getPath(QPointF(0,25),QPointF(50,25));
-        QPainter painter(&image);
+    QImage image(50, 50, QImage::Format_ARGB32);
+    QPainter painter(&image);
 
+    for (const auto& name : strings.getStrings()) {
+        image.fill(Qt::white);
+        JointPainterPathCreator pathCreator(name.second);
+    
+        QPainterPath path = pathCreator.getPath(QPointF(0,25),QPointF(50,25));
+        
         painter.drawPath(path);
         
         QPixmap pixmap(QPixmap::fromImage(image));
 
-        QLabel* imageLabel = new QLabel();
+        QLabel* imageLabel = new QLabel(this);
 
         imageLabel->setPixmap(pixmap);
 
-        QLabel* textLabel = new QLabel(name.first.c_str());
+        QLabel* textLabel = new QLabel(name.first.c_str(),this);
 
         layout->addRow(imageLabel, textLabel);
+        
     }
     return layout;
 }
@@ -76,12 +81,13 @@ QFormLayout * Legend::createConnectorsLayout()
 {
     QFormLayout* layout = new QFormLayout(m_connectors);
     ConnectorStringToEnum strings;
+    QImage image(50, 50, QImage::Format_ARGB32);
+    QPainter painter(&image);
 
     for (const auto& name : strings.getStrings()) {
+        image.fill(Qt::white);
         ConnectorPainterPathCreator pathCreator(name.second);
-        QImage image(50, 50, QImage::Format_ARGB32);
         QPainterPath path = pathCreator.getPath(QPointF(0, 25), QPointF(50, 25));
-        QPainter painter(&image);
 
         painter.setPen(Qt::red);    
         painter.drawPath(path);

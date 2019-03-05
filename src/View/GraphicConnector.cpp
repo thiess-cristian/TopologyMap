@@ -7,7 +7,7 @@
 #include <iostream>
 
 GraphicConnector::GraphicConnector(const Connector& connector, GraphicMotionBody * action, GraphicMotionBody * base):
-    m_connector(connector),
+    m_model(connector),
     m_action(action),
     m_base(base)
 {
@@ -64,7 +64,7 @@ void GraphicConnector::paint(QPainter * painter, const QStyleOptionGraphicsItem 
 
     QLineF line(begin, end);
 
-    ConnectorPainterPathCreator creator(m_connector.getKind());
+    ConnectorPainterPathCreator creator(m_model.getKind());
 
     auto path=creator.getPath(begin, end);
 
@@ -73,6 +73,9 @@ void GraphicConnector::paint(QPainter * painter, const QStyleOptionGraphicsItem 
     painter->setPen(pen);
     //painter->drawLine(begin, end);
     painter->drawPath(path);
+
+    QPointF middlePoint((m_actionConnection + m_baseConnection) / 2);
+    painter->drawText(middlePoint + QPoint(10, 10), m_model.getName().c_str());
 }
 
 void GraphicConnector::setActionConnection(const QPointF & action)
@@ -113,7 +116,7 @@ void GraphicConnector::connectionScale(double scaleFactor)
 
 const Connector & GraphicConnector::getModel() const
 {
-    return m_connector;
+    return m_model;
 }
 
 void GraphicConnector::changeActionPosition(const QPointF & offset)

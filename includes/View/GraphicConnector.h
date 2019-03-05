@@ -37,7 +37,7 @@ public slots:
     void changeActionPosition(const QPointF& offset);
 
 private:
-    Connector m_connector;
+    Connector m_model;
 
     QPointF m_actionConnection;
     QPointF m_baseConnection;
