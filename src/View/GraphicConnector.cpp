@@ -73,9 +73,10 @@ void GraphicConnector::paint(QPainter * painter, const QStyleOptionGraphicsItem 
     painter->setPen(pen);
     //painter->drawLine(begin, end);
     painter->drawPath(path);
-
-    QPointF middlePoint((m_actionConnection + m_baseConnection) / 2);
-    painter->drawText(middlePoint + QPoint(10, 10), m_model.getName().c_str());
+    if (m_displayName) {
+        QPointF middlePoint((m_actionConnection + m_baseConnection) / 2);
+        painter->drawText(middlePoint + QPoint(10, 10), m_model.getName().c_str());
+    }
 }
 
 void GraphicConnector::setActionConnection(const QPointF & action)

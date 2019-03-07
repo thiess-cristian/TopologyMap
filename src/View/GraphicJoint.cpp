@@ -34,8 +34,10 @@ void GraphicJoint::paint(QPainter * painter, const QStyleOptionGraphicsItem * op
     painter->drawEllipse(m_actionConnection, 5,5);
     painter->drawEllipse(m_baseConnection, 7, 7);
 
-    QPointF middlePoint((m_actionConnection+m_baseConnection)/2);
-    painter->drawText(middlePoint + QPoint(10, 10), m_model.getName().c_str());
+    if (m_displayName) {
+        QPointF middlePoint((m_actionConnection+m_baseConnection)/2);
+        painter->drawText(middlePoint + QPoint(10, 10), m_model.getName().c_str());
+    }
 }
 
 QPainterPath GraphicJoint::shape() const

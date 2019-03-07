@@ -15,11 +15,17 @@ void GraphicElement::contextMenuEvent(QGraphicsSceneContextMenuEvent * event)
 
 void GraphicElement::setColor(const QColor & color)
 {
-    QGraphicsItem::update();
     m_color = color;
+    QGraphicsItem::update();
 }
 
 QColor GraphicElement::getColor() const
 {
     return m_color;
+}
+
+void GraphicElement::enableDisplayName(bool canDisplayName)
+{
+    m_displayName = canDisplayName;
+    QGraphicsItem::update();
 }

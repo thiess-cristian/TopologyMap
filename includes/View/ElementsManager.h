@@ -2,6 +2,7 @@
 
 #include "DocumentParser.h"
 #include "Enums.h"
+#include "XMLTagNames.h"
 #include <vector>
 #include <qobject.h>
 #include <map>
@@ -29,6 +30,7 @@ public:
     QPointF computeTranslationPoint();
     std::shared_ptr<Mechanism> getMechanism() const;
     std::shared_ptr<GraphicMechanism> getGraphicMechanism() const;
+    void displayElementName(ElementType type, bool checked);
 
 public slots:
     void applyScale(double scaleFactor);

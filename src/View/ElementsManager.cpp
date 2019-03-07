@@ -144,6 +144,33 @@ std::shared_ptr<GraphicMechanism> ElementsManager::getGraphicMechanism() const
     return m_graphicsMechanism;
 }
 
+void ElementsManager::displayElementName(ElementType type, bool checked)
+{
+    auto displayName = [checked](auto elementContainer) {
+        for (auto& element : elementContainer) {
+            element.second->enableDisplayName(checked);
+        }
+    };
+
+
+    switch (type) {
+        case ElementType::MotionBody: {
+            displayName(m_graphicsMechanism->getGraphicMotionBodies());
+            break;
+        }
+        case ElementType::Joint: {
+            displayName(m_graphicsMechanism->getGraphicJoints());
+            break;
+        }
+        case ElementType::Connector: {
+            displayName(m_graphicsMechanism->getGraphicConnectors());
+            break;
+        }
+        default:
+            break;
+    }
+}
+
 void ElementsManager::saveElements(QFile & file, std::string modelName)
 {
     SceneToXML sceneWriter(modelName);

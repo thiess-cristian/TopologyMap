@@ -51,9 +51,19 @@
      <addaction name="actionSide"/>
      <addaction name="actionFront"/>
     </widget>
+    <widget class="QMenu" name="menuDisplay_names">
+     <property name="title">
+      <string>Display names</string>
+     </property>
+     <addaction name="actionMotion_body"/>
+     <addaction name="actionJoint"/>
+     <addaction name="actionConnector"/>
+    </widget>
     <addaction name="menuPerspective"/>
     <addaction name="actionCircle"/>
     <addaction name="actionForce_Directed"/>
+    <addaction name="separator"/>
+    <addaction name="menuDisplay_names"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -123,6 +133,39 @@
   <action name="actionSearch">
    <property name="text">
     <string>Search</string>
+   </property>
+  </action>
+  <action name="actionMotion_body">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Motion body</string>
+   </property>
+  </action>
+  <action name="actionJoint">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Joint</string>
+   </property>
+  </action>
+  <action name="actionConnector">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Connector</string>
    </property>
   </action>
  </widget>

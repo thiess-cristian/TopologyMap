@@ -53,7 +53,9 @@ void GraphicMotionBody::paint(QPainter * painter, const QStyleOptionGraphicsItem
 
     painter->fillRect(rect, QBrush(m_color));
     //painter->fillRect(rect, QBrush(QColor(128, 128, 255)));
-    painter->drawText(m_origin+QPoint(10,10), m_model.getName().c_str());
+    if (m_displayName) {
+        painter->drawText(m_origin+QPoint(10,10), m_model.getName().c_str());
+    }
 }
 
 void GraphicMotionBody::setBoundingRect(const QRectF& boundingRect)
@@ -106,6 +108,7 @@ void GraphicMotionBody::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 void GraphicMotionBody::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     m_shiftMouseCoords = event->pos();
+    m_color = m_color.darker();
     setCursor(QCursor(Qt::ClosedHandCursor));
 }
 

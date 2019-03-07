@@ -33,6 +33,10 @@ protected slots:
     void displayLegend(bool checked);
     void openSearchWindow();
 
+    void displayMotionBodyName(bool checked);
+    void displayJointName(bool checked);
+    void displayConnectorName(bool checked);
+
 private:
     std::unique_ptr<Ui_TopologyMapWindow> m_ui;
     std::unique_ptr<SearchWindow> m_searchWindow;

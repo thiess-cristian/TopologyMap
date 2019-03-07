@@ -9,6 +9,7 @@
 #include "Zoom.h"
 #include "Legend.h"
 #include "SearchWindow.h"
+#include "XMLTagNames.h"
 
 #include <qlabel.h>
 #include <qfiledialog.h>
@@ -36,6 +37,10 @@ TopologyMapWindow::TopologyMapWindow(QWidget *parent):QMainWindow(parent)
     QObject::connect(m_ui->actionTop, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToTop);
     QObject::connect(m_ui->actionCircle, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveCircle);
     QObject::connect(m_ui->actionForce_Directed, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveForceDirected);
+
+    QObject::connect(m_ui->actionMotion_body, &QAction::triggered, this, &TopologyMapWindow::displayMotionBodyName);
+    QObject::connect(m_ui->actionJoint, &QAction::triggered, this, &TopologyMapWindow::displayJointName);
+    QObject::connect(m_ui->actionConnector, &QAction::triggered, this, &TopologyMapWindow::displayConnectorName);
     
     m_ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
     m_ui->graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
@@ -136,6 +141,21 @@ void TopologyMapWindow::openSearchWindow()
 {
     m_searchManager->setGraphicMechanism(m_manager.getGraphicMechanism());
     m_searchWindow->show();
+}
+
+void TopologyMapWindow::displayMotionBodyName(bool checked)
+{
+    m_manager.displayElementName(ElementType::MotionBody,checked);
+}
+
+void TopologyMapWindow::displayJointName(bool checked)
+{
+    m_manager.displayElementName(ElementType::Joint, checked);
+}
+
+void TopologyMapWindow::displayConnectorName(bool checked)
+{
+    m_manager.displayElementName(ElementType::Connector, checked);
 }
 
 void TopologyMapWindow::openFile()

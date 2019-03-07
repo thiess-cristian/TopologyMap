@@ -2,6 +2,13 @@
 #include <string>
 #include <map>
 
+enum class ElementType
+{
+    MotionBody,
+    Joint,
+    Connector
+};
+
 enum class JointType
 {
     Revolute,
