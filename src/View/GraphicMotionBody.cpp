@@ -108,8 +108,14 @@ void GraphicMotionBody::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 void GraphicMotionBody::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     m_shiftMouseCoords = event->pos();
-    m_color = m_color.darker();
+    setColor(m_color.darker(200));
     setCursor(QCursor(Qt::ClosedHandCursor));
+}
+
+void GraphicMotionBody::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
+{
+    setColor(m_color.lighter(200));
+    setCursor(QCursor(Qt::OpenHandCursor));
 }
 
 void GraphicMotionBody::resetColor()
