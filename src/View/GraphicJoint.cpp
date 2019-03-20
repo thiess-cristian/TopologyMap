@@ -7,9 +7,8 @@
 #include <qpainter.h>
 
 GraphicJoint::GraphicJoint(const Joint & joint, GraphicMotionBody * action, GraphicMotionBody * base) :
-    m_model(joint),
-    m_action(action),
-    m_base(base)
+    GraphicLink(action, base),
+    m_model(joint)
 {
     GraphicElement::setColor(Qt::black);
     connect(action, &GraphicMotionBody::offsetChanged, this, &GraphicJoint::changeActionPosition);
@@ -24,8 +23,38 @@ QRectF GraphicJoint::boundingRect() const
 
 void GraphicJoint::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
+    QPointF begin(m_actionConnection.x(), m_actionConnection.y());
+    QPointF end(m_baseConnection.x(), m_baseConnection.y());
+
+    QPointF dir = end - begin;
+    QPointF perpendicular(-1 * dir.y(), dir.x());
+
+    double length = sqrt(pow(perpendicular.x(), 2)+pow(perpendicular.y(), 2));
+
+    if (length != 0) {
+        perpendicular /= length;
+
+        int xPositionOffset = m_overlappingCount - m_overlappingCount % 2;
+        xPositionOffset *= m_overlappingCount % 2 ? 1 : -1;
+        int yPositionOffset = m_overlappingCount;
+
+        if (m_reverseOverlap) {
+            xPositionOffset *= -1;
+        }
+
+        begin += perpendicular*xPositionOffset * 10;
+        begin += dir*yPositionOffset*0.05;
+        end += perpendicular*xPositionOffset * 10;
+        end -= dir*yPositionOffset*0.05;
+    }
+
     JointPainterPathCreator creator(m_model.getType());
-    auto path = creator.getPath(m_actionConnection,m_baseConnection);
+
+    QPainterPath path;
+    path.moveTo(m_actionConnection);
+    path.lineTo(begin);
+    path.addPath(creator.getPath(begin, end));
+    path.lineTo(m_baseConnection);
 
     QPen pen(m_color);
     pen.setCosmetic(true);
@@ -72,28 +101,6 @@ QPainterPath GraphicJoint::shape() const
 void GraphicJoint::resetColor()
 {
     GraphicElement::setColor(Qt::black);
-}
-
-void GraphicJoint::setActionConnection(const QPointF& action)
-{
-    prepareGeometryChange();
-    m_actionConnection = action;
-}
-
-void GraphicJoint::setBaseConnection(const QPointF& base)
-{
-    prepareGeometryChange();
-    m_baseConnection = base;
-}
-
-QPointF GraphicJoint::getActionConnection() const
-{
-    return m_actionConnection;
-}
-
-QPointF GraphicJoint::getBaseConnection() const
-{
-    return m_baseConnection;
 }
 
 const Joint & GraphicJoint::getModel() const

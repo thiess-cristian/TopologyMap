@@ -1,5 +1,7 @@
 #include "GraphicMechanism.h"
 #include "GraphicMotionBody.h"
+#include "GraphicLink.h"
+#include "GraphicJoint.h"
 
 GraphicMechanism::GraphicMechanism(const std::map<std::string, GraphicMotionBody*>& graphicMotionBodies, 
                                    const std::map<std::string, GraphicJoint*>& graphicJoints, 
@@ -40,6 +42,17 @@ std::map<std::string, GraphicJoint*> GraphicMechanism::getGraphicJoints() const
 std::map<std::string, GraphicConnector*> GraphicMechanism::getGraphicConnectors() const
 {
     return m_graphicConnectors;
+}
+
+std::map<std::string, GraphicLink*> GraphicMechanism::getLinks() const
+{
+    std::map<std::string, GraphicLink*> graphicLinks;
+
+    for (auto& joint : m_graphicJoints) {
+        //graphicLinks[joint.first] = new GraphicJoint(joint.second);
+    }
+
+    return graphicLinks;
 }
 
 GraphicMotionBody * GraphicMechanism::findMotionBody(const std::string & name) const

@@ -2,11 +2,12 @@
 #include "Connector.h"
 #include "Enums.h"
 #include "GraphicElement.h"
+#include "GraphicLink.h"
 #include <qgraphicsitem.h>
 
 class GraphicMotionBody;
 
-class GraphicConnector :public QObject, public GraphicElement
+class GraphicConnector :public QObject, public GraphicLink
 {
     Q_OBJECT
 public:
@@ -21,12 +22,6 @@ public:
 
     virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = nullptr) override;
 
-    void setActionConnection(const QPointF& action);
-    void setBaseConnection(const QPointF& base);
-
-    QPointF getActionConnection()const;
-    QPointF getBaseConnection()const;
-
     void connectionTranslate(const QPointF& translate);
     void connectionScale(double scaleFactor);
 
@@ -38,10 +33,4 @@ public slots:
 
 private:
     Connector m_model;
-
-    QPointF m_actionConnection;
-    QPointF m_baseConnection;
-
-    GraphicMotionBody* m_action;
-    GraphicMotionBody* m_base;
 };

@@ -10,12 +10,14 @@
 #include "LinkAtachment.h"
 #include "SceneToXML.h"
 #include "SceneFromXML.h"
+#include "OverlappingLinkFinder.h"
 
 #include <qfile.h>
 #include <qtransform.h>
 #include <memory>
 #include <iostream>
 #include <map>
+#include <set>
 
 ElementsManager::ElementsManager()
 {
@@ -76,6 +78,9 @@ void ElementsManager::changePerspective(IPerspective* perspective)
     applyScale(scaleFactor);
 
     setStackingOrder();
+
+    OverlappingLinkFinder edgeFinder(m_graphicsMechanism);
+    edgeFinder.computeOverlappingCount();    
 }
 
 double ElementsManager::computeScaleFactor()

@@ -43,8 +43,7 @@ void SearchWindow::searchClicked()
     searchRequirements.regEx = m_ui->checkBoxRegEx->isChecked();
 
     emit sendSearchRequirements(searchRequirements);
-    
-    
+        
     close();
 }
 

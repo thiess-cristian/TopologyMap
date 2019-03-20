@@ -6,6 +6,7 @@
 class GraphicMotionBody;
 class GraphicJoint;
 class GraphicConnector;
+class GraphicLink;
 
 class GraphicMechanism
 {
@@ -19,9 +20,10 @@ public:
     void setGraphicJoints(const std::map<std::string, GraphicJoint*>& graphicJoints);
     void setGraphicConnectors(const std::map<std::string, GraphicConnector*>& graphicConnectors);
 
-    std::map<std::string, GraphicMotionBody*> getGraphicMotionBodies()const;
-    std::map<std::string, GraphicJoint*> getGraphicJoints()const;
-    std::map<std::string, GraphicConnector*> getGraphicConnectors()const;
+    std::map<std::string, GraphicMotionBody*> getGraphicMotionBodies() const;
+    std::map<std::string, GraphicJoint*> getGraphicJoints() const;
+    std::map<std::string, GraphicConnector*> getGraphicConnectors() const;
+    std::map<std::string, GraphicLink*> getLinks() const;
 
     GraphicMotionBody* findMotionBody(const std::string& name) const;
 

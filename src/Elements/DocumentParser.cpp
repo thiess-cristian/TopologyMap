@@ -98,7 +98,6 @@ std::map<std::string, Joint> DocumentParser::readJoints(std::map<std::string, Mo
     
     std::map<std::string, Joint> joints;
 
-
     JointStringToEnum converter;
 
     for (int i = 0; i < list.size(); i++) {
@@ -124,11 +123,11 @@ std::map<std::string, Joint> DocumentParser::readJoints(std::map<std::string, Mo
                 MotionBody& baseBody = baseAttribute != "" ? motionBodies.at(baseAttribute) : motionBodies.at("Ground");
 
                 //the connection point for the action motionbody
-                QDomElement actionOrigin = action.firstChildElement("Point").firstChildElement("Origin");
+                QDomElement actionOrigin = action.firstChildElement("TransformationMatrix").firstChildElement("Origin");
                 Point3D actionConnection = findPoint(actionOrigin);
 
                 //the connection point for the base motionbody
-                QDomElement baseOrigin = base.firstChildElement("Point").firstChildElement("Origin");
+                QDomElement baseOrigin = base.firstChildElement("TransformationMatrix").firstChildElement("Origin");
                 Point3D baseConnection = findPoint(baseOrigin);
                 
                 joints[nameAttribute] = Joint(nameAttribute, type, actionBody, baseBody, actionConnection, baseConnection);
@@ -182,11 +181,11 @@ std::map<std::string, Connector> DocumentParser::readConnectors(std::map<std::st
                     MotionBody& actionBody = motionBodies.at(actionAttribute);
                     MotionBody& baseBody = motionBodies.at(baseAttribute);
 
-                    QDomElement actionOrigin = action.firstChildElement("Point").firstChildElement("Origin");
+                    QDomElement actionOrigin = action.firstChildElement("TransformationMatrix").firstChildElement("Origin");
                     Point3D actionConnection = findPoint(actionOrigin);
                     //the connection point for the base motionbody
 
-                    QDomElement baseOrigin = base.firstChildElement("Point").firstChildElement("Origin");
+                    QDomElement baseOrigin = base.firstChildElement("TransformationMatrix").firstChildElement("Origin");
                     Point3D baseConnection = findPoint(baseOrigin);
                    
                     connectors[nameAttribute] = Connector(kind, nameAttribute, typeAttribute, actionBody, baseBody, actionConnection, baseConnection);

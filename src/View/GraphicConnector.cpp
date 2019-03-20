@@ -2,14 +2,14 @@
 #include "Bounder.h"
 #include "GraphicMotionBody.h"
 #include "ConnectorPainterPathCreator.h"
+#include "GraphicLink.h"
 #include <qpainter.h>
 #include <qtransform>
 #include <iostream>
 
 GraphicConnector::GraphicConnector(const Connector& connector, GraphicMotionBody * action, GraphicMotionBody * base):
-    m_model(connector),
-    m_action(action),
-    m_base(base)
+    GraphicLink(action,base),
+    m_model(connector)
 {
     GraphicElement::setColor(Qt::red);
     connect(action, &GraphicMotionBody::offsetChanged, this, &GraphicConnector::changeActionPosition);
@@ -62,43 +62,45 @@ void GraphicConnector::paint(QPainter * painter, const QStyleOptionGraphicsItem 
     QPointF begin(m_actionConnection.x(), m_actionConnection.y());
     QPointF end(m_baseConnection.x(), m_baseConnection.y());
 
-    QLineF line(begin, end);
+    QPointF dir = end - begin;
+    QPointF perpendicular(-1 * dir.y(), dir.x());
+
+    double length = sqrt(pow(perpendicular.x(), 2) + pow(perpendicular.y(), 2));
+
+    if (length != 0) {
+
+        perpendicular /= length;
+
+        int xPositionOffset = m_overlappingCount - m_overlappingCount % 2;
+        xPositionOffset *= m_overlappingCount % 2 ? 1 : -1;
+        int yPositionOffset = m_overlappingCount;
+
+        if (m_reverseOverlap) {
+            xPositionOffset *= -1;
+        }
+
+        begin += perpendicular*xPositionOffset * 10;
+        begin += dir*yPositionOffset*0.05;
+        end += perpendicular*xPositionOffset * 10;
+        end -= dir*yPositionOffset*0.05;
+    }
 
     ConnectorPainterPathCreator creator(m_model.getKind());
 
-    auto path=creator.getPath(begin, end);
-
+    QPainterPath path;
+    path.moveTo(m_actionConnection);
+    path.lineTo(begin);
+    path.addPath(creator.getPath(begin, end));
+    path.lineTo(m_baseConnection);
+    
     QPen pen(m_color);
     pen.setCosmetic(true);
     painter->setPen(pen);
-    //painter->drawLine(begin, end);
     painter->drawPath(path);
     if (m_displayName) {
-        QPointF middlePoint((m_actionConnection + m_baseConnection) / 2);
+        QPointF middlePoint((begin + end) / 2);
         painter->drawText(middlePoint + QPoint(10, 10), m_model.getName().c_str());
     }
-}
-
-void GraphicConnector::setActionConnection(const QPointF & action)
-{
-    prepareGeometryChange();
-    m_actionConnection = action;
-}
-
-void GraphicConnector::setBaseConnection(const QPointF & base)
-{
-    prepareGeometryChange();
-    m_baseConnection = base;
-}
-
-QPointF GraphicConnector::getActionConnection() const
-{
-    return m_actionConnection;
-}
-
-QPointF GraphicConnector::getBaseConnection() const
-{
-    return m_baseConnection;
 }
 
 void GraphicConnector::connectionTranslate(const QPointF& translate)

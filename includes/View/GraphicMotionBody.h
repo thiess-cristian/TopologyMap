@@ -31,6 +31,8 @@ public:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
 
+    bool operator==(const GraphicMotionBody& other) const;
+
 signals:
     void offsetChanged(const QPointF& offset);
 

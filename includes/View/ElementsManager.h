@@ -24,13 +24,17 @@ public:
     void saveElements(QFile& file, std::string modelName);
     void loadElements(QFile& file, std::string modelName);
     void addElementsToScene(TopologyMapScene * scene);
-    void setWindowSize(size_t windowHeight,size_t windowWidth);
     void changePerspective(IPerspective* perspective);
+
     double computeScaleFactor();
     QPointF computeTranslationPoint();
+    
+    void displayElementName(ElementType type, bool checked);
+
     std::shared_ptr<Mechanism> getMechanism() const;
     std::shared_ptr<GraphicMechanism> getGraphicMechanism() const;
-    void displayElementName(ElementType type, bool checked);
+
+    void setWindowSize(size_t windowHeight,size_t windowWidth);
 
 public slots:
     void applyScale(double scaleFactor);
@@ -54,4 +58,5 @@ private:
 
     size_t m_windowHeight;
     size_t m_windowWidth;
+
 };

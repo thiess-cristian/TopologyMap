@@ -2,12 +2,13 @@
 #include "Joint.h"
 #include "Enums.h"
 #include "GraphicElement.h"
+#include "GraphicLink.h"
 #include <qgraphicsitem.h>
 #include <qobject.h>
 
 class GraphicMotionBody;
 
-class GraphicJoint :public QObject, public GraphicElement
+class GraphicJoint :public QObject, public GraphicLink
 {
     Q_OBJECT
 public:
@@ -21,12 +22,6 @@ public:
     // Inherited via GraphicElement
     virtual void resetColor() override;
 
-    void setActionConnection(const QPointF& action);
-    void setBaseConnection(const QPointF& base);
-
-    QPointF getActionConnection()const;
-    QPointF getBaseConnection()const;
-
     const Joint& getModel() const;
 
     void connectionTranslate(QPointF translate);
@@ -38,12 +33,5 @@ public slots:
 
 private:
     Joint m_model;
-
-    QPointF m_actionConnection;
-    QPointF m_baseConnection;
-
-    GraphicMotionBody* m_action;
-    GraphicMotionBody* m_base;
-
     QRectF m_boundingRect;
 };

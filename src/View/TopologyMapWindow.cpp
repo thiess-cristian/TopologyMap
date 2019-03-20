@@ -24,23 +24,23 @@ TopologyMapWindow::TopologyMapWindow(QWidget *parent):QMainWindow(parent)
     m_scene = new TopologyMapScene();
     m_ui->graphicsView->setScene(m_scene);
 
-    QObject::connect(m_ui->actionOpen, &QAction::triggered, this, &TopologyMapWindow::openFile);
-    QObject::connect(m_ui->actionSave_as, &QAction::triggered, this, &TopologyMapWindow::saveAsFile);
-    QObject::connect(m_ui->actionSave, &QAction::triggered, this, &TopologyMapWindow::saveFile);
-    QObject::connect(m_ui->actionLoad, &QAction::triggered, this, &TopologyMapWindow::loadSceneFromFile);
+    QObject::connect(m_ui->actionOpen,              &QAction::triggered, this, &TopologyMapWindow::openFile);
+    QObject::connect(m_ui->actionSave_as,           &QAction::triggered, this, &TopologyMapWindow::saveAsFile);
+    QObject::connect(m_ui->actionSave,              &QAction::triggered, this, &TopologyMapWindow::saveFile);
+    QObject::connect(m_ui->actionLoad,              &QAction::triggered, this, &TopologyMapWindow::loadSceneFromFile);
 
-    QObject::connect(m_ui->actionLegend, &QAction::triggered, this, &TopologyMapWindow::displayLegend);
-    QObject::connect(m_ui->actionSearch, &QAction::triggered, this, &TopologyMapWindow::openSearchWindow);
+    QObject::connect(m_ui->actionLegend,            &QAction::triggered, this, &TopologyMapWindow::displayLegend);
+    QObject::connect(m_ui->actionSearch,            &QAction::triggered, this, &TopologyMapWindow::openSearchWindow);
 
-    QObject::connect(m_ui->actionFront, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToFront);
-    QObject::connect(m_ui->actionSide, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToSide);
-    QObject::connect(m_ui->actionTop, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToTop);
-    QObject::connect(m_ui->actionCircle, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveCircle);
-    QObject::connect(m_ui->actionForce_Directed, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveForceDirected);
+    QObject::connect(m_ui->actionFront,             &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToFront);
+    QObject::connect(m_ui->actionSide,              &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToSide);
+    QObject::connect(m_ui->actionTop,               &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToTop);
+    QObject::connect(m_ui->actionCircle,            &QAction::triggered, this, &TopologyMapWindow::changePerspectiveCircle);
+    QObject::connect(m_ui->actionForce_Directed,    &QAction::triggered, this, &TopologyMapWindow::changePerspectiveForceDirected);
 
-    QObject::connect(m_ui->actionMotion_body, &QAction::triggered, this, &TopologyMapWindow::displayMotionBodyName);
-    QObject::connect(m_ui->actionJoint, &QAction::triggered, this, &TopologyMapWindow::displayJointName);
-    QObject::connect(m_ui->actionConnector, &QAction::triggered, this, &TopologyMapWindow::displayConnectorName);
+    QObject::connect(m_ui->actionMotion_body,       &QAction::triggered, this, &TopologyMapWindow::displayMotionBodyName);
+    QObject::connect(m_ui->actionJoint,             &QAction::triggered, this, &TopologyMapWindow::displayJointName);
+    QObject::connect(m_ui->actionConnector,         &QAction::triggered, this, &TopologyMapWindow::displayConnectorName);
     
     m_ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
     m_ui->graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);

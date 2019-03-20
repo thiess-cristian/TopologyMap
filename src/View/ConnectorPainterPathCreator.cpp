@@ -11,6 +11,10 @@ QPainterPath ConnectorPainterPathCreator::getPath(QPointF begin, QPointF end) co
     double angle = line.angle()*M_PI / 180.0;
     double length = line.length();
 
+    //QPainterPath path(begin);
+    //path.quadTo(end,begin+QPointF(20,20));
+
+    //Turtle turtle(path.currentPosition(), -angle);
     Turtle turtle(begin,-angle);
     
     switch (m_kind) {
@@ -57,7 +61,7 @@ void ConnectorPainterPathCreator::drawSpringPath(Turtle & turtle, double length)
 
 void ConnectorPainterPathCreator::drawDamperPath(Turtle & turtle, double length) const
 {
-    turtle.forward(length / 6);
+    turtle.forward(length / 2);
 
     const int segment = 8;
 
@@ -82,6 +86,5 @@ void ConnectorPainterPathCreator::drawDamperPath(Turtle & turtle, double length)
 
     turtle.rotate(M_PI / 2);
     turtle.forward(segment,false);
-
 }
 

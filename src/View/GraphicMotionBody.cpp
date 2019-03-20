@@ -118,6 +118,11 @@ void GraphicMotionBody::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
     setCursor(QCursor(Qt::OpenHandCursor));
 }
 
+bool GraphicMotionBody::operator==(const GraphicMotionBody & other) const
+{
+    return m_model == other.m_model;
+}
+
 void GraphicMotionBody::resetColor()
 {
     GraphicElement::setColor(QColor(128, 128, 255, 128));
