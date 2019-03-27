@@ -38,23 +38,31 @@ void GraphicMotionBody::paint(QPainter * painter, const QStyleOptionGraphicsItem
     QPen pen(Qt::black);
     pen.setCosmetic(true);
     painter->setPen(pen);
-
-    //painter->drawEllipse(m_origin, 10, 10);
+    
     QRectF rect(m_boundingRect.x(), m_boundingRect.y(), m_boundingRect.width(), m_boundingRect.height());
     
     double minWidth = 50;
     double minHeight = 50;
 
     rect.setWidth(std::max(rect.width(), minWidth));
-    rect.setHeight(std::max(rect.height(), minHeight));
 
-    //m_origin.setX(std::max(rect.center().x(), m_origin.x()));
-    //m_origin.setY(std::max(rect.center().y(), m_origin.y()));
-
+    QGraphicsTextItem textItem;
+    textItem.font();
+    QFontMetrics metrics(textItem.font());
+    int textWidth = std::max(static_cast<int>(rect.width()), metrics.width(m_model.getName().c_str())+20);
+    rect.setWidth(textWidth);
+    
+    if (rect.height() == 0) {
+        int textHeight = metrics.height() + 5;
+        rect.setHeight(textHeight);
+    } else {
+        rect.setHeight(std::max(rect.height(), minHeight));
+    }
+    
     painter->fillRect(rect, QBrush(m_color));
-    //painter->fillRect(rect, QBrush(QColor(128, 128, 255)));
+    painter->drawRect(rect);
     if (m_displayName) {
-        painter->drawText(m_origin+QPoint(10,10), m_model.getName().c_str());
+        painter->drawText(m_origin+QPoint(10,13), m_model.getName().c_str());
     }
 }
 

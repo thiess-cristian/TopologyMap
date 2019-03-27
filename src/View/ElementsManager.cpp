@@ -42,16 +42,16 @@ void ElementsManager::addElementsToScene(TopologyMapScene * scene)
     m_graphicsMechanism->setGraphicConnectors(createConnectors());
 
 
+    for (const auto& motionBody : m_graphicsMechanism->getGraphicMotionBodies()) {
+        scene->addItem(motionBody.second);
+    }
+
     for (const auto& joint : m_graphicsMechanism->getGraphicJoints()) {
         scene->addItem(joint.second);
     }
 
     for (const auto& connector : m_graphicsMechanism->getGraphicConnectors()) {
         scene->addItem(connector.second);
-    }
-
-    for (const auto& motionBody : m_graphicsMechanism->getGraphicMotionBodies()) {
-        scene->addItem(motionBody.second);
     }
 
     SidePerspective side;    
