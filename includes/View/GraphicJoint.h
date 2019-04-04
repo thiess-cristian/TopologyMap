@@ -21,6 +21,8 @@ public:
 
     // Inherited via GraphicElement
     virtual void resetColor() override;
+    // Inherited via GraphicLink
+    virtual std::shared_ptr<Element> getElementModel() const override;
 
     const Joint& getModel() const;
 
@@ -34,7 +36,4 @@ public slots:
 private:
     Joint m_model;
     QRectF m_boundingRect;
-
-    // Inherited via GraphicLink
-    virtual std::shared_ptr<Element> getElementModel() const override;
 };

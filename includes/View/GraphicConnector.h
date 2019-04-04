@@ -19,6 +19,9 @@ public:
 
     // Inherited via GraphicElement
     virtual void resetColor() override;
+    // Inherited via GraphicLink
+    virtual std::shared_ptr<Element> getElementModel() const override;
+
 
     virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = nullptr) override;
 
@@ -34,8 +37,5 @@ public slots:
 private:
     Connector m_model;
 
-
-    // Inherited via GraphicLink
-    virtual std::shared_ptr<Element> getElementModel() const override;
 
 };

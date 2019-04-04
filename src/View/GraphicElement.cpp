@@ -4,13 +4,12 @@
 
 GraphicElement::GraphicElement()
 {
-
+    m_rightClickMenu= std::make_unique<ElementRightClickMenu>(*this);
 }
 
 void GraphicElement::contextMenuEvent(QGraphicsSceneContextMenuEvent * event)
 {
-    std::unique_ptr<ElementRightClickMenu> rightClickMenu = std::make_unique<ElementRightClickMenu>(*this);    
-    rightClickMenu->processEvent(event);
+    m_rightClickMenu->processEvent(event);
 }
 
 void GraphicElement::setColor(const QColor & color)
@@ -22,6 +21,11 @@ void GraphicElement::setColor(const QColor & color)
 QColor GraphicElement::getColor() const
 {
     return m_color;
+}
+
+std::shared_ptr<ElementRightClickMenu> GraphicElement::getRightClickMenu() const
+{
+    return m_rightClickMenu;
 }
 
 void GraphicElement::enableDisplayName(bool canDisplayName)

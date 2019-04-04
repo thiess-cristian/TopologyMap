@@ -28,9 +28,6 @@ public:
     const MotionBody& getModel() const;
     QPointF getOrigin()const;
 
-    std::shared_ptr<ElementRightClickMenu> getRightClickMenu() const;
-
-
     void boundingRectTranslate(QPointF translation);
     void boundingRectScale(double scaleFactor);
 
@@ -39,9 +36,6 @@ public:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
 
     bool operator==(const GraphicMotionBody& other) const;
-
-    virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
-
 signals:
     void offsetChanged(const QPointF& offset);
 
@@ -51,7 +45,5 @@ private:
     QPointF m_origin;
     QRectF m_boundingRect;
 
-    std::shared_ptr<ElementRightClickMenu> m_rightClickMenu;
     
-
 };

@@ -129,8 +129,8 @@ void GraphicConnector::changeActionPosition(const QPointF & offset)
 }
 
 std::shared_ptr<Element> GraphicConnector::getElementModel() const
-{
-    return std::shared_ptr<Element>();
+{    
+    return std::make_shared<Connector>(m_model);
 }
 
 void GraphicConnector::changeBasePosition(const QPointF& offset)

@@ -129,8 +129,8 @@ void GraphicJoint::changeActionPosition(const QPointF & offset)
 }
 
 std::shared_ptr<Element> GraphicJoint::getElementModel() const
-{
-    return std::shared_ptr<Element>();
+{    
+    return std::make_shared<Joint>(m_model);
 }
 
 void GraphicJoint::changeBasePosition(const QPointF& offset)
