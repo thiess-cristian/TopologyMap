@@ -13,6 +13,7 @@ class GraphicJoint;
 class GraphicConnector;
 class GraphicMechanism;
 class IPerspective;
+class InfoPanel;
 
 class ElementsManager:public QObject
 {
@@ -36,6 +37,8 @@ public:
 
     void setWindowSize(size_t windowHeight,size_t windowWidth);
 
+    void setUpInfoPanelRelations(std::shared_ptr<InfoPanel> infoPanel);
+
 public slots:
     void applyScale(double scaleFactor);
     void applyTranslation(QPointF translatePoint);
@@ -58,5 +61,4 @@ private:
 
     size_t m_windowHeight;
     size_t m_windowWidth;
-
 };

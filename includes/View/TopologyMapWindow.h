@@ -9,6 +9,7 @@ class Ui_TopologyMapWindow;
 class TopologyMapScene;
 class Zoom;
 class Legend;
+class InfoPanel;
 class SearchWindow;
 class QLabel;
 
@@ -31,6 +32,7 @@ protected slots:
     void changePerspectiveForceDirected();
     
     void displayLegend(bool checked);
+    void displayInfoPanel(bool checked);
     void openSearchWindow();
 
     void displayMotionBodyName(bool checked);
@@ -50,4 +52,5 @@ private:
     std::shared_ptr<SearchManager> m_searchManager;
     std::unique_ptr<Zoom> m_zoom;
     std::unique_ptr<Legend> m_legend;
+    std::shared_ptr<InfoPanel> m_infoPanel;
 };

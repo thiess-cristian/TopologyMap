@@ -33,4 +33,9 @@ public slots:
 
 private:
     Connector m_model;
+
+
+    // Inherited via GraphicLink
+    virtual std::shared_ptr<Element> getElementModel() const override;
+
 };

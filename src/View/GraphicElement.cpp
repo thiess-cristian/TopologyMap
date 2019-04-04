@@ -9,7 +9,7 @@ GraphicElement::GraphicElement()
 
 void GraphicElement::contextMenuEvent(QGraphicsSceneContextMenuEvent * event)
 {
-    std::unique_ptr<ElementRightClickMenu> rightClickMenu = std::make_unique<ElementRightClickMenu>(*this);
+    std::unique_ptr<ElementRightClickMenu> rightClickMenu = std::make_unique<ElementRightClickMenu>(*this);    
     rightClickMenu->processEvent(event);
 }
 

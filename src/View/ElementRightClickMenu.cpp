@@ -1,14 +1,16 @@
 #include "ElementRightClickMenu.h"
 #include <qcolor.h>
 #include <qcolordialog.h>
+#include <iostream>
+#include "GraphicElement.h"
 
 ElementRightClickMenu::ElementRightClickMenu(GraphicElement& element):m_element(element)
-{
-    m_removeAction = addAction("Remove");
+{    
+    m_showInfo = addAction("Show info");
     m_resetColor = addAction("Reset color");
     m_changeColorAction = addAction("Change color");
-
-    QObject::connect(m_removeAction, &QAction::triggered, this, &ElementRightClickMenu::deleteItem);
+    
+    QObject::connect(m_showInfo, &QAction::triggered, this, &ElementRightClickMenu::showInfo);
     QObject::connect(m_changeColorAction, &QAction::triggered, this, &ElementRightClickMenu::changeColor);
     QObject::connect(m_resetColor, &QAction::triggered, this, &ElementRightClickMenu::resetColor);
 }
@@ -30,7 +32,7 @@ void ElementRightClickMenu::changeColor()
     m_element.setColor(newColor);
 }
 
-void ElementRightClickMenu::deleteItem()
+void ElementRightClickMenu::showInfo()
 {
-    
+    emit sentData(m_element);
 }

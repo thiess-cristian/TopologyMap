@@ -8,6 +8,7 @@
 #include "ForceDirectedPerspective.h"
 #include "Zoom.h"
 #include "Legend.h"
+#include "InfoPanel.h"
 #include "SearchWindow.h"
 #include "XMLTagNames.h"
 
@@ -30,6 +31,7 @@ TopologyMapWindow::TopologyMapWindow(QWidget *parent):QMainWindow(parent)
     QObject::connect(m_ui->actionLoad,              &QAction::triggered, this, &TopologyMapWindow::loadSceneFromFile);
 
     QObject::connect(m_ui->actionLegend,            &QAction::triggered, this, &TopologyMapWindow::displayLegend);
+    QObject::connect(m_ui->actionInformation,       &QAction::triggered, this, &TopologyMapWindow::displayInfoPanel);
     QObject::connect(m_ui->actionSearch,            &QAction::triggered, this, &TopologyMapWindow::openSearchWindow);
 
     QObject::connect(m_ui->actionFront,             &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToFront);
@@ -49,6 +51,7 @@ TopologyMapWindow::TopologyMapWindow(QWidget *parent):QMainWindow(parent)
     m_zoom = std::make_unique<Zoom>(m_ui->graphicsView, &m_manager);
 
     m_legend = std::make_unique<Legend>(m_ui->graphicsView);
+    m_infoPanel = std::make_unique<InfoPanel>(m_ui->graphicsView);
 
     m_searchManager = std::make_shared<SearchManager>();
     m_searchWindow = std::make_unique<SearchWindow>(m_searchManager);
@@ -137,6 +140,11 @@ void TopologyMapWindow::displayLegend(bool checked)
     m_legend->display(checked);
 }
 
+void TopologyMapWindow::displayInfoPanel(bool checked)
+{
+    m_infoPanel->display(checked);
+}
+
 void TopologyMapWindow::openSearchWindow()
 {
     m_searchManager->setGraphicMechanism(m_manager.getGraphicMechanism());
@@ -169,6 +177,7 @@ void TopologyMapWindow::openFile()
     m_manager.openElements(file);
     m_manager.setWindowSize(size().height()-100,size().width()-100);
     m_manager.addElementsToScene(m_scene);
+    m_manager.setUpInfoPanelRelations(m_infoPanel);
 
     QFileInfo fileInfo(m_filename);
     std::string filename = fileInfo.fileName().toStdString();

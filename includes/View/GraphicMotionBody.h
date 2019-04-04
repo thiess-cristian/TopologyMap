@@ -6,6 +6,8 @@
 #include <qrect.h>
 #include <qcolor.h>
 
+class ElementRightClickMenu;
+
 class GraphicMotionBody :public QObject,public GraphicElement
 {
     Q_OBJECT
@@ -17,12 +19,17 @@ public:
     
     // Inherited via GraphicElement
     virtual void resetColor() override;
+    // Inherited via GraphicElement
+    virtual std::shared_ptr<Element> getElementModel() const override;
 
     void setBoundingRect(const QRectF& boundingRect);
     void setOrigin(const QPointF& origin);
 
     const MotionBody& getModel() const;
     QPointF getOrigin()const;
+
+    std::shared_ptr<ElementRightClickMenu> getRightClickMenu() const;
+
 
     void boundingRectTranslate(QPointF translation);
     void boundingRectScale(double scaleFactor);
@@ -33,6 +40,8 @@ public:
 
     bool operator==(const GraphicMotionBody& other) const;
 
+    virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
+
 signals:
     void offsetChanged(const QPointF& offset);
 
@@ -41,4 +50,8 @@ private:
     MotionBody m_model;
     QPointF m_origin;
     QRectF m_boundingRect;
+
+    std::shared_ptr<ElementRightClickMenu> m_rightClickMenu;
+    
+
 };

@@ -128,6 +128,11 @@ void GraphicJoint::changeActionPosition(const QPointF & offset)
     m_actionConnection += offset;
 }
 
+std::shared_ptr<Element> GraphicJoint::getElementModel() const
+{
+    return std::shared_ptr<Element>();
+}
+
 void GraphicJoint::changeBasePosition(const QPointF& offset)
 {
     prepareGeometryChange();

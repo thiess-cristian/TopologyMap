@@ -71,6 +71,7 @@
     </property>
     <addaction name="actionLegend"/>
     <addaction name="actionSearch"/>
+    <addaction name="actionInformation"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuview"/>
@@ -166,6 +167,14 @@
    </property>
    <property name="text">
     <string>Connector</string>
+   </property>
+  </action>
+  <action name="actionInformation">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Information</string>
    </property>
   </action>
  </widget>

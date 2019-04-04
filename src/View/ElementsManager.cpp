@@ -11,6 +11,7 @@
 #include "SceneToXML.h"
 #include "SceneFromXML.h"
 #include "OverlappingLinkFinder.h"
+#include "InfoPanel.h"
 
 #include <qfile.h>
 #include <qtransform.h>
@@ -62,6 +63,13 @@ void ElementsManager::setWindowSize(size_t windowHeight, size_t windowWidth)
 {
     m_windowHeight = windowHeight;
     m_windowWidth = windowWidth;
+}
+
+void ElementsManager::setUpInfoPanelRelations(std::shared_ptr<InfoPanel> infoPanel)
+{
+    for (const auto& motionBody : m_graphicsMechanism->getGraphicMotionBodies()) {
+        QObject::connect(motionBody.second->getRightClickMenu().get(),&ElementRightClickMenu::sentData,infoPanel.get(),&InfoPanel::addInfoTab);
+    }
 }
 
 

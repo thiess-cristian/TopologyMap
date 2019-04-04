@@ -2,6 +2,7 @@
 #include "qpainter.h"
 #include "Bounder.h"
 #include "ElementRightClickMenu.h"
+#include "MotionBodyRightClickMenu.h"
 
 #include <iostream>
 #include <qgraphicssceneevent.h>
@@ -15,6 +16,7 @@ GraphicMotionBody::GraphicMotionBody(MotionBody body):
     m_boundingRect(QRectF())
 {
     GraphicElement::setColor(QColor(128, 128, 255, 128));
+    m_rightClickMenu= std::make_shared<MotionBodyRightClickMenu>(*this);
 }
 
 QRectF GraphicMotionBody::boundingRect() const
@@ -86,6 +88,11 @@ QPointF GraphicMotionBody::getOrigin() const
     return m_origin;
 }
 
+std::shared_ptr<ElementRightClickMenu> GraphicMotionBody::getRightClickMenu() const
+{
+    return m_rightClickMenu;
+}
+
 void GraphicMotionBody::boundingRectTranslate(QPointF translation)
 {
     prepareGeometryChange();
@@ -129,6 +136,16 @@ void GraphicMotionBody::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 bool GraphicMotionBody::operator==(const GraphicMotionBody & other) const
 {
     return m_model == other.m_model;
+}
+
+void GraphicMotionBody::contextMenuEvent(QGraphicsSceneContextMenuEvent * event)
+{        
+    m_rightClickMenu->processEvent(event);
+}
+
+std::shared_ptr<Element> GraphicMotionBody::getElementModel() const
+{    
+    return std::make_shared<MotionBody>(m_model);
 }
 
 void GraphicMotionBody::resetColor()

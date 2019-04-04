@@ -34,4 +34,7 @@ public slots:
 private:
     Joint m_model;
     QRectF m_boundingRect;
+
+    // Inherited via GraphicLink
+    virtual std::shared_ptr<Element> getElementModel() const override;
 };

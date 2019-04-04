@@ -20,7 +20,8 @@ Legend::Legend(QGraphicsView* view)
     m_tab = new QTabWidget(this);
     
     m_tab->setFixedWidth(170);
-
+    m_tab->setFixedHeight(400);
+    
     m_joints = new QWidget(m_tab);
     m_joints->setLayout(createJointsLayout());
 
@@ -58,24 +59,19 @@ QFormLayout * Legend::createJointsLayout()
         image.fill(Qt::white);
         JointPainterPathCreator pathCreator(name.second);
     
-        QPainterPath path = pathCreator.getPath(QPointF(0,25),QPointF(50,25));
-        
+        QPainterPath path = pathCreator.getPath(QPointF(0,25),QPointF(50,25));        
         painter.drawPath(path);
         
         QPixmap pixmap(QPixmap::fromImage(image));
 
         QLabel* imageLabel = new QLabel(this);
-
         imageLabel->setPixmap(pixmap);
 
         QLabel* textLabel = new QLabel(name.first.c_str(),this);
-
-        layout->addRow(imageLabel, textLabel);
-        
+        layout->addRow(imageLabel, textLabel);        
     }
     return layout;
 }
-
 
 QFormLayout * Legend::createConnectorsLayout()
 {
@@ -88,18 +84,15 @@ QFormLayout * Legend::createConnectorsLayout()
         image.fill(Qt::white);
         ConnectorPainterPathCreator pathCreator(name.second);
         QPainterPath path = pathCreator.getPath(QPointF(0, 25), QPointF(50, 25));
-
         painter.setPen(Qt::red);    
         painter.drawPath(path);
         
         QPixmap pixmap(QPixmap::fromImage(image));
 
-        QLabel* imageLabel = new QLabel();
-        
+        QLabel* imageLabel = new QLabel();       
         imageLabel->setPixmap(pixmap);
 
         QLabel* textLabel = new QLabel(name.first.c_str());
-
         layout->addRow(imageLabel, textLabel);
     }
     return layout;

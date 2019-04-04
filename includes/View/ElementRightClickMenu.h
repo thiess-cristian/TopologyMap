@@ -4,8 +4,9 @@
 #include <qaction.h>
 #include <memory>
 #include <qgraphicssceneevent.h>
+#include <map>
 
-#include "GraphicElement.h"
+class GraphicElement;
 
 class ElementRightClickMenu:public QMenu
 {
@@ -14,17 +15,19 @@ public:
     ElementRightClickMenu(GraphicElement& element);
     void processEvent(QGraphicsSceneContextMenuEvent *event);
 
+signals:
+    void sentData(GraphicElement& element);
+
 protected slots:    
     void resetColor();
-    void changeColor();
-    void deleteItem();
+    void changeColor();    
+    virtual void showInfo();
 
-private:
-
+protected:
     GraphicElement& m_element;
 
     QAction* m_resetColor;
     QAction* m_changeColorAction;
-    QAction* m_removeAction;
+    QAction* m_showInfo;
     QAction* m_selectedAction;
 };
