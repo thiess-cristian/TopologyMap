@@ -12,6 +12,16 @@ public:
     {
         return m_names[type];
     }
+
+    std::string getString(T enumName)
+    {
+        for (const auto& name : m_names) {
+            if (name.second == enumName) {
+                return name.first;
+            }
+        }
+        return "";
+    }
     
     std::map<std::string, T> getStrings() const
     {

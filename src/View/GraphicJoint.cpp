@@ -67,6 +67,8 @@ void GraphicJoint::paint(QPainter * painter, const QStyleOptionGraphicsItem * op
         QPointF middlePoint((m_actionConnection+m_baseConnection)/2);
         painter->drawText(middlePoint + QPoint(10, 10), m_model.getName().c_str());
     }
+
+    painter->drawPath(shape());
 }
 
 QPainterPath GraphicJoint::shape() const
@@ -91,8 +93,8 @@ QPainterPath GraphicJoint::shape() const
     QPainterPath shape;
     shape.moveTo(A);
     shape.lineTo(B);
-    shape.lineTo(C);
     shape.lineTo(D);
+    shape.lineTo(C);
     shape.lineTo(A);
     
     return shape;

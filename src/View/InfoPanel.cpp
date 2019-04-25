@@ -3,6 +3,8 @@
 #include "MotionBody.h"
 #include "Joint.h"
 #include "Connector.h"
+#include "LinkAtachment.h"
+#include "JointStringToEnum.h"
 
 #include <qgraphicsview.h>
 #include <qtableview.h>
@@ -10,7 +12,13 @@
 #include <qformlayout.h>
 #include <qwidget.h>
 #include <qlayout.h>
-#include <sstream>
+#include <qstringlistmodel.h>
+
+
+#include <ui_MotionBodyInfo.h>
+#include <ui_JointInfo.h>
+#include <ui_ConnectorInfo.h>
+
 
 
 InfoPanel::InfoPanel(QGraphicsView * view)
@@ -58,39 +66,57 @@ void InfoPanel::addInfoTab(GraphicElement& element)
 void InfoPanel::addMotionBodyInfo(std::shared_ptr<MotionBody> motionBodyModel)
 {
     QWidget* content = new QWidget(m_tab);
-    QFormLayout* layout = new QFormLayout(content);
-    QLabel* nameLabel = new QLabel("name:", content);
-
-    QLabel* textLabel = new QLabel(motionBodyModel->getName().c_str(), content);
-    layout->addRow(nameLabel, textLabel);
     
+    std::unique_ptr<Ui_MotionBodyInfo> ui= std::make_unique<Ui_MotionBodyInfo>();
+    ui->setupUi(content);
+    ui->labelNameContent->setText(motionBodyModel->getName().c_str());
+    ui->labelXCoordContent->setText(QString::number(motionBodyModel->getOrigin().getX()));
+    ui->labelYCoordContent->setText(QString::number(motionBodyModel->getOrigin().getY()));
+    ui->labelZCoordContent->setText(QString::number(motionBodyModel->getOrigin().getZ()));
+    
+    QStringListModel *model = new QStringListModel(content);
+    QStringList list;    
+    ui->listViewLinkAtachments->setEditTriggers(QAbstractItemView::NoEditTriggers);
+     
+    auto linkAtachments = motionBodyModel->getLinkAtachments();
+    for (const auto linkAtachment : linkAtachments) {
+        list << linkAtachment->getLink().getName().c_str();        
+    }    
+    
+    model->setStringList(list);
+    ui->listViewLinkAtachments->setModel(model);
+
     m_tab->addTab(content, motionBodyModel->getName().c_str());
 }
 
 void InfoPanel::addConnectorInfo(std::shared_ptr<Connector> connectorModel)
 {
-
     QWidget* content = new QWidget(m_tab);
-    QFormLayout* layout = new QFormLayout(content);
-    QLabel* nameLabel = new QLabel("name:", content);
-
-    QLabel* textLabel = new QLabel(connectorModel->getName().c_str(), content);
-    layout->addRow(nameLabel, textLabel);
-
     
+    std::unique_ptr<Ui_ConnectorInfo> ui = std::make_unique<Ui_ConnectorInfo>();
+    ui->setupUi(content);
+        
+    ui->labelNameContent->setText(connectorModel->getName().c_str());
+
+    ui->labelActionContent->setText(connectorModel->getAction().getName().c_str());
+    ui->labelBaseContent->setText(connectorModel->getBase().getName().c_str());
 
     m_tab->addTab(content, connectorModel->getName().c_str());
 }
 
 void InfoPanel::addJointInfo(std::shared_ptr<Joint> jointModel)
 {
-
     QWidget* content = new QWidget(m_tab);
-    QFormLayout* layout = new QFormLayout(content);
-    QLabel* nameLabel = new QLabel("name:", content);
+    JointStringToEnum enumConv;
+    std::unique_ptr<Ui_JointInfo> ui = std::make_unique<Ui_JointInfo>();
+    ui->setupUi(content);
+    ui->labelNameContent->setText(jointModel->getName().c_str());
+    std::string type;
+    type = enumConv.getString(jointModel->getType());
+    ui->labelTypeContent->setText(type.c_str());
 
-    QLabel* textLabel = new QLabel(jointModel->getName().c_str(), content);
-    layout->addRow(nameLabel, textLabel);
+    ui->labelActionContent->setText(jointModel->getAction().getName().c_str());
+    ui->labelBaseContent->setText(jointModel->getBase().getName().c_str());
 
     m_tab->addTab(content, jointModel->getName().c_str());
 }
