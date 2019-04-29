@@ -19,7 +19,6 @@ public:
     
     // Inherited via GraphicElement
     virtual void resetColor() override;
-    // Inherited via GraphicElement
     virtual std::shared_ptr<Element> getElementModel() const override;
 
     void setBoundingRect(const QRectF& boundingRect);
@@ -43,7 +42,5 @@ private:
     QPointF m_shiftMouseCoords;
     MotionBody m_model;
     QPointF m_origin;
-    QRectF m_boundingRect;
-
-    
+    QRectF m_boundingRect;    
 };
