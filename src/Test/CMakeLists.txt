@@ -15,4 +15,4 @@ include_directories("${CMAKE_SOURCE_DIR}/bin")
 
 add_executable(${PROJECT_NAME} ${srcs} ${includes})
 
-target_link_libraries(${PROJECT_NAME} Elements)
+target_link_libraries(${PROJECT_NAME} Elements Graph)

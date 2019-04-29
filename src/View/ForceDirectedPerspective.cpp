@@ -1,23 +1,57 @@
 #include "ForceDirectedPerspective.h"
 #include "Mechanism.h"
 #include "Point3D.h"
+#include <utility>
 
 ForceDirectedPerspective::ForceDirectedPerspective(std::shared_ptr<Mechanism> mechanism):
     m_mechanism(mechanism)
 {
+    GraphType::GraphCoord<double> origin;
 
     for (const auto& motionBody : m_mechanism->getMotionBodies()) {
-        m_graph.addNode(motionBody.second);
+        auto node = std::make_shared<GraphType::GraphNode<MotionBody, double>>(motionBody.second, origin);
+        graph.addNode(node);
     }
 
     for (const auto& joint : m_mechanism->getJoints()) {
-        m_graph.addEdge(joint.second);
+
+        std::shared_ptr<GraphType::GraphNode<MotionBody, double>> baseNode;
+        std::shared_ptr<GraphType::GraphNode<MotionBody, double>> actionNode;
+
+        for (const auto& node : graph.nodes()) {
+            if (node->getData() == joint.second.getAction()) {
+                actionNode = node;
+            }
+
+            if (node->getData() == joint.second.getBase()) {
+                baseNode = node;
+            }
+        }
+
+        graph.addEdge(actionNode, baseNode);
     }
 
     for (const auto& connector : m_mechanism->getConnectors()) {
-        m_graph.addEdge(connector.second);
+
+        std::shared_ptr<GraphType::GraphNode<MotionBody, double>> baseNode;
+        std::shared_ptr<GraphType::GraphNode<MotionBody, double>> actionNode;
+
+        for (const auto& node : graph.nodes()) {
+            if (node->getData() == connector.second.getAction()) {
+                actionNode = node;
+            }
+
+            if (node->getData() == connector.second.getBase()) {
+                baseNode = node;
+            }
+        }
+
+        graph.addEdge(actionNode, baseNode);
     }
-    m_graph.forceDirectedLayout();
+
+
+    GraphType::ForceDirectedLayout<MotionBody, double> layout(graph);
+    layout.runAlgorithm();
 }
 
 QPointF ForceDirectedPerspective::projectPoint(const Point3D & point) const
@@ -27,8 +61,18 @@ QPointF ForceDirectedPerspective::projectPoint(const Point3D & point) const
 
 QPointF ForceDirectedPerspective::projectMotionBody(const MotionBody & motionBody) const
 {
-    auto node = m_graph.getNodeCoord(motionBody);
-    return QPointF(node.x*500,node.y*500);
+    std::shared_ptr<GraphType::GraphNode<MotionBody, double>> node;
+
+    for (const auto& n : graph.getNodes()) {
+        if (n->getData() == motionBody) {
+            node = n;
+        }
+    }
+
+    double x = node->getPosition().getX();
+    double y= node->getPosition().getY();
+    
+    return QPointF(x*500,y*500);
 }
 
 QPointF ForceDirectedPerspective::projectLinkAtachment(const Link & link, LinkType type) const

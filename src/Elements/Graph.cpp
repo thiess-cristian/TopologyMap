@@ -1,4 +1,5 @@
-#include "Graph.h"
+
+#include "Elements\Graph.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <iostream>
@@ -107,7 +108,6 @@ void Graph::calculateRepulsiveForces()
 
 void Graph::calculateAttractiveForces()
 {
-
     for (size_t i = 0; i < m_nodesSize; i++) {
 
         auto &nodeV = m_nodes[i];

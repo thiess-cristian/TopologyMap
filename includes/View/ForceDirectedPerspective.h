@@ -4,6 +4,8 @@
 #include "MotionBody.h"
 #include <memory>
 #include <qpoint.h>
+#include <ForceDirectedLayout.h>
+#include <Graph\Graph.h>
 
 class Mechanism;
 
@@ -19,6 +21,6 @@ public:
 private:
 
     std::shared_ptr<Mechanism> m_mechanism;
-
-    Graph m_graph;
+    
+    GraphType::Graph<MotionBody, double> graph;
 };

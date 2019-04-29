@@ -1,10 +1,16 @@
 #pragma once
 #include <iostream>
+#include <memory>
+
 #include <MotionBody.h>
 #include <Graph.h>
 #include <Joint.h>
 #include <Connector.h>
 
+#include <GraphCoord.h>
+#include <GraphNode.h>
+#include <Graph\Graph.h>
+#include <Graph\ForceDirectedLayout.h>
 
 void graphTest()
 {
@@ -126,9 +132,34 @@ void graph2Test()
     */
 }
 
+void graphTest3()
+{
+    GraphType::GraphCoord<float> a(1,2);
+
+    auto n1 = std::make_shared<GraphType::GraphNode<MotionBody, float>>(MotionBody(), a);
+    auto n2 = std::make_shared<GraphType::GraphNode<MotionBody, float>>(MotionBody(), a);
+    auto n3 = std::make_shared<GraphType::GraphNode<MotionBody, float>>(MotionBody(), a);
+    auto n4 = std::make_shared<GraphType::GraphNode<MotionBody, float>>(MotionBody(), a);
+        
+    GraphType::Graph<MotionBody, float> g;
+
+    g.addNode(n1);
+    g.addNode(n2);
+    g.addEdge(n1, n2);
+    g.addEdge(n3, n4);
+    g.addEdge(n3, n4);
+    g.addEdge(n3, n4);
+
+    
+
+    GraphType::ForceDirectedLayout<MotionBody,float> l(g);
+
+    l.runAlgorithm();
+}
+
 int main()
 {
-    graph2Test();
-    
+    //graph2Test();
+    graphTest3();
     return 0;
 }
