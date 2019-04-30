@@ -3,7 +3,7 @@
 #include <memory>
 #include <exception>
 
-namespace GraphType
+namespace Graph
 {
     template<typename T,typename D>
     class Graph

@@ -22,5 +22,5 @@ private:
 
     std::shared_ptr<Mechanism> m_mechanism;
     
-    GraphType::Graph<MotionBody, double> graph;
+    Graph::Graph<MotionBody, double> graph;
 };

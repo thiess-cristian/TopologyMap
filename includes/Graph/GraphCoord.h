@@ -1,6 +1,6 @@
 #pragma once
 
-namespace GraphType
+namespace Graph
 {
     template<typename DataType>
     class GraphCoord

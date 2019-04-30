@@ -4,7 +4,7 @@
 #include <memory>
 #include <algorithm>
 
-namespace GraphType
+namespace Graph
 {
     template<typename DataObject, typename DataType>
     class GraphNode

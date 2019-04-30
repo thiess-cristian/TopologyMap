@@ -6,7 +6,7 @@
 #include <set>
 #include <chrono>
 
-namespace GraphType
+namespace Graph
 {
     template<typename T,typename D>
     class ForceDirectedLayout

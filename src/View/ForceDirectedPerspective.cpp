@@ -6,17 +6,17 @@
 ForceDirectedPerspective::ForceDirectedPerspective(std::shared_ptr<Mechanism> mechanism):
     m_mechanism(mechanism)
 {
-    GraphType::GraphCoord<double> origin;
+    Graph::GraphCoord<double> origin;
 
     for (const auto& motionBody : m_mechanism->getMotionBodies()) {
-        auto node = std::make_shared<GraphType::GraphNode<MotionBody, double>>(motionBody.second, origin);
+        auto node = std::make_shared<Graph::GraphNode<MotionBody, double>>(motionBody.second, origin);
         graph.addNode(node);
     }
 
     for (const auto& joint : m_mechanism->getJoints()) {
 
-        std::shared_ptr<GraphType::GraphNode<MotionBody, double>> baseNode;
-        std::shared_ptr<GraphType::GraphNode<MotionBody, double>> actionNode;
+        std::shared_ptr<Graph::GraphNode<MotionBody, double>> baseNode;
+        std::shared_ptr<Graph::GraphNode<MotionBody, double>> actionNode;
 
         for (const auto& node : graph.nodes()) {
             if (node->getData() == joint.second.getAction()) {
@@ -33,8 +33,8 @@ ForceDirectedPerspective::ForceDirectedPerspective(std::shared_ptr<Mechanism> me
 
     for (const auto& connector : m_mechanism->getConnectors()) {
 
-        std::shared_ptr<GraphType::GraphNode<MotionBody, double>> baseNode;
-        std::shared_ptr<GraphType::GraphNode<MotionBody, double>> actionNode;
+        std::shared_ptr<Graph::GraphNode<MotionBody, double>> baseNode;
+        std::shared_ptr<Graph::GraphNode<MotionBody, double>> actionNode;
 
         for (const auto& node : graph.nodes()) {
             if (node->getData() == connector.second.getAction()) {
@@ -50,7 +50,7 @@ ForceDirectedPerspective::ForceDirectedPerspective(std::shared_ptr<Mechanism> me
     }
 
 
-    GraphType::ForceDirectedLayout<MotionBody, double> layout(graph);
+    Graph::ForceDirectedLayout<MotionBody, double> layout(graph);
     layout.runAlgorithm();
 }
 
@@ -61,7 +61,7 @@ QPointF ForceDirectedPerspective::projectPoint(const Point3D & point) const
 
 QPointF ForceDirectedPerspective::projectMotionBody(const MotionBody & motionBody) const
 {
-    std::shared_ptr<GraphType::GraphNode<MotionBody, double>> node;
+    std::shared_ptr<Graph::GraphNode<MotionBody, double>> node;
 
     for (const auto& n : graph.getNodes()) {
         if (n->getData() == motionBody) {
