@@ -34,4 +34,6 @@ target_link_libraries(${PROJECT_NAME}
 	Elements
 	Utils
 	Graph
+	DataHandler
+	DataModel
 )

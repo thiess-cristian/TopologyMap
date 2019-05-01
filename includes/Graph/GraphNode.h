@@ -15,12 +15,12 @@ namespace Graph
         bool isNeighbour(const GraphNode& node) const;
         void addNeighbour(std::shared_ptr<GraphNode> node);
 
-        std::vector<std::shared_ptr<GraphNode>>& getNeighbourNodes();
+        auto& getNeighbourNodes();
         void setPosition(const DataType& x, const DataType& y);
         void setDisplacement(const DataType& x, const DataType& y);
-        GraphCoord<DataType>& getDisplacement();
-        GraphCoord<DataType>& getPosition();
-        DataObject getData()const;
+        auto& getDisplacement();
+        auto& getPosition();
+        auto getData()const;
 
     private:
         DataObject m_data;
@@ -51,7 +51,7 @@ namespace Graph
     }
 
     template<typename DataObject, typename DataType>
-    inline std::vector<std::shared_ptr<GraphNode<DataObject,DataType>>>& GraphNode<DataObject, DataType>::getNeighbourNodes()
+    inline auto& GraphNode<DataObject, DataType>::getNeighbourNodes()
     {
         return m_neighbourNodes;
     }
@@ -71,19 +71,19 @@ namespace Graph
     }
 
     template<typename DataObject, typename DataType>
-    inline GraphCoord<DataType>& GraphNode<DataObject, DataType>::getDisplacement()
+    inline auto& GraphNode<DataObject, DataType>::getDisplacement()
     {
         return m_displacement;
     }
 
     template<typename DataObject, typename DataType>
-    inline GraphCoord<DataType>& GraphNode<DataObject, DataType>::getPosition()
+    inline auto& GraphNode<DataObject, DataType>::getPosition()
     {
         return m_position;
     }
 
     template<typename DataObject, typename DataType>
-    inline DataObject GraphNode<DataObject, DataType>::getData() const
+    inline auto GraphNode<DataObject, DataType>::getData() const
     {
         return m_data;
     }

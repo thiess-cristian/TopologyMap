@@ -17,6 +17,8 @@
 #include <qgraphicsview.h>
 #include <qpushbutton.h>
 
+#include <DataHandler\DocumentParser.h>
+
 TopologyMapWindow::TopologyMapWindow(QWidget *parent):QMainWindow(parent)
 {
     m_ui=std::make_unique<Ui_TopologyMapWindow>();
@@ -174,6 +176,11 @@ void TopologyMapWindow::openFile()
     }
 
     QFile file(m_filename);
+
+    DataHandler::DocumentParser p;
+    p.parseFile(file);
+
+
     m_manager.openElements(file);
     m_manager.setWindowSize(size().height()-100,size().width()-100);
     m_manager.addElementsToScene(m_scene);

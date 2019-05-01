@@ -13,8 +13,8 @@ namespace Graph
         void addEdge(std::shared_ptr<GraphNode<T, D>> firstNode, std::shared_ptr<GraphNode<T, D>> secondNode);
         size_t size()const;
 
-        std::vector<std::shared_ptr<GraphNode<T, D>>>& nodes();
-        std::vector<std::shared_ptr<GraphNode<T, D>>> getNodes() const;
+        auto& nodes();
+        auto getNodes() const;
 
     private:
         std::vector<std::shared_ptr<GraphNode<T,D>>> m_nodes;
@@ -48,13 +48,13 @@ namespace Graph
     }
 
     template<typename T, typename D>
-    inline std::vector<std::shared_ptr<GraphNode<T, D>>>& Graph<T, D>::nodes()
+    inline auto& Graph<T, D>::nodes()
     {
         return m_nodes;
     }
 
     template<typename T, typename D>
-    inline std::vector<std::shared_ptr<GraphNode<T, D>>> Graph<T, D>::getNodes() const
+    inline auto Graph<T, D>::getNodes() const
     {
         return m_nodes;
     }

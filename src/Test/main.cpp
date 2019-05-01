@@ -12,6 +12,11 @@
 #include <Graph\Graph.h>
 #include <Graph\ForceDirectedLayout.h>
 
+#include<DataModel\Mechanism.h>
+#include<DataModel\Joint.h>
+#include<DataModel\MotionBody.h>
+#include<DataModel\Connector.h>
+
 void graphTest()
 {
     //Point3D origin;
@@ -134,6 +139,7 @@ void graph2Test()
 
 void graphTest3()
 {
+    /*
     GraphType::GraphCoord<float> a(1,2);
 
     auto n1 = std::make_shared<GraphType::GraphNode<MotionBody, float>>(MotionBody(), a);
@@ -155,11 +161,47 @@ void graphTest3()
     GraphType::ForceDirectedLayout<MotionBody,float> l(g);
 
     l.runAlgorithm();
+    */
+}
+
+void dataModelTest()
+{
+    auto m1 = std::make_shared<DataModel::MotionBody>("m1", DataModel::Point3D());
+    auto m2 = std::make_shared<DataModel::MotionBody>("m2", DataModel::Point3D());
+    auto m3 = std::make_shared<DataModel::MotionBody>("m3", DataModel::Point3D());
+
+    std::map<std::string, std::shared_ptr<DataModel::Element>> mContainer;
+
+    mContainer[m1->getName()] = m1;
+    mContainer[m2->getName()] = m2;
+    mContainer[m3->getName()] = m3;
+
+
+    auto j1 = std::make_shared<DataModel::Joint>("j1",JointType::Atpoint,m1,m2, DataModel::Point3D(), DataModel::Point3D());
+    auto c1 = std::make_shared<DataModel::Connector>(ConnectorKind::Damper, "c1", "type", j1);
+    auto c2 = std::make_shared<DataModel::Connector>(ConnectorKind::Damper, "c2", "type2", m1,m2, DataModel::Point3D(), DataModel::Point3D());
+
+    std::map<std::string, std::shared_ptr<DataModel::Element>> lContainer;
+
+    lContainer[j1->getName()] = j1;
+    lContainer[c1->getName()] = c1;
+    lContainer[c2->getName()] = c2;
+
+    DataModel::Mechanism mech;
+
+    mech.addDataContainer(mContainer, DataModel::ElementType::MotionBody);
+
+    for (auto x : mech.getContainer(DataModel::ElementType::MotionBody)) {
+        
+
+        
+    }
 }
 
 int main()
 {
     //graph2Test();
-    graphTest3();
+    //graphTest3();
+    dataModelTest();
     return 0;
 }
