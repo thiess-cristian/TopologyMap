@@ -9,3 +9,6 @@ add_subdirectory(Test)
 add_subdirectory(DataModel)
 add_subdirectory(Graph)
 add_subdirectory(DataHandler)
+
+add_subdirectory(GraphicModel)
+add_subdirectory(GraphicView)

@@ -16,3 +16,8 @@ std::map<std::string, std::shared_ptr<Element>> Mechanism::getContainer(ElementT
 {
     return m_elements.at(type);
 }
+
+std::map<ElementType, std::map<std::string, std::shared_ptr<Element>>> DataModel::Mechanism::getElements() const
+{
+    return m_elements;
+}

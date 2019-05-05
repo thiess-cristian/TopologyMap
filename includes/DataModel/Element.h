@@ -7,8 +7,11 @@ namespace DataModel
     {
     public:
         Element(const std::string& name);        
-        std::string getName()const;
         virtual ~Element() {};
+        std::string getName()const;
+
+        bool operator==(const Element& other);
+
     protected:
         std::string m_name;
     };

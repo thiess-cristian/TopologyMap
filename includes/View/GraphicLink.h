@@ -34,5 +34,4 @@ protected:
 
     GraphicMotionBody* m_action;
     GraphicMotionBody* m_base;
-
 };

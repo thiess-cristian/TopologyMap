@@ -30,8 +30,8 @@ namespace Graph
         GraphCoord<DataType> m_position;
     };
 
-
-
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //implementations
     template<typename DataObject, typename DataType>
     inline GraphNode<DataObject, DataType>::GraphNode(const DataObject & data, const GraphCoord<DataType>& position) :m_data(data), m_position(position), m_displacement()
     {}
