@@ -12,3 +12,8 @@ add_subdirectory(DataHandler)
 
 add_subdirectory(GraphicModel)
 add_subdirectory(GraphicView)
+add_subdirectory(Perspective)
+add_subdirectory(Panel)
+
+add_subdirectory(App)
+
