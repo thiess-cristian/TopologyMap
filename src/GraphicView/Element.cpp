@@ -16,5 +16,5 @@ QRectF Element::boundingRect() const
 
 void Element::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = nullptr)
 {
-    m_elementPainter->paintItem(painter, m_elementModel);
+    m_elementPainter->paintItem(painter);
 }

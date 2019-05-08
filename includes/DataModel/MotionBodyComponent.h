@@ -13,7 +13,6 @@ namespace DataModel
         MotionBodyComponent(const std::string& name);
         void addMotionBody(std::shared_ptr<MotionBody> motionBody);
 
-
     private:
         std::map<std::string, std::shared_ptr<MotionBody>> m_motionBodies;
 

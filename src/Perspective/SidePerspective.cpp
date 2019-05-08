@@ -18,10 +18,10 @@ QPointF SidePerspective::projectMotionBody(const DataModel::MotionBody & motionB
 QPointF SidePerspective::projectLinkAtachment(const DataModel::Link & link, DataModel::LinkType type) const
 {
     switch (type) {
-        case  DataModel::LinkType::Action:
+        case DataModel::LinkType::Action:
             return projectPoint(link.getActionConnection());
             break;
-        case  DataModel::LinkType::Base:
+        case DataModel::LinkType::Base:
             return projectPoint(link.getBaseConnection());
             break;
         default:
