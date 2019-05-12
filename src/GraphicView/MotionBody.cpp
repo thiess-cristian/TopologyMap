@@ -1,6 +1,7 @@
 #include "GraphicView\MotionBody.h"
 #include "GraphicModel\Element.h"
 #include "GraphicModel\MotionBody.h"
+#include "GraphicView\MotionBodyPainter.h"
 
 #include <qcursor.h>
 
@@ -8,14 +9,13 @@ using namespace GV;
 
 MotionBody::MotionBody(std::shared_ptr<GM::Element> elementModel):Element(elementModel)
 {
-
+    m_elementPainter = std::make_unique<MotionBodyPainter>(std::dynamic_pointer_cast<GM::MotionBody>(m_elementModel));
 }
 
 void MotionBody::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
-    auto dir = event->pos() - m_shiftMouseCoords;
-    auto motionBodyModel = std::dynamic_pointer_cast<GM::MotionBody>(m_elementModel);
-    motionBodyModel->bodyTranslate(dir);
+    auto dir = event->pos() - m_shiftMouseCoords;    
+    m_elementModel->translate(dir);
     m_shiftMouseCoords = event->pos();
 
     //TODO:

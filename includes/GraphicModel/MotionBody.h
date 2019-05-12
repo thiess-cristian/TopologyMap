@@ -11,9 +11,10 @@ namespace GM
         // Inherited via Element
         virtual QRectF boundingRect() const override;
         virtual QPainterPath shape() const override;
+        virtual void translate(QPointF translation) override;
+        virtual void scale(double scaleFactor) override;
 
-        void bodyTranslate(QPointF translation);
-        void bodyScale(double scaleFactor);
+        void setBody(const QRectF& body);
 
         static const size_t MinWidth = 50;
         static const size_t MinHeight = 50;

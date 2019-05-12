@@ -30,15 +30,20 @@ QPainterPath MotionBody::shape() const
     return QPainterPath();
 }
 
-void MotionBody::bodyTranslate(QPointF translation)
+void MotionBody::translate(QPointF translation)
 {
     m_body.translate(translation);
 }
 
-void MotionBody::bodyScale(double scaleFactor)
+void MotionBody::scale(double scaleFactor)
 {
     m_body = QRectF(m_body.x()*scaleFactor,
                     m_body.y()*scaleFactor,
                     m_body.width()*scaleFactor,
                     m_body.height()*scaleFactor);
+}
+
+void GM::MotionBody::setBody(const QRectF & body)
+{
+    m_body = body;
 }

@@ -1,6 +1,8 @@
 #include "GraphicView\Element.h"
 #include "GraphicView\IElementPainter.h"
-#include "GraphicModel\Element.h"
+#include "GraphicView\ElementRightClickMenu.h"
+#include <GraphicModel\Element.h>
+#include <qpainter.h>
 
 using namespace GV;
 
@@ -14,7 +16,7 @@ QRectF Element::boundingRect() const
     return m_elementModel->boundingRect();
 }
 
-void Element::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = nullptr)
+void Element::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
 {
     m_elementPainter->paintItem(painter);
 }

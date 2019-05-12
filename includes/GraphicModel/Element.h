@@ -23,6 +23,8 @@ namespace GM
 
         virtual QRectF boundingRect()const = 0;
         virtual QPainterPath shape()const = 0;
+        virtual void translate(QPointF point) = 0;
+        virtual void scale(double factor) = 0;
 
         bool isDisplayingName()const;
 

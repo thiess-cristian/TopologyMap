@@ -53,13 +53,13 @@ bool Link::reverseOverlaps(const Link & other)
     return *m_actionGraphicModel == *other.m_baseGraphicModel && *m_baseGraphicModel == *other.m_actionGraphicModel;
 }
 
-void Link::connectionTranslate(QPointF translate)
+void Link::translate(QPointF translate)
 {
     m_baseConnection += translate;
     m_actionConnection += translate;
 }
 
-void Link::connectionScale(double scaleFactor)
+void Link::scale(double scaleFactor)
 {
     m_baseConnection *= scaleFactor;
     m_actionConnection *= scaleFactor;

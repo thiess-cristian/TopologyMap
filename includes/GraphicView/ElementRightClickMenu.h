@@ -20,6 +20,7 @@ namespace GV
         Q_OBJECT
     public:
         ElementRightClickMenu(std::shared_ptr<GM::Element> elementGraphicModel);
+        ~ElementRightClickMenu() = default;
         void processEvent(QGraphicsSceneContextMenuEvent *event);
 
     signals:

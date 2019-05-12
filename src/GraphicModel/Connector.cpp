@@ -8,5 +8,5 @@ Connector::Connector(std::shared_ptr<DataModel::Element> linkDataModel,
              std::shared_ptr<Element> baseGraphicModel) :
     Link(linkDataModel, actionGraphicModel, baseGraphicModel)
 {
-    DefaultColor = QColor(Qt::red);
+    DefaultColor = QColor(Qt::red);    
 }

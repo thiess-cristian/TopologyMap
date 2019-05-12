@@ -1,6 +1,8 @@
 #pragma once
 #include <memory>
 #include <qgraphicsitem.h>
+#include "GraphicView\ElementRightClickMenu.h"
+#include "GraphicView\IElementPainter.h"
 
 namespace GM
 {
@@ -9,8 +11,8 @@ namespace GM
 
 namespace GV
 {
-    class ElementRightClickMenu;
-    class IElementPainter;
+    //class ElementRightClickMenu;
+    //class IElementPainter;
 
     class Element:public QGraphicsItem
     {
