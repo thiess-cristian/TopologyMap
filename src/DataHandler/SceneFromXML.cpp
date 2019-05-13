@@ -1,4 +1,5 @@
 #include "SceneFromXML.h"
+#include "DocumentStrings.h"
 #include <GraphicModel\Element.h>
 #include <GraphicModel\Mechanism.h>
 #include <GraphicModel\Joint.h>
@@ -36,9 +37,10 @@ void SceneFromXML::updateFromXML(std::shared_ptr<GM::Mechanism> mechanism, QFile
 
 void SceneFromXML::updateMotionBodies(std::map<std::string, std::shared_ptr<GM::Element>>& motionBodies)
 {
-    QDomElement motionBodyParent = m_root.firstChildElement("MotionBodies");
+    using namespace Doc;
+    QDomElement motionBodyParent = m_root.firstChildElement(MotionBodies);
 
-    QDomNodeList motionBodiesList = motionBodyParent.elementsByTagName("MotionBody");
+    QDomNodeList motionBodiesList = motionBodyParent.elementsByTagName(MotionBody);
 
     for (int i = 0; i < motionBodiesList.size(); i++) {
         QDomNode item = motionBodiesList.at(i);
@@ -48,7 +50,7 @@ void SceneFromXML::updateMotionBodies(std::map<std::string, std::shared_ptr<GM::
 
             std::string name = element.attribute("name").toStdString();
 
-            QDomElement origin = element.firstChildElement("Origin");
+            QDomElement origin = element.firstChildElement(Origin);
 
             double originX = origin.attribute("x").toDouble();
             double originY = origin.attribute("y").toDouble();
@@ -72,9 +74,10 @@ void SceneFromXML::updateMotionBodies(std::map<std::string, std::shared_ptr<GM::
 
 void SceneFromXML::updateJoints(std::map<std::string, std::shared_ptr<GM::Element>>& joints)
 {
-    QDomElement jointsParent = m_root.firstChildElement("Joints");
+    using namespace Doc;
+    QDomElement jointsParent = m_root.firstChildElement(Joints);
 
-    QDomNodeList jointsList = jointsParent.elementsByTagName("Joint");
+    QDomNodeList jointsList = jointsParent.elementsByTagName(Joint);
 
     for (int i = 0; i < jointsList.size(); i++) {
         QDomNode item = jointsList.at(i);
@@ -84,12 +87,12 @@ void SceneFromXML::updateJoints(std::map<std::string, std::shared_ptr<GM::Elemen
 
             std::string name= element.attribute("name").toStdString();
 
-            QDomElement action = element.firstChildElement("Action");
+            QDomElement action = element.firstChildElement(Action);
 
             double actionX = action.attribute("x").toDouble();
             double actionY = action.attribute("y").toDouble();
 
-            QDomElement base = element.firstChildElement("Base");
+            QDomElement base = element.firstChildElement(Base);
 
             double baseX = base.attribute("x").toDouble();
             double baseY = base.attribute("y").toDouble();
@@ -106,9 +109,10 @@ void SceneFromXML::updateJoints(std::map<std::string, std::shared_ptr<GM::Elemen
 
 void SceneFromXML::updateConnectors(std::map<std::string, std::shared_ptr<GM::Element>>& connectors)
 {
-    QDomElement connectorsParent = m_root.firstChildElement("Connectors");
+    using namespace Doc;
+    QDomElement connectorsParent = m_root.firstChildElement(Connectors);
 
-    QDomNodeList connectorsList = connectorsParent.elementsByTagName("Connector");
+    QDomNodeList connectorsList = connectorsParent.elementsByTagName(Connector);
 
     for (int i = 0; i < connectorsList.size(); i++) {
         QDomNode item = connectorsList.at(i);
@@ -118,12 +122,12 @@ void SceneFromXML::updateConnectors(std::map<std::string, std::shared_ptr<GM::El
 
             std::string name = element.attribute("name").toStdString();
 
-            QDomElement action = element.firstChildElement("Action");
+            QDomElement action = element.firstChildElement(Action);
 
             double actionX = action.attribute("x").toDouble();
             double actionY = action.attribute("y").toDouble();
 
-            QDomElement base = element.firstChildElement("Base");
+            QDomElement base = element.firstChildElement(Base);
 
             double baseX = base.attribute("x").toDouble();
             double baseY = base.attribute("y").toDouble();
