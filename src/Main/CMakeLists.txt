@@ -15,4 +15,4 @@ include_directories("${CMAKE_SOURCE_DIR}/bin")
 
 add_executable(${PROJECT_NAME} ${srcs} ${includes})
 
-target_link_libraries(${PROJECT_NAME} View)
+target_link_libraries(${PROJECT_NAME} App)

@@ -13,7 +13,7 @@ Mechanism::Mechanism(std::shared_ptr<DataModel::Mechanism> dataMechanism)
 {
     auto motionBodies = dataMechanism->getContainer(DataModel::ElementType::MotionBody);
 
-    for (const auto& motionBody : motionBodies) {
+    for (auto motionBody : motionBodies) {
         auto graphicMotionBodyModel = std::make_shared<GM::MotionBody>(motionBody.second);
         m_elements[DataModel::ElementType::MotionBody][motionBody.first] = graphicMotionBodyModel;
     }
@@ -33,7 +33,7 @@ Mechanism::Mechanism(std::shared_ptr<DataModel::Mechanism> dataMechanism)
     */
     auto joints = dataMechanism->getContainer(DataModel::ElementType::Joint);
 
-    for (const auto& joint : joints) {
+    for (auto joint : joints) {
         auto jointCast = std::dynamic_pointer_cast<DataModel::Joint>(joint.second);
         auto action = m_elements[DataModel::ElementType::MotionBody][jointCast->getAction()->getName()];
         auto base = m_elements[DataModel::ElementType::MotionBody][jointCast->getBase()->getName()];
@@ -47,7 +47,7 @@ Mechanism::Mechanism(std::shared_ptr<DataModel::Mechanism> dataMechanism)
         auto connectorCast = std::dynamic_pointer_cast<DataModel::Connector>(connector.second);
         auto action = m_elements[DataModel::ElementType::MotionBody][connectorCast->getAction()->getName()];
         auto base = m_elements[DataModel::ElementType::MotionBody][connectorCast->getBase()->getName()];
-        auto graphicConnectorModel = std::make_shared<GM::Joint>(connector.second, action, base);
+        auto graphicConnectorModel = std::make_shared<GM::Connector>(connector.second, action, base);
         m_elements[DataModel::ElementType::Connector][connector.first] = graphicConnectorModel;
     }
 }

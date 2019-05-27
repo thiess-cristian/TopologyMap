@@ -2,6 +2,7 @@
 #include "GraphicView\Element.h"
 #include <qgraphicssceneevent.h>
 
+
 namespace GV
 {
     class MotionBody:public Element

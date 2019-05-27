@@ -9,17 +9,25 @@ namespace DataModel
     class Element;
 }
 
+namespace GV
+{
+    class Element;
+}
+
 namespace GM
 {
     class Element
     {
     public:
         Element(std::shared_ptr<DataModel::Element> elementDataModel);
+        ~Element();
 
         void setColor(const QColor& color);
         QColor getColor()const;
 
         std::shared_ptr<DataModel::Element> getDataModel() const;
+
+        void setGraphicViewModel(GV::Element* element);
 
         virtual QRectF boundingRect()const = 0;
         virtual QPainterPath shape()const = 0;
@@ -35,6 +43,7 @@ namespace GM
         QColor m_color;
         bool m_displayName;
         std::shared_ptr<DataModel::Element> m_elementDataModel;
+        GV::Element* m_graphicViewModel;
     };
 
 

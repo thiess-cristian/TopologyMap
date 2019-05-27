@@ -1,16 +1,20 @@
-#include "..\..\includes\GraphicView\Element.h"
-#include "..\..\includes\GraphicView\Element.h"
+#include "GraphicView\Element.h"
+#include "GraphicView\Element.h"
 #include "GraphicModel\Element.h"
 #include <DataModel\Element.h>
+#include <iostream>
 
 using namespace GM;
 
-Element::Element(std::shared_ptr<DataModel::Element> elementDataModel)
+Element::Element(std::shared_ptr<DataModel::Element> elementDataModel):m_elementDataModel(elementDataModel)
 {
 
     
 }
-
+Element:: ~Element()
+{
+    std::cout << "destroyed ";
+}
 
 void Element::setColor(const QColor & color)
 {
@@ -25,6 +29,11 @@ QColor Element::getColor() const
 std::shared_ptr<DataModel::Element> Element::getDataModel() const
 {
     return m_elementDataModel;
+}
+
+void Element::setGraphicViewModel(GV::Element * element)
+{
+    m_graphicViewModel = element;
 }
 
 bool Element::isDisplayingName() const

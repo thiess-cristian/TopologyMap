@@ -1,14 +1,18 @@
 #pragma once
 #include <QMainWindow>
 #include <memory>
+#include "TopologyMap.h"
 
 class Ui_TopologyMapWindow;
 
-class Legend;
-class InfoPanel;
-class SearchWindow;
-class SearchManager;
+
 class QLabel;
+
+namespace Panel
+{
+    class InfoPanel;
+    class LegendPanel;
+}
 
 namespace GV
 {
@@ -18,6 +22,8 @@ namespace GV
 namespace App
 {
     class SceneZoom;
+    class SearchWindow;
+    class SearchManager;
 
     class TopologyMapWindow : public QMainWindow
     {
@@ -53,11 +59,11 @@ namespace App
         QLabel* m_label;
 
         GV::TopologyMapScene* m_scene;
-//        ElementsManager m_manager;
+        TopologyMap m_topologyMap;
         std::shared_ptr<SearchManager> m_searchManager;
         std::unique_ptr<SceneZoom> m_zoom;
-        std::unique_ptr<Legend> m_legend;
-        std::shared_ptr<InfoPanel> m_infoPanel;
+        std::unique_ptr<Panel::LegendPanel> m_legend;
+        std::shared_ptr<Panel::InfoPanel> m_infoPanel;
     };
 
 

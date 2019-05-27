@@ -14,12 +14,14 @@ MotionBody::MotionBody(std::shared_ptr<GM::Element> elementModel):Element(elemen
 
 void MotionBody::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
+    prepareGeometryChange();
     auto dir = event->pos() - m_shiftMouseCoords;    
     m_elementModel->translate(dir);
     m_shiftMouseCoords = event->pos();
-
+    
     //TODO:
-    //emit offsetChanged(dir);
+    auto model = std::dynamic_pointer_cast<GM::MotionBody>(m_elementModel);
+    emit model->offsetChanged(dir);
 }
 
 void MotionBody::mousePressEvent(QGraphicsSceneMouseEvent * event)

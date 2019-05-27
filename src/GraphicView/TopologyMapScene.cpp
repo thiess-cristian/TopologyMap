@@ -10,33 +10,22 @@
 #include <GraphicModel\Bounder.h>
 #include <GraphicModel\OverlappingLinkFinder.h>
 #include <DataModel\Mechanism.h>
-
 #include <Perspective\TopPerspective.h>
 #include <Perspective\SidePerspective.h>
+
 #include <Perspective\FrontPerspective.h>
 #include <Perspective\CirclePerspective.h>
 #include <Perspective\ForceDirectedPerspective.h>
 
+#include <Panel\InfoPanel.h>
+
+#include <qgraphicswidget.h>
+
 using namespace GV;
 
-TopologyMapScene::TopologyMapScene(std::shared_ptr<GM::Mechanism> mechanism):QGraphicsScene(),m_mechanism(mechanism)
+TopologyMapScene::TopologyMapScene():QGraphicsScene()
 {
-    auto elements = mechanism->getElements();
     
-    for (const auto& motionBody : elements[DataModel::ElementType::MotionBody]) {
-        auto graphicMotionBody = new MotionBody(std::dynamic_pointer_cast<GM::MotionBody>(motionBody.second));
-        addItem(graphicMotionBody);
-    }
-    
-    for (const auto& joint : elements[DataModel::ElementType::Joint]) {
-        auto graphicJoint = new Joint(std::dynamic_pointer_cast<GM::Joint>(joint.second));
-        addItem(graphicJoint);
-    }
-
-    for (const auto& connector : elements[DataModel::ElementType::Connector]) {
-        auto graphicConnector = new Connector(std::dynamic_pointer_cast<GM::Connector>(connector.second));
-        addItem(graphicConnector);
-    }
 }
 
 void TopologyMapScene::changePerspective(Perspective::IPerspective* perspective)
@@ -57,17 +46,74 @@ void TopologyMapScene::changePerspective(Perspective::IPerspective* perspective)
     edgeFinder.computeOverlappingCount();
 }
 
+void TopologyMapScene::addElements(std::shared_ptr<GM::Mechanism> mechanism)
+{
+    QGraphicsScene::clear();
+    m_mechanism = mechanism;
+
+    auto elements = mechanism->getElements();
+
+    for (auto motionBody : elements[DataModel::ElementType::MotionBody]) {
+        auto model = std::dynamic_pointer_cast<GM::MotionBody>(motionBody.second);        
+        auto graphicMotionBody = new MotionBody(model);
+        graphicMotionBody->setFlag(QGraphicsItem::ItemIsMovable);                
+        m_elements.push_back(graphicMotionBody);        
+        addItem(graphicMotionBody);
+
+    }
+
+    for (auto joint : elements[DataModel::ElementType::Joint]) {
+        auto model = std::dynamic_pointer_cast<GM::Joint>(joint.second);
+        auto graphicJoint = new Joint(std::dynamic_pointer_cast<GM::Joint>(joint.second));
+        m_elements.push_back(graphicJoint);
+        addItem(graphicJoint);
+    }
+
+    for (auto connector : elements[DataModel::ElementType::Connector]) {
+        auto model = std::dynamic_pointer_cast<GM::Connector>(connector.second);        
+        auto graphicConnector = new Connector(std::dynamic_pointer_cast<GM::Connector>(connector.second));
+        m_elements.push_back(graphicConnector);
+        addItem(graphicConnector);
+    }
+
+    Perspective::SidePerspective side;
+    changeMotionBodiesPerspective(&side);
+}
+
+void TopologyMapScene::setInfoPanelRelations(std::shared_ptr<Panel::InfoPanel> infoPanel)
+{
+    for (auto& item : QGraphicsScene::items()) {
+        auto topologyElement = dynamic_cast<GV::Element*>(item);
+
+        if (topologyElement != nullptr) {
+            QObject::connect(&topologyElement->getRightClickMenu(), &ElementRightClickMenu::sentData, infoPanel.get(), &Panel::InfoPanel::addInfoTab);
+        }
+    }
+}
+
+void TopologyMapScene::setViewableHeight(size_t height)
+{
+    m_viewableHeight = height;
+}
+
+void TopologyMapScene::setViewableWidth(size_t width)
+{
+    m_viewableWidth = width;
+}
+
 double TopologyMapScene::computeScaleFactor()
 {
     double maxX = -DBL_MAX;
     double maxY = -DBL_MAX;
 
-    for (const auto& motionBody : m_mechanism->getElements()[DataModel::ElementType::MotionBody]) {
+    auto elements = m_mechanism->getElements();
+
+    for (const auto& motionBody : elements[DataModel::ElementType::MotionBody]) {
         maxX = std::max(maxX, motionBody.second->boundingRect().right());
         maxY = std::max(maxY, motionBody.second->boundingRect().bottom());
     }
     
-    return std::min(height() / maxY,width() / maxX);
+    return std::min(m_viewableHeight / maxY,m_viewableWidth / maxX);
 }
 
 QPointF TopologyMapScene::computeTranslationPoint()
@@ -75,7 +121,9 @@ QPointF TopologyMapScene::computeTranslationPoint()
     double minX = 0;
     double minY = 0;
 
-    for (const auto& motionBody : m_mechanism->getElements()[DataModel::ElementType::MotionBody]) {
+    auto elements = m_mechanism->getElements();
+
+    for (const auto& motionBody : elements[DataModel::ElementType::MotionBody]) {
         minX = std::min(minX, motionBody.second->boundingRect().left());
         minY = std::min(minY, motionBody.second->boundingRect().top());
     }
@@ -107,7 +155,10 @@ void TopologyMapScene::applyTranslation(QPointF translatePoint)
 void TopologyMapScene::changeMotionBodiesPerspective(Perspective::IPerspective * perspective)
 {
     GM::Bounder bounder;
-    for (auto element : m_mechanism->getElements()[DataModel::ElementType::MotionBody]) {
+    auto containers = m_mechanism->getElements();
+    auto motionBodies = containers[DataModel::ElementType::MotionBody];
+
+    for (auto element : motionBodies) {
         auto motionBody = std::dynamic_pointer_cast<GM::MotionBody>(element.second);
         std::vector<QPointF> projectedPoints;
 
@@ -141,7 +192,8 @@ void TopologyMapScene::changeMotionBodiesPerspective(Perspective::IPerspective *
 
 void TopologyMapScene::changeJointsPerspective(Perspective::IPerspective * perspective)
 {
-    for (auto element : m_mechanism->getElements()[DataModel::ElementType::Joint]) {
+    auto elements = m_mechanism->getElements()[DataModel::ElementType::Joint];
+    for (auto element : elements) {
         auto joint = std::dynamic_pointer_cast<GM::Joint>(element.second);
         auto dataModel = std::dynamic_pointer_cast<DataModel::Link>(joint->getDataModel());
         QPointF actionConnection = perspective->projectLinkAtachment(*dataModel, DataModel::LinkType::Action);
@@ -153,7 +205,8 @@ void TopologyMapScene::changeJointsPerspective(Perspective::IPerspective * persp
 
 void TopologyMapScene::changeConnectorsPerspective(Perspective::IPerspective * perspective)
 {
-    for (auto element : m_mechanism->getElements()[DataModel::ElementType::Connector]) {
+    auto elements = m_mechanism->getElements()[DataModel::ElementType::Connector];
+    for (auto element : elements) {
         auto connector = std::dynamic_pointer_cast<GM::Connector>(element.second);
         auto dataModel = std::dynamic_pointer_cast<DataModel::Link>(connector->getDataModel());
         QPointF actionConnection = perspective->projectLinkAtachment(*dataModel, DataModel::LinkType::Action);

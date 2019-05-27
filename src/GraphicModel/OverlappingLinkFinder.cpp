@@ -6,12 +6,14 @@ using namespace GM;
 
 OverlappingLinkFinder::OverlappingLinkFinder(std::shared_ptr<Mechanism> mechanism) :m_mechanism(mechanism)
 {
-    for (auto conector : m_mechanism->getElements()[DataModel::ElementType::Connector]) {
+    auto elements = m_mechanism->getElements();
+
+    for (auto conector :elements [DataModel::ElementType::Connector]) {
         auto link = std::dynamic_pointer_cast<GM::Link>(conector.second);
         m_links.push_back(link);
     }
 
-    for (auto joint : m_mechanism->getElements()[DataModel::ElementType::Joint]) {
+    for (auto joint : elements[DataModel::ElementType::Joint]) {
         auto link = std::dynamic_pointer_cast<GM::Link>(joint.second);
         m_links.push_back(link);
     }

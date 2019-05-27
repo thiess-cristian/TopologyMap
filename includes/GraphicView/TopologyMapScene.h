@@ -4,6 +4,7 @@
 #include <qobject.h>
 #include <qpoint.h>
 #include <memory>
+#include <GraphicView\Element.h>
 
 namespace GM
 {
@@ -14,6 +15,10 @@ namespace Perspective
 {
     class IPerspective;
 }
+namespace Panel
+{
+    class InfoPanel;
+}
 
 
 namespace GV
@@ -21,8 +26,13 @@ namespace GV
     class TopologyMapScene :public QGraphicsScene
     {
     public:
-        TopologyMapScene(std::shared_ptr<GM::Mechanism> mechanism);
+        TopologyMapScene();
         void changePerspective(Perspective::IPerspective* perspective);
+        void addElements(std::shared_ptr<GM::Mechanism> mechanism);
+        void setInfoPanelRelations(std::shared_ptr<Panel::InfoPanel>);
+
+        void setViewableHeight(size_t height);
+        void setViewableWidth(size_t width);
 
     public slots:
         void applyScale(double scaleFactor);
@@ -39,6 +49,10 @@ namespace GV
         void setStackingOrder();
 
         std::shared_ptr<GM::Mechanism> m_mechanism;
+        std::vector<Element*> m_elements;
+
+        size_t m_viewableHeight;
+        size_t m_viewableWidth;
         
     };
 }

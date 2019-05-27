@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
 {
     srand(time(0));
     QApplication a(argc, argv);
-    TopologyMapWindow w;
+    App::TopologyMapWindow w;
     w.show();
 
     return a.exec();

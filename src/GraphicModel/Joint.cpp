@@ -9,4 +9,5 @@ Joint::Joint(std::shared_ptr<DataModel::Element> linkDataModel,
     Link(linkDataModel,actionGraphicModel,baseGraphicModel)
 {
     DefaultColor = QColor(Qt::black);
+    m_color = DefaultColor;
 }

@@ -16,7 +16,8 @@ namespace App
     {
         Q_OBJECT
     public:
-        SceneZoom(QGraphicsView* view, GM::Mechanism& mechansim);
+        SceneZoom(QGraphicsView* view);
+        void setMechanism(std::shared_ptr<GM::Mechanism> mechanism);
     signals:
         void zoomed();
 
@@ -24,8 +25,8 @@ namespace App
         void zoom(double factor);
         bool eventFilter(QObject* object, QEvent* event);
 
-        QGraphicsView* m_view;
-        GM::Mechanism& m_mechansim;
+        QGraphicsView* m_view;        
+        std::shared_ptr<GM::Mechanism> m_mechanism;
 
         double m_zoomFactor;
         QPointF m_targetScenePos;

@@ -4,30 +4,39 @@
 #include <qapplication.h>
 #include <GraphicModel\Mechanism.h>
 #include <GraphicModel\Element.h>
+#include <qgraphicsitem.h>
 
 using namespace App;
 
-SceneZoom::SceneZoom(QGraphicsView* view, GM::Mechanism& mechansim):m_view(view),m_mechansim(mechansim)
-{
+SceneZoom::SceneZoom(QGraphicsView* view):m_view(view)
+{      
     m_view->viewport()->installEventFilter(this);
     m_view->setMouseTracking(true);
     m_zoomFactor = 1.0015;
 }
 
+void App::SceneZoom::setMechanism(std::shared_ptr<GM::Mechanism> mechanism)
+{
+    m_mechanism = mechanism;
+}
+
 void App::SceneZoom::zoom(double factor)
 {
-    for (auto& container : m_mechansim.getElements()) {
-        for (auto& element: container.second) {
-            element.second->scale(factor);
+    if (m_mechanism) {
+        for (auto container : m_mechanism->getElements()) {
+            for (auto element : container.second) {                
+                element.second->scale(factor);
+            }
         }
+        
+        //m_view->update();
+        
+
+        m_view->centerOn(m_targetScenePos);
+        QPointF deltaViewportPos = m_targetViewportPos - QPointF(m_view->viewport()->width() / 2.0, m_view->viewport()->height() / 2.0);
+        QPointF viewportCenter = m_view->mapFromScene(m_targetScenePos) - deltaViewportPos;
+        m_view->centerOn(m_view->mapToScene(viewportCenter.toPoint()));
     }
-
-    m_view->update();
-
-    // m_view->centerOn(m_targetScenePos);
-    QPointF deltaViewportPos = m_targetViewportPos - QPointF(m_view->viewport()->width() / 2.0, m_view->viewport()->height() / 2.0);
-    QPointF viewportCenter = m_view->mapFromScene(m_targetScenePos) - deltaViewportPos;
-    // m_view->centerOn(m_view->mapToScene(viewportCenter.toPoint()));
 }
 
 bool App::SceneZoom::eventFilter(QObject * object, QEvent * event)

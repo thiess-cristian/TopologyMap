@@ -1,5 +1,7 @@
 #include "GraphicModel\Link.h"
 #include "GraphicModel\Bounder.h"
+#include "GraphicModel\MotionBody.h"
+#include <GraphicView\Element.h>
 
 using namespace GM;
 
@@ -8,9 +10,16 @@ Link::Link(std::shared_ptr<DataModel::Element> elementDataModel,
            std::shared_ptr<Element> baseGraphicModel):
     Element(elementDataModel),
     m_actionGraphicModel(actionGraphicModel),
-    m_baseGraphicModel(baseGraphicModel)
+    m_baseGraphicModel(baseGraphicModel),
+    m_actionConnection(0,0),
+    m_baseConnection(0,0)
 {
-    
+
+    auto action = std::dynamic_pointer_cast<MotionBody>(m_actionGraphicModel);
+    auto base = std::dynamic_pointer_cast<MotionBody>(m_baseGraphicModel);
+
+    QObject::connect(action.get(), &MotionBody::offsetChanged, this, &Link::offsetActionPosition);
+    QObject::connect(base.get(), &MotionBody::offsetChanged, this, &Link::offsetBasePosition);
 }
 
 void Link::setOverlappingCount(size_t i)
@@ -31,6 +40,16 @@ void Link::setReverseOverlaps(bool reverseOverlaps)
 bool Link::isReverseOverlap()
 {
     return m_reverseOverlap;
+}
+
+QPointF Link::getActionConnection()const
+{
+    return m_actionConnection;
+}
+
+QPointF Link::getBaseConnection()const
+{
+    return m_baseConnection;
 }
 
 void Link::setActionConnection(const QPointF & action)
@@ -55,18 +74,20 @@ bool Link::reverseOverlaps(const Link & other)
 
 void Link::translate(QPointF translate)
 {
+    m_graphicViewModel->prepareViewModel();
     m_baseConnection += translate;
     m_actionConnection += translate;
 }
 
 void Link::scale(double scaleFactor)
 {
+    m_graphicViewModel->prepareViewModel();
     m_baseConnection *= scaleFactor;
     m_actionConnection *= scaleFactor;
 }
 
 void Link::offsetBasePosition(const QPointF & offset)
-{
+{    
     m_baseConnection += offset;
 }
 
