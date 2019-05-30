@@ -36,7 +36,9 @@ void TopologyMap::loadElements(QFile & file, std::string modelName)
 }
 
 void App::TopologyMap::displayElementName(DataModel::ElementType type, bool checked)
-{}
+{
+
+}
 
 std::shared_ptr<DataModel::Mechanism> TopologyMap::getDataModel() const
 {

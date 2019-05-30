@@ -24,6 +24,7 @@ namespace App
     class SceneZoom;
     class SearchWindow;
     class SearchManager;
+    class TopologyMapTab;
 
     class TopologyMapWindow : public QMainWindow
     {
@@ -51,6 +52,8 @@ namespace App
         void displayJointName(bool checked);
         void displayConnectorName(bool checked);
 
+        void closeTab(int index);
+
     private:
         std::unique_ptr<Ui_TopologyMapWindow> m_ui;
         std::unique_ptr<SearchWindow> m_searchWindow;
@@ -58,12 +61,10 @@ namespace App
         QString m_filename;
         QLabel* m_label;
 
-        GV::TopologyMapScene* m_scene;
+        std::vector<TopologyMapTab*> m_tabs;
+        
         TopologyMap m_topologyMap;
         std::shared_ptr<SearchManager> m_searchManager;
-        std::unique_ptr<SceneZoom> m_zoom;
-        std::unique_ptr<Panel::LegendPanel> m_legend;
-        std::shared_ptr<Panel::InfoPanel> m_infoPanel;
     };
 
 

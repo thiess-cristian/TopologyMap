@@ -2,10 +2,14 @@
 #include "App\SceneZoom.h"
 #include "App\SearchManager.h"
 #include "App\SearchWindow.h"
+#include "App\TopologyMapTab.h"
+#include "App\TopologyMapView.h"
 #include "ui_TopologyMapWindow.h"
 
 #include "Panel\InfoPanel.h"
 #include "Panel\LegendPanel.h"
+
+#include "GraphicView\TopologyMapScene.h"
 
 #include "Perspective\SidePerspective.h"
 #include "Perspective\TopPerspective.h"
@@ -24,9 +28,6 @@ TopologyMapWindow::TopologyMapWindow(QWidget *parent) :QMainWindow(parent)
 {
     m_ui = std::make_unique<Ui_TopologyMapWindow>();
     m_ui->setupUi(this);
-
-    m_scene = new GV::TopologyMapScene();
-    m_ui->graphicsView->setScene(m_scene);
 
     QObject::connect(m_ui->actionOpen, &QAction::triggered, this, &TopologyMapWindow::openFile);
     QObject::connect(m_ui->actionSave_as, &QAction::triggered, this, &TopologyMapWindow::saveAsFile);
@@ -47,17 +48,11 @@ TopologyMapWindow::TopologyMapWindow(QWidget *parent) :QMainWindow(parent)
     QObject::connect(m_ui->actionJoint, &QAction::triggered, this, &TopologyMapWindow::displayJointName);
     QObject::connect(m_ui->actionConnector, &QAction::triggered, this, &TopologyMapWindow::displayConnectorName);
 
-    m_ui->graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
-    m_ui->graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-    m_ui->graphicsView->setRenderHint(QPainter::Antialiasing);
-
-    m_zoom = std::make_unique<SceneZoom>(m_ui->graphicsView);
-
-    m_legend = std::make_unique<Panel::LegendPanel>(m_ui->graphicsView);
-    m_infoPanel = std::make_unique<Panel::InfoPanel>(m_ui->graphicsView);
-
     m_searchManager = std::make_shared<SearchManager>();
     m_searchWindow = std::make_unique<SearchWindow>(m_searchManager);
+
+    m_ui->tabWidget->setTabsClosable(true);
+    QObject::connect(m_ui->tabWidget, &QTabWidget::tabCloseRequested, this, &TopologyMapWindow::closeTab);
 }
 
 TopologyMapWindow::~TopologyMapWindow()
@@ -111,62 +106,77 @@ void TopologyMapWindow::loadSceneFromFile()
 void TopologyMapWindow::changePerspectiveToTop()
 {
     Perspective::TopPerspective top;  
+    auto view = dynamic_cast<TopologyMapView*>(m_ui->tabWidget->currentWidget());
+    auto scene = dynamic_cast<GV::TopologyMapScene*>(view->scene());
+    scene->setViewableHeight(size().height());
+    scene->setViewableWidth(size().width());
 
-    m_scene->setViewableHeight(size().height());
-    m_scene->setViewableWidth(size().width());
-
-    m_scene->changePerspective(&top);
+    scene->changePerspective(&top);
 }
 
 void TopologyMapWindow::changePerspectiveToSide()
 {
     Perspective::SidePerspective side;
+    
+    auto view = dynamic_cast<TopologyMapView*>(m_ui->tabWidget->currentWidget());
+    auto scene = dynamic_cast<GV::TopologyMapScene*>(view->scene());
 
-    m_scene->setViewableHeight(size().height());
-    m_scene->setViewableWidth(size().width());
+    scene->setViewableHeight(size().height());
+    scene->setViewableWidth(size().width());
 
-    m_scene->changePerspective(&side);
+    scene->changePerspective(&side);
 }
 
 void TopologyMapWindow::changePerspectiveToFront()
 {
     Perspective::FrontPerspective front;
+    auto view = dynamic_cast<TopologyMapView*>(m_ui->tabWidget->currentWidget());
+    auto scene = dynamic_cast<GV::TopologyMapScene*>(view->scene());
 
-    m_scene->setViewableHeight(size().height());
-    m_scene->setViewableWidth(size().width());
+    scene->setViewableHeight(size().height());
+    scene->setViewableWidth(size().width());
 
-    m_scene->changePerspective(&front);
+    scene->changePerspective(&front);
 }
 
 void TopologyMapWindow::changePerspectiveCircle()
 {
-    Perspective::CirclePerspective circle(m_topologyMap.getDataModel());
+    auto currentTab = dynamic_cast<TopologyMapTab*>(m_ui->tabWidget->currentWidget());
+    auto view = dynamic_cast<TopologyMapView*>(m_ui->tabWidget->currentWidget());
+    auto scene = dynamic_cast<GV::TopologyMapScene*>(view->scene());
 
-    m_scene->setViewableHeight(size().height());
-    m_scene->setViewableWidth(size().width());
+    Perspective::CirclePerspective circle(currentTab->getTopologyMap().getDataModel());
+    scene->setViewableHeight(size().height());
+    scene->setViewableWidth(size().width());
 
-    m_scene->changePerspective(&circle);
+    scene->changePerspective(&circle);
 
 }
 
 void TopologyMapWindow::changePerspectiveForceDirected()
 {
-    Perspective::ForceDirectedPerspective force(m_topologyMap.getDataModel());
 
-    m_scene->setViewableHeight(size().height());
-    m_scene->setViewableWidth(size().width());
+    auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
+    auto view = dynamic_cast<TopologyMapView*>(m_ui->tabWidget->currentWidget());
+    auto scene = dynamic_cast<GV::TopologyMapScene*>(view->scene());
 
-    m_scene->changePerspective(&force);
+    Perspective::ForceDirectedPerspective force(currentTab->getTopologyMap().getDataModel());
+    scene->setViewableHeight(size().height());
+    scene->setViewableWidth(size().width());
+
+    scene->changePerspective(&force);
 }
 
 void TopologyMapWindow::displayLegend(bool checked)
 {
-    m_legend->display(checked);
+    auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
+    currentTab->displayLegend(checked);
 }
 
 void TopologyMapWindow::displayInfoPanel(bool checked)
 {
-    m_infoPanel->display(checked);
+    auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
+    currentTab->displayInfoPanel(checked);
 }
 
 void TopologyMapWindow::openSearchWindow()
@@ -179,7 +189,6 @@ void TopologyMapWindow::openSearchWindow()
 void TopologyMapWindow::displayMotionBodyName(bool checked)
 {
     m_topologyMap.displayElementName(DataModel::ElementType::MotionBody, checked);
-
 }
 
 void TopologyMapWindow::displayJointName(bool checked)
@@ -192,6 +201,13 @@ void TopologyMapWindow::displayConnectorName(bool checked)
     m_topologyMap.displayElementName(DataModel::ElementType::Connector, checked);
 }
 
+void TopologyMapWindow::closeTab(int index)
+{
+    auto widget = m_ui->tabWidget->widget(index);
+    m_tabs.erase(m_tabs.begin() + index);
+    widget->deleteLater();
+}
+
 void TopologyMapWindow::openFile()
 {
     m_filename = QFileDialog::getOpenFileName(this, tr("Open file"), "../../../resources", tr("file (*.xml *.mdef)"));
@@ -199,31 +215,31 @@ void TopologyMapWindow::openFile()
         return;
     }
 
+    TopologyMap map;
+    
     QFile file(m_filename);
+    map.openElements(file);
 
-    DataHandler::DocumentParser p;
-    p.parseFile(file);
+    QFileInfo fileInfo(file.fileName());
+    std::string modelName = fileInfo.fileName().toStdString();
 
-
-    m_topologyMap.openElements(file);
-    m_zoom->setMechanism(m_topologyMap.getGraphicModel());
-
-    m_scene->addElements(m_topologyMap.getGraphicModel());
-    m_scene->setInfoPanelRelations(m_infoPanel);
+    auto tab = new TopologyMapTab(map, modelName);
+    m_tabs.push_back(tab);
+    m_ui->tabWidget->addTab(tab->getView(),tab->getName().c_str());
+    m_ui->tabWidget->setCurrentIndex(m_ui->tabWidget->count() - 1);
 
     changePerspectiveToSide();
     
-    QFileInfo fileInfo(m_filename);
-    std::string filename = fileInfo.fileName().toStdString();
 
-    size_t lastindex = filename.find_last_of(".");
-    m_filename = filename.substr(0, lastindex).c_str();
+
+    
+    //m_filename = filename.substr(0, lastindex).c_str();
 
     try {
         QString savePath = "../../../saves/" + m_filename + ".xml";
         QFile file(savePath);
         
-        m_topologyMap.loadElements(file, m_filename.toStdString());
+        //m_topologyMap.loadElements(file, m_filename.toStdString());
     } catch (...) {
         return;
     }

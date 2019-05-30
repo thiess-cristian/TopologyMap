@@ -23,7 +23,7 @@
 
 using namespace GV;
 
-TopologyMapScene::TopologyMapScene():QGraphicsScene()
+TopologyMapScene::TopologyMapScene(QWidget *parent):QGraphicsScene(parent)
 {
     
 }

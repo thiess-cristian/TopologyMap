@@ -26,7 +26,7 @@ namespace GV
     class TopologyMapScene :public QGraphicsScene
     {
     public:
-        TopologyMapScene();
+        TopologyMapScene(QWidget *parent = nullptr);
         void changePerspective(Perspective::IPerspective* perspective);
         void addElements(std::shared_ptr<GM::Mechanism> mechanism);
         void setInfoPanelRelations(std::shared_ptr<Panel::InfoPanel>);
