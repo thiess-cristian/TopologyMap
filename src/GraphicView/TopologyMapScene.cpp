@@ -101,6 +101,15 @@ void TopologyMapScene::setViewableWidth(size_t width)
     m_viewableWidth = width;
 }
 
+void TopologyMapScene::resetColors()
+{
+    for (auto& elementContainer : m_mechanism->getElements()) {
+        for (auto& element : elementContainer.second) {
+            element.second->setColor(element.second->DefaultColor);
+        }
+    }
+}
+
 double TopologyMapScene::computeScaleFactor()
 {
     double maxX = -DBL_MAX;

@@ -24,6 +24,5 @@ namespace App
     private:
         std::shared_ptr<DataModel::Mechanism> m_dataModelMechansim;
         std::shared_ptr<GM::Mechanism> m_graphicModelMechansim;
-
     };
 }

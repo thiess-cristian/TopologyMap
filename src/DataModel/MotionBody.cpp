@@ -36,13 +36,18 @@ void MotionBody::setOrigin(const Point3D & point) const
     m_origin = point;
 }
 
-bool MotionBody::operator==(const MotionBody & motionbody) const
-{
-    return m_name == motionbody.m_name;
-}
 
 bool MotionBody::operator<(const MotionBody & motionbody) const
 {
     return m_name < motionbody.m_name;
+}
+
+bool MotionBody::isEqual(const Element & other) const
+{
+    if (MotionBody const* p = dynamic_cast<MotionBody const*>(&other)) {
+        return Element::isEqual(other) && m_origin == p->m_origin /*&& m_linkAtachments==p->m_linkAtachments*/;
+    } else {
+        return false;
+    }
 }
 

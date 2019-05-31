@@ -15,7 +15,7 @@ SearchWindow::SearchWindow(std::shared_ptr<SearchManager> searchManager, QWidget
 
     QObject::connect(m_ui->pushButtonSearch, &QPushButton::clicked, this, &SearchWindow::searchClicked);
     QObject::connect(m_ui->pushButtonSelectColor, &QPushButton::clicked, this, &SearchWindow::selectColorClicked);
-    QObject::connect(m_ui->pushButtonReset, &QPushButton::clicked, this, &SearchWindow::resetClicked);
+    
 
     QImage image(20, 20, QImage::Format_ARGB32);
 

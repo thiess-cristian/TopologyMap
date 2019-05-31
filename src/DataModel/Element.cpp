@@ -12,7 +12,17 @@ std::string Element::getName()const
     return m_name;
 }
 
-bool Element::operator==(const Element & other)
+bool Element::operator==(const Element & other) const
 {
-    return m_name==other.m_name;
+    return isEqual(other);
+}
+
+bool Element::operator!=(const Element & other) const
+{
+    return !(*this == other);
+}
+
+bool Element::isEqual(const Element&other) const
+{
+    return m_name == other.m_name;
 }

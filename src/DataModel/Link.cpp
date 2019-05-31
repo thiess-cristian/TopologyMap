@@ -37,4 +37,18 @@ Point3D Link::getBaseConnection() const
     return m_baseConnection;
 }
 
+bool Link::isEqual(const Element & other) const
+{
+    if (Link const* p = dynamic_cast<Link const*>(&other)) {
+        return Element::isEqual(other) &&
+            m_actionConnection == p->m_actionConnection &&
+            m_baseConnection == p->m_baseConnection &&
+            *m_base == *p->m_base &&
+            *m_action == *p->m_action &&
+            type == p->type;
+    } else {
+        return false;
+    }
+}
+
 

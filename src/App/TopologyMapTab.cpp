@@ -19,10 +19,6 @@ TopologyMapTab::TopologyMapTab(const TopologyMap& map, const std::string& name, 
     auto scene = new GV::TopologyMapScene(m_view);
     m_view->setScene(scene);
 
-    m_view->setDragMode(QGraphicsView::ScrollHandDrag);
-    m_view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-    m_view->setRenderHint(QPainter::Antialiasing);
-
     m_zoom = std::make_unique<SceneZoom>(m_view);
 
     m_legend = std::make_unique<Panel::LegendPanel>(m_view);

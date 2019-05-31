@@ -4,25 +4,12 @@
 #include "TopologyMap.h"
 
 class Ui_TopologyMapWindow;
-
-
 class QLabel;
-
-namespace Panel
-{
-    class InfoPanel;
-    class LegendPanel;
-}
-
-namespace GV
-{
-    class TopologyMapScene;
-}
 
 namespace App
 {
-    class SceneZoom;
     class SearchWindow;
+    class CompareWindow;
     class SearchManager;
     class TopologyMapTab;
 
@@ -54,18 +41,19 @@ namespace App
 
         void closeTab(int index);
 
+        void compareModels();
+        void resetColors();
     private:
         std::unique_ptr<Ui_TopologyMapWindow> m_ui;
         std::unique_ptr<SearchWindow> m_searchWindow;
+        std::unique_ptr<CompareWindow> m_compareWindow;
 
         QString m_filename;
         QLabel* m_label;
 
-        std::vector<TopologyMapTab*> m_tabs;
+        std::vector<std::shared_ptr<TopologyMapTab>> m_tabs;
         
         TopologyMap m_topologyMap;
         std::shared_ptr<SearchManager> m_searchManager;
     };
-
-
 }

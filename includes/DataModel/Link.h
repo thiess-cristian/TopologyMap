@@ -25,10 +25,14 @@ namespace DataModel
         Point3D getBaseConnection() const;
 
     protected:
+        // Inherited via Element
+        virtual bool isEqual(const Element & other) const override;
+
         Point3D m_actionConnection;
         Point3D m_baseConnection;
         std::string type;
         std::shared_ptr<MotionBody> m_action;
         std::shared_ptr<MotionBody> m_base;
+
     };
 }

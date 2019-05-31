@@ -19,6 +19,10 @@ namespace DataModel
 
         JointType getType()const;
 
+    protected:
+        // Inherited via Element
+        virtual bool isEqual(const Element & other) const override;
+
     private:
         JointType m_type;
 

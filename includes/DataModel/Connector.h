@@ -23,6 +23,10 @@ namespace DataModel
 
         ConnectorKind getKind()const;
 
+    protected:
+        // Inherited via Element
+        virtual bool isEqual(const Element & other) const override;
+
     private:
         ConnectorKind m_kind;
     };

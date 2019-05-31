@@ -20,3 +20,8 @@ std::shared_ptr<MotionBody> LinkAtachment::getMotionBody() const
 {
     return m_type == LinkType::Action ? m_link->getAction() : m_link->getBase();
 }
+
+bool LinkAtachment::operator==(const LinkAtachment & other) const
+{
+    return m_type == other.m_type && *m_link == *other.m_link;
+}

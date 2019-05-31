@@ -2,6 +2,7 @@
 #include "App\SceneZoom.h"
 #include "App\SearchManager.h"
 #include "App\SearchWindow.h"
+#include "App\CompareWindow.h"
 #include "App\TopologyMapTab.h"
 #include "App\TopologyMapView.h"
 #include "ui_TopologyMapWindow.h"
@@ -29,27 +30,32 @@ TopologyMapWindow::TopologyMapWindow(QWidget *parent) :QMainWindow(parent)
     m_ui = std::make_unique<Ui_TopologyMapWindow>();
     m_ui->setupUi(this);
 
-    QObject::connect(m_ui->actionOpen, &QAction::triggered, this, &TopologyMapWindow::openFile);
-    QObject::connect(m_ui->actionSave_as, &QAction::triggered, this, &TopologyMapWindow::saveAsFile);
-    QObject::connect(m_ui->actionSave, &QAction::triggered, this, &TopologyMapWindow::saveFile);
-    QObject::connect(m_ui->actionLoad, &QAction::triggered, this, &TopologyMapWindow::loadSceneFromFile);
+    QObject::connect(m_ui->actionOpen,          &QAction::triggered, this, &TopologyMapWindow::openFile);
+    QObject::connect(m_ui->actionSave_as,       &QAction::triggered, this, &TopologyMapWindow::saveAsFile);
+    QObject::connect(m_ui->actionSave,          &QAction::triggered, this, &TopologyMapWindow::saveFile);
+    QObject::connect(m_ui->actionLoad,          &QAction::triggered, this, &TopologyMapWindow::loadSceneFromFile);
 
-    QObject::connect(m_ui->actionLegend, &QAction::triggered, this, &TopologyMapWindow::displayLegend);
-    QObject::connect(m_ui->actionInformation, &QAction::triggered, this, &TopologyMapWindow::displayInfoPanel);
-    QObject::connect(m_ui->actionSearch, &QAction::triggered, this, &TopologyMapWindow::openSearchWindow);
+    QObject::connect(m_ui->actionLegend,        &QAction::triggered, this, &TopologyMapWindow::displayLegend);
+    QObject::connect(m_ui->actionInformation,   &QAction::triggered, this, &TopologyMapWindow::displayInfoPanel);
+    QObject::connect(m_ui->actionSearch,        &QAction::triggered, this, &TopologyMapWindow::openSearchWindow);
 
-    QObject::connect(m_ui->actionFront, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToFront);
-    QObject::connect(m_ui->actionSide, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToSide);
-    QObject::connect(m_ui->actionTop, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToTop);
-    QObject::connect(m_ui->actionCircle, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveCircle);
-    QObject::connect(m_ui->actionForce_Directed, &QAction::triggered, this, &TopologyMapWindow::changePerspectiveForceDirected);
+    QObject::connect(m_ui->actionFront,         &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToFront);
+    QObject::connect(m_ui->actionSide,          &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToSide);
+    QObject::connect(m_ui->actionTop,           &QAction::triggered, this, &TopologyMapWindow::changePerspectiveToTop);
+    QObject::connect(m_ui->actionCircle,        &QAction::triggered, this, &TopologyMapWindow::changePerspectiveCircle);
+    QObject::connect(m_ui->actionForce_Directed,&QAction::triggered, this, &TopologyMapWindow::changePerspectiveForceDirected);
 
-    QObject::connect(m_ui->actionMotion_body, &QAction::triggered, this, &TopologyMapWindow::displayMotionBodyName);
-    QObject::connect(m_ui->actionJoint, &QAction::triggered, this, &TopologyMapWindow::displayJointName);
-    QObject::connect(m_ui->actionConnector, &QAction::triggered, this, &TopologyMapWindow::displayConnectorName);
+    QObject::connect(m_ui->actionMotion_body,   &QAction::triggered, this, &TopologyMapWindow::displayMotionBodyName);
+    QObject::connect(m_ui->actionJoint,         &QAction::triggered, this, &TopologyMapWindow::displayJointName);
+    QObject::connect(m_ui->actionConnector,     &QAction::triggered, this, &TopologyMapWindow::displayConnectorName);
+
+    QObject::connect(m_ui->actionCompare,       &QAction::triggered, this, &TopologyMapWindow::compareModels);
+    QObject::connect(m_ui->actionReset_colors,  &QAction::triggered, this, &TopologyMapWindow::resetColors);
 
     m_searchManager = std::make_shared<SearchManager>();
     m_searchWindow = std::make_unique<SearchWindow>(m_searchManager);
+
+    m_compareWindow = std::make_unique<CompareWindow>(m_ui->tabWidget);
 
     m_ui->tabWidget->setTabsClosable(true);
     QObject::connect(m_ui->tabWidget, &QTabWidget::tabCloseRequested, this, &TopologyMapWindow::closeTab);
@@ -208,6 +214,22 @@ void TopologyMapWindow::closeTab(int index)
     widget->deleteLater();
 }
 
+void TopologyMapWindow::compareModels()
+{
+    m_compareWindow->setTabs(m_tabs);
+    m_compareWindow->initComboBoxes();
+    m_compareWindow->show();
+}
+
+void TopologyMapWindow::resetColors()
+{
+    auto view = dynamic_cast<TopologyMapView*>(m_ui->tabWidget->currentWidget());
+    auto scene = dynamic_cast<GV::TopologyMapScene*>(view->scene());
+
+    scene->resetColors();
+    scene->update();
+}
+
 void TopologyMapWindow::openFile()
 {
     m_filename = QFileDialog::getOpenFileName(this, tr("Open file"), "../../../resources", tr("file (*.xml *.mdef)"));
@@ -222,17 +244,14 @@ void TopologyMapWindow::openFile()
 
     QFileInfo fileInfo(file.fileName());
     std::string modelName = fileInfo.fileName().toStdString();
-
-    auto tab = new TopologyMapTab(map, modelName);
+    
+    auto tab = std::make_shared<TopologyMapTab>(map, modelName);
     m_tabs.push_back(tab);
     m_ui->tabWidget->addTab(tab->getView(),tab->getName().c_str());
     m_ui->tabWidget->setCurrentIndex(m_ui->tabWidget->count() - 1);
 
     changePerspectiveToSide();
-    
-
-
-    
+        
     //m_filename = filename.substr(0, lastindex).c_str();
 
     try {

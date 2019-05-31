@@ -36,3 +36,12 @@ ConnectorKind Connector::getKind() const
 {
     return m_kind;
 }
+
+bool Connector::isEqual(const Element & other) const
+{
+    if (Connector const* p = dynamic_cast<Connector const*>(&other)) {
+        return Link::isEqual(other) && m_kind == p->m_kind;
+    } else {
+        return false;
+    }
+}

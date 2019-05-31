@@ -13,13 +13,6 @@ namespace App
     {
     public:
         TopologyMapView(QWidget *parent = nullptr);
-
-        std::string getName() const;        
-
-    private:
-        std::string m_name;
-        
-
     };
 
 

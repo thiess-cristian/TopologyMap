@@ -21,6 +21,8 @@ namespace DataModel
         LinkType getLinkType()const;        
         std::shared_ptr<MotionBody> getMotionBody()const;
 
+        bool operator==(const LinkAtachment& other) const;
+
     private:        
         std::shared_ptr<Link> m_link;
         LinkType m_type;

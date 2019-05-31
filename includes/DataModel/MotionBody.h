@@ -22,11 +22,16 @@ namespace DataModel
         Point3D getOrigin()const;
         void setOrigin(const Point3D& point) const;
 
-        bool operator==(const MotionBody& motionbody) const;
         bool operator<(const MotionBody& motionbody)const;
+
+    protected:
+        // Inherited via Element
+        virtual bool isEqual(const Element & other) const override;
 
     private:
         std::vector<LinkAtachment> m_linkAtachments;
         mutable Point3D m_origin;
+
+
     };
 }

@@ -34,6 +34,8 @@ namespace GV
         void setViewableHeight(size_t height);
         void setViewableWidth(size_t width);
 
+        void resetColors();
+
     public slots:
         void applyScale(double scaleFactor);
         void applyTranslation(QPointF translatePoint);

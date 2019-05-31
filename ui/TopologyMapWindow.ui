@@ -97,6 +97,7 @@
      <string>Tools</string>
     </property>
     <addaction name="actionCompare"/>
+    <addaction name="actionReset_colors"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuview"/>
@@ -205,6 +206,11 @@
   <action name="actionCompare">
    <property name="text">
     <string>Compare models</string>
+   </property>
+  </action>
+  <action name="actionReset_colors">
+   <property name="text">
+    <string>Reset colors</string>
    </property>
   </action>
  </widget>

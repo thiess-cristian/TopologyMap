@@ -21,4 +21,13 @@ JointType Joint::getType() const
     return m_type;
 }
 
+bool Joint::isEqual(const Element & other) const
+{
+    if (Joint const* p = dynamic_cast<Joint const*>(&other)) {
+        return Link::isEqual(other) && m_type == p->m_type;
+    } else {
+        return false;
+    }
+}
+
 
