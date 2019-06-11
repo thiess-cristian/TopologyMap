@@ -30,7 +30,7 @@ namespace App
         void setMechanism(std::shared_ptr<GM::Mechanism> mechanism);
         QColor getHighlightColor()const;
 
-        public slots:
+    public slots:
         void search(const SearchRequirements& searchRequirements);
         void reset();
         void changeColor(const QColor& color);

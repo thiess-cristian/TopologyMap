@@ -20,7 +20,7 @@ namespace App
         explicit TopologyMapWindow(QWidget *parent = 0);
         ~TopologyMapWindow();
 
-        protected slots:
+    protected slots:
         void openFile();
         void saveAsFile();
         void saveFile();

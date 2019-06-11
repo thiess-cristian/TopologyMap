@@ -8,9 +8,9 @@ using namespace GM;
 
 Element::Element(std::shared_ptr<DataModel::Element> elementDataModel):m_elementDataModel(elementDataModel)
 {
-
-    
+   
 }
+
 Element:: ~Element()
 {
     std::cout << "destroyed ";
@@ -18,6 +18,7 @@ Element:: ~Element()
 
 void Element::setColor(const QColor & color)
 {
+    m_graphicViewModel->prepareViewModel();
     m_color = color;
 }
 

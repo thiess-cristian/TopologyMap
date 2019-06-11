@@ -9,6 +9,4 @@ namespace GV
         Link(std::shared_ptr<GM::Element> elementModel);
     
     };
-
-
 }

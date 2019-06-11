@@ -14,7 +14,7 @@ namespace App
         explicit SearchWindow(std::shared_ptr<SearchManager> searchManager, QWidget *parent = 0);
         ~SearchWindow();
 
-        protected slots:
+    protected slots:
         void searchClicked();
         void resetClicked();
         void selectColorClicked();

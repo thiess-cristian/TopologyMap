@@ -8,7 +8,9 @@
 using namespace GV;
 
 MotionBodyPainter::MotionBodyPainter(std::shared_ptr<GM::MotionBody> motionBodyModel):m_motionBodyModel(motionBodyModel)
-{}
+{
+    
+}
 
 void MotionBodyPainter::paintItem(QPainter * painter) const
 {
@@ -30,16 +32,10 @@ void MotionBodyPainter::paintItem(QPainter * painter) const
     int textWidth = std::max(static_cast<int>(rect.width()), metrics.width(m_motionBodyModel->getDataModel()->getName().c_str()) + 20);
     rect.setWidth(textWidth);
 
-    if (rect.height() == 0) {
-        int textHeight = metrics.height() + 5;
-        rect.setHeight(textHeight);
-    } else {
-        rect.setHeight(std::max(rect.height(), minHeight));
-    }
     
     painter->fillRect(rect, QBrush(m_motionBodyModel->getColor()));
     painter->drawRect(rect);
-    if (m_motionBodyModel->isDisplayingName()) {
-        painter->drawText(bounding.center() + QPoint(10, 13), m_motionBodyModel->getDataModel()->getName().c_str());
+    if (m_motionBodyModel->isDisplayingName()) {        
+        painter->drawText(bounding.topLeft() + QPoint(10, 13), m_motionBodyModel->getDataModel()->getName().c_str());
     }
 }
