@@ -32,4 +32,6 @@ enum class ConnectorKind
 {
     Spring,
     Damper,
+    Bushing,
+    BeamForce,
 };

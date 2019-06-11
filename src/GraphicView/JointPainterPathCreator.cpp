@@ -15,8 +15,6 @@ QPainterPath JointPainterPathCreator::getPath(QPointF begin, QPointF end) const
 
     Turtle turtle(begin, -angleStart);
 
-    
-    
     switch (m_type) {
         case JointType::Revolute: {
             drawRevolutePath(turtle, length);
@@ -31,7 +29,7 @@ QPainterPath JointPainterPathCreator::getPath(QPointF begin, QPointF end) const
             break;
         }
         case JointType::Screw: {
-
+            drawScrewPath(turtle, length);
             break;
         }
         case JointType::Universal: {
@@ -43,19 +41,19 @@ QPainterPath JointPainterPathCreator::getPath(QPointF begin, QPointF end) const
             break;
         }
         case JointType::Planar: {
-
+            drawPlanarPath(turtle, length);
             break;
         }
         case JointType::Fixed: {
-
+            drawFixedPath(turtle, length);
             break;
         }
         case JointType::ConstantVelocity: {
-
+            drawConstantVelocityPath(turtle, length);
             break;
         }
         case JointType::Atpoint: {
-
+            drawAtpointPath(turtle, length);
             break;
         }
         case JointType::Inline: {
@@ -63,19 +61,19 @@ QPainterPath JointPainterPathCreator::getPath(QPointF begin, QPointF end) const
             break;
         }
         case JointType::Inplane: {
-
+            drawInplanePath(turtle, length);
             break;
         }
         case JointType::Orientation: {
-
+            drawOrientationPath(turtle, length);
             break;
         }
         case JointType::Parallel: {
-
+            drawParallelPath(turtle, length);
             break;
         }
         case JointType::Perpendicular: {
-
+            drawPerpendicularPath(turtle, length);
             break;
         }
         default:
@@ -92,7 +90,7 @@ void JointPainterPathCreator::drawSphericalPath(Turtle & turtle, double length) 
 {
     double radius = 7;
 
-    turtle.forward((length / 2) - radius);
+    turtle.forward((length / 2));
     turtle.rotate(M_PI / 2);
 
     int nrOfSegments = 32;
@@ -121,7 +119,7 @@ void JointPainterPathCreator::drawRevolutePath(Turtle & turtle, double length) c
     turtle.rotate(M_PI / 2);
     const int nrOfSegments = 32;
     const double angle = 2 * M_PI / nrOfSegments;
-   // const double segmentLength = angle*radius;
+    //const double segmentLength = angle*radius;
     const double segmentLength = radius*sqrt(2.0 - 2.0*cos(angle));
 
     //turtle.rotate(-angle / 2);
@@ -247,7 +245,7 @@ void JointPainterPathCreator::drawUniversalPath(Turtle & turtle, double length) 
 {
     double radius = 10;
 
-    turtle.forward((length / 2) - radius);
+    turtle.forward((length / 2));
 
     turtle.rotate(-M_PI / 2);
     turtle.forward(radius,false);
@@ -272,4 +270,258 @@ void JointPainterPathCreator::drawUniversalPath(Turtle & turtle, double length) 
     turtle.rotate(-M_PI / 2);
     turtle.forward(radius, false);
 
+}
+
+void JointPainterPathCreator::drawAtpointPath(Turtle & turtle, double length) const
+{
+    turtle.forward(length / 2);
+
+    const double triangleSide = 10;
+
+    drawTriangle(turtle,triangleSide);
+
+    turtle.rotate(-M_PI / 2);
+    turtle.forward(sqrt(3) / 2.0*triangleSide, false);
+
+    drawTriangle(turtle, triangleSide);
+
+    turtle.rotate(-M_PI / 2);
+    turtle.forward(sqrt(3) / 2.0*triangleSide, false);
+}
+
+void JointPainterPathCreator::drawConstantVelocityPath(Turtle & turtle, double length) const
+{
+    double radius = 7;
+
+    turtle.forward((length / 2)-radius);
+    turtle.rotate(M_PI / 2);
+
+    drawCircle(turtle, radius);
+
+    turtle.rotate(-M_PI / 2);
+    turtle.forward(radius, false);
+
+    const double triangleSide = 9;
+
+    drawTriangle(turtle, triangleSide);
+
+    turtle.rotate(-M_PI / 2);
+    turtle.forward(sqrt(3) / 2.0*triangleSide, false);
+
+    drawTriangle(turtle, triangleSide);
+
+    turtle.rotate(-M_PI / 2);
+    turtle.forward(sqrt(3) / 2.0*triangleSide, false);
+}
+
+void JointPainterPathCreator::drawFixedPath(Turtle & turtle, double length) const
+{
+    turtle.forward(length / 2);
+
+    double side = 6;
+
+    auto DShape = [&turtle,&side,this]() {
+        turtle.rotate(M_PI / 2);
+        turtle.forward(side);
+
+        turtle.rotate(-M_PI / 2);
+        turtle.forward(side);
+
+        drawHalfCircle(turtle, side);
+
+        turtle.forward(side + 1);
+        turtle.rotate(-M_PI / 2);
+
+        turtle.forward(side);
+    };
+
+    auto reverseDShape = [&turtle, &side, this]() {
+        turtle.rotate(-M_PI / 2);
+        turtle.forward(side);
+
+        turtle.rotate(-M_PI / 2);
+        turtle.forward(side);
+
+        drawHalfCircle(turtle, side);
+
+        turtle.forward(side+2);
+        turtle.rotate(-M_PI / 2);
+
+        turtle.forward(side);
+    };
+
+    DShape();
+
+    turtle.rotate(-M_PI/2);
+    turtle.forward(side*3.5,false);
+
+    reverseDShape();
+}
+
+void JointPainterPathCreator::drawInplanePath(Turtle & turtle, double length) const
+{
+    turtle.forward(length / 2);
+
+    const double rectWidth = 8;
+    const double rectHeight = 10;
+
+    drawRectangle(turtle, rectWidth, rectHeight);
+
+    turtle.rotate(-M_PI / 2);
+    turtle.forward(rectWidth, false);
+
+    drawAtpointPath(turtle, 5);
+}
+
+void JointPainterPathCreator::drawOrientationPath(Turtle & turtle, double length) const
+{
+    turtle.forward(length / 2);
+
+    const double triangleSide = 10;
+
+    drawTriangle(turtle,triangleSide);
+
+    turtle.rotate(-M_PI / 2);
+    turtle.forward(sqrt(3) / 2.0*triangleSide, false);
+}
+
+void JointPainterPathCreator::drawParallelPath(Turtle & turtle, double length) const
+{
+    turtle.forward(length / 2);
+
+    const double rectWidth = 4;
+    const double rectHeight = 10;
+
+    auto drawParallel = [&rectWidth,&rectHeight,&turtle,this]() {
+        drawRectangle(turtle, rectWidth, rectHeight);
+        turtle.rotate(-M_PI / 2);
+        turtle.forward(rectWidth, false);
+    };
+
+    drawParallel();
+    
+    turtle.forward(4, false);
+
+    drawParallel();
+
+    drawAtpointPath(turtle, 4);
+}
+
+void JointPainterPathCreator::drawPerpendicularPath(Turtle & turtle, double length) const
+{
+    turtle.forward(length / 2);
+
+    const double firstRectWidth = 4;
+    const double firstRectHeight = 10;
+
+    const double secondRectWidth = 7;
+    const double secondRectHeight = 4;
+
+    drawRectangle(turtle, firstRectWidth, firstRectHeight);
+
+    turtle.rotate(-M_PI / 2);
+    turtle.forward(firstRectWidth, false);
+
+    drawRectangle(turtle, secondRectWidth, secondRectHeight);
+
+    turtle.rotate(-M_PI / 2);
+    turtle.forward(secondRectWidth, false);
+
+    drawAtpointPath(turtle, 4);
+}
+
+void JointPainterPathCreator::drawPlanarPath(Turtle & turtle, double length) const
+{
+    turtle.forward(length / 2);
+
+    const double outerRectWidth = 20;
+    const double outerRectHeight = 10;
+
+    const double innerRectWidth = outerRectWidth/3;
+    const double innerRectHeight = outerRectHeight/3;
+
+    drawRectangle(turtle, outerRectWidth, outerRectHeight);
+
+    turtle.rotate(-M_PI / 2);
+    turtle.forward(outerRectWidth/3, false);
+
+    drawRectangle(turtle, innerRectWidth, innerRectHeight);
+
+    turtle.rotate(-M_PI / 2);
+    turtle.forward(2 * outerRectWidth / 3, false);
+}
+
+void JointPainterPathCreator::drawScrewPath(Turtle & turtle, double length) const
+{
+    turtle.forward(length / 2);
+    const double rectWidth = 4.7;
+    const double rectHeight = 10.0;
+
+    auto drawRect = [&rectWidth, &rectHeight, &turtle, this]() {
+        drawRectangle(turtle, rectWidth, rectHeight);
+        turtle.rotate(-M_PI / 2);
+        turtle.forward(rectWidth, false);
+    };
+
+    for (int i = 0; i < 4; i++) {
+        drawRect();
+    }
+}
+
+void JointPainterPathCreator::drawTriangle(Turtle & turtle, double triangleSide) const
+{
+    turtle.rotate(M_PI / 2);
+    turtle.forward(triangleSide / 2);
+
+    turtle.rotate(-2.0*M_PI / 3);
+    turtle.forward(triangleSide);
+
+    turtle.rotate(-2.0*M_PI / 3);
+    turtle.forward(triangleSide);
+
+    turtle.rotate(-2.0*M_PI / 3);
+    turtle.forward(triangleSide / 2);
+}
+
+void JointPainterPathCreator::drawCircle(Turtle & turtle, double radius) const
+{
+    int nrOfSegments = 32;
+    double angle = 2 * M_PI / nrOfSegments;
+    double segmentLength = angle*radius;
+
+    for (int i = 0; i < nrOfSegments; i++) {
+        turtle.forward(segmentLength);
+        turtle.rotate(-angle);
+    }
+
+}
+
+void JointPainterPathCreator::drawHalfCircle(Turtle & turtle, double radius) const
+{
+    int nrOfSegments = 32;
+    double angle = 2 * M_PI / nrOfSegments;
+    double segmentLength = angle*radius;
+
+    for (int i = 0; i < nrOfSegments/2; i++) {
+        turtle.forward(segmentLength);
+        turtle.rotate(-angle);
+    }
+}
+
+void JointPainterPathCreator::drawRectangle(Turtle& turtle, double width, double height) const
+{
+    turtle.rotate(M_PI / 2);
+    turtle.forward(height / 2);
+
+    turtle.rotate(-M_PI / 2);
+    turtle.forward(width);
+
+    turtle.rotate(-M_PI / 2);
+    turtle.forward(height);
+
+    turtle.rotate(-M_PI / 2);
+    turtle.forward(width);
+
+    turtle.rotate(-M_PI / 2);
+    turtle.forward(height / 2);    
 }

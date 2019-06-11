@@ -18,7 +18,4 @@ namespace GV
     private:
         std::shared_ptr<GM::Connector> m_connectorModel;
     };
-
-
-
 }
