@@ -5,7 +5,7 @@ namespace DataHandler
 {
     namespace Doc
     {
-        static const char* MotionBody           = "MotioBody";
+        static const char* MotionBody           = "MotionBody";
         static const char* MotionBodies         = "MotionBodies";
         static const char* SelectedMotionBody   = "SelectedMotionBody";
         static const char* Joint                = "Joint";

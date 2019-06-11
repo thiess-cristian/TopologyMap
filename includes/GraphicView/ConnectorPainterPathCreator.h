@@ -18,9 +18,7 @@ namespace GV
         void drawDamperPath(Turtle& turtle, double length) const;
         void drawBushingPath(Turtle& turtle, double length) const;
         void drawBeamForcePath(Turtle& turtle, double length) const;
-
-        void drawRectangle(Turtle& turtle, double width, double height)const;
-
+        
         ConnectorKind m_kind;
 
     };

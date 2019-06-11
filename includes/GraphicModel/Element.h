@@ -35,6 +35,7 @@ namespace GM
         virtual void scale(double factor) = 0;
 
         bool isDisplayingName()const;
+        void enableDisplayingName(bool checked);
 
         bool operator==(const Element& other);
 
@@ -45,6 +46,4 @@ namespace GM
         std::shared_ptr<DataModel::Element> m_elementDataModel;
         GV::Element* m_graphicViewModel;
     };
-
-
 }

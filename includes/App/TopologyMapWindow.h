@@ -51,9 +51,7 @@ namespace App
         QString m_filename;
         QLabel* m_label;
 
-        std::vector<std::shared_ptr<TopologyMapTab>> m_tabs;
-        
-        TopologyMap m_topologyMap;
+        std::vector<std::shared_ptr<TopologyMapTab>> m_tabs;                
         std::shared_ptr<SearchManager> m_searchManager;
     };
 }
