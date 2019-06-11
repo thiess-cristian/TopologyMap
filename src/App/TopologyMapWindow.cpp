@@ -77,7 +77,8 @@ void TopologyMapWindow::saveAsFile()
         return;
     }
 
-    m_topologyMap.saveElements(file, m_filename.toStdString());    
+    auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
+    currentTab->getTopologyMap().saveElements(file, m_filename.toStdString());
 }
 
 void TopologyMapWindow::saveFile()
@@ -94,7 +95,8 @@ void TopologyMapWindow::saveFile()
         return;
     }
 
-    m_topologyMap.saveElements(file, m_filename.toStdString());
+    auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
+    currentTab->getTopologyMap().saveElements(file, m_filename.toStdString());
 }
 
 void TopologyMapWindow::loadSceneFromFile()
@@ -106,7 +108,8 @@ void TopologyMapWindow::loadSceneFromFile()
 
     QFile file(filename);
 
-    m_topologyMap.loadElements(file, m_filename.toStdString());
+    auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
+    currentTab->getTopologyMap().loadElements(file, m_filename.toStdString());
 }
 
 void TopologyMapWindow::changePerspectiveToTop()
@@ -161,7 +164,6 @@ void TopologyMapWindow::changePerspectiveCircle()
 
 void TopologyMapWindow::changePerspectiveForceDirected()
 {
-
     auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
     auto view = dynamic_cast<TopologyMapView*>(m_ui->tabWidget->currentWidget());
     auto scene = dynamic_cast<GV::TopologyMapScene*>(view->scene());
@@ -186,25 +188,28 @@ void TopologyMapWindow::displayInfoPanel(bool checked)
 }
 
 void TopologyMapWindow::openSearchWindow()
-{
-    //m_searchManager->setGraphicMechanism(m_manager.getGraphicMechanism());
-    m_searchManager->setMechanism(m_topologyMap.getGraphicModel());    
+{    
+    auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];    
+    m_searchManager->setMechanism(currentTab->getTopologyMap().getGraphicModel());
     m_searchWindow->show();
 }
 
 void TopologyMapWindow::displayMotionBodyName(bool checked)
 {
-    m_topologyMap.displayElementName(DataModel::ElementType::MotionBody, checked);
+    auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
+    currentTab->getTopologyMap().displayElementName(DataModel::ElementType::MotionBody, checked);
 }
 
 void TopologyMapWindow::displayJointName(bool checked)
 {
-    m_topologyMap.displayElementName(DataModel::ElementType::Joint, checked);
+    auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
+    currentTab->getTopologyMap().displayElementName(DataModel::ElementType::Joint, checked);
 }
 
 void TopologyMapWindow::displayConnectorName(bool checked)
 {
-    m_topologyMap.displayElementName(DataModel::ElementType::Connector, checked);
+    auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
+    currentTab->getTopologyMap().displayElementName(DataModel::ElementType::Connector, checked);
 }
 
 void TopologyMapWindow::closeTab(int index)

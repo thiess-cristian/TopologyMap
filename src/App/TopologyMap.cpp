@@ -4,6 +4,7 @@
 #include <DataHandler\SceneFromXML.h>
 
 #include <GraphicModel\Mechanism.h>
+#include <GraphicModel\Element.h>
 #include <DataModel\Mechanism.h>
 
 using namespace App;
@@ -36,8 +37,11 @@ void TopologyMap::loadElements(QFile & file, std::string modelName)
 }
 
 void App::TopologyMap::displayElementName(DataModel::ElementType type, bool checked)
-{
-
+{    
+    auto elementContainer = m_graphicModelMechansim->getElements()[type];
+    for (auto& element : elementContainer) {
+        element.second->enableDisplayingName(checked);
+    }
 }
 
 std::shared_ptr<DataModel::Mechanism> TopologyMap::getDataModel() const

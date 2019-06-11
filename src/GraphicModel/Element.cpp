@@ -41,6 +41,12 @@ bool Element::isDisplayingName() const
     return m_displayName;
 }
 
+void Element::enableDisplayingName(bool checked)
+{
+    m_graphicViewModel->prepareViewModel();
+    m_displayName = checked;
+}
+
 bool Element::operator==(const Element & other)
 {
     return *m_elementDataModel == *other.m_elementDataModel;

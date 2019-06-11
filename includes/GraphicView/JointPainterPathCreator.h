@@ -32,11 +32,6 @@ namespace GV
         void drawPlanarPath(Turtle& turtle, double length)const;
         void drawScrewPath(Turtle& turtle, double length)const;
 
-        //helper functions
-        void drawTriangle(Turtle& turtle, double length)const;
-        void drawCircle(Turtle& turtle, double length)const;
-        void drawHalfCircle(Turtle& turtle, double length) const;
-        void drawRectangle(Turtle& turtle, double width,double height)const;
 
         JointType m_type;
     };

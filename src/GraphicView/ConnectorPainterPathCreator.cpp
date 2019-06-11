@@ -13,10 +13,6 @@ QPainterPath ConnectorPainterPathCreator::getPath(QPointF begin, QPointF end) co
     double angle = line.angle()*M_PI / 180.0;
     double length = line.length();
 
-    //QPainterPath path(begin);
-    //path.quadTo(end,begin+QPointF(20,20));
-
-    //Turtle turtle(path.currentPosition(), -angle);
     Turtle turtle(begin,-angle);
     
     switch (m_kind) {
@@ -158,22 +154,3 @@ void ConnectorPainterPathCreator::drawBeamForcePath(Turtle & turtle, double leng
     drawRect(rectWidth2,rectHeight2);
     drawRect(rectWidth1,rectHeight1);
 }
-
-void ConnectorPainterPathCreator::drawRectangle(Turtle & turtle, double width, double height) const
-{
-    turtle.rotate(M_PI / 2);
-    turtle.forward(height / 2);
-
-    turtle.rotate(-M_PI / 2);
-    turtle.forward(width);
-
-    turtle.rotate(-M_PI / 2);
-    turtle.forward(height);
-
-    turtle.rotate(-M_PI / 2);
-    turtle.forward(width);
-
-    turtle.rotate(-M_PI / 2);
-    turtle.forward(height / 2);
-}
-
