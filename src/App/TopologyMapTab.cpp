@@ -26,8 +26,6 @@ TopologyMapTab::TopologyMapTab(const TopologyMap& map, const std::string& name, 
 
     m_searchManager = std::make_shared<SearchManager>();
     
-
-
     m_zoom->setMechanism(m_topologyMap.getGraphicModel());
     auto topologyMapScene = dynamic_cast<GV::TopologyMapScene*>(m_view->scene());
 
@@ -55,12 +53,24 @@ TopologyMap App::TopologyMapTab::getTopologyMap() const
     return m_topologyMap;
 }
 
-void App::TopologyMapTab::displayLegend(bool checked)
+void App::TopologyMapTab::toggleLegend()
 {
-    m_legend->display(checked);
+    if (legendToggled) {
+        m_legend->display(false);
+        legendToggled = false;
+    } else {
+        m_legend->display(true);
+        legendToggled = true;
+    }
 }
 
-void App::TopologyMapTab::displayInfoPanel(bool checked)
+void App::TopologyMapTab::toggleInfoPanel()
 {
-    m_infoPanel->display(checked);
+    if (infoPanelToggled) {
+        m_infoPanel->display(false);
+        infoPanelToggled = false;
+    } else {
+        m_infoPanel->display(true);
+        infoPanelToggled = true;
+    }
 }

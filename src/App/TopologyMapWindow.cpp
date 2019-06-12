@@ -66,50 +66,49 @@ TopologyMapWindow::~TopologyMapWindow()
 
 void TopologyMapWindow::saveAsFile()
 {
-    QString filename = QFileDialog::getSaveFileName(this, tr("Save file"), "../../../saves", tr("Xml files(*.xml)"));
-    QFile file(filename);
+    if (!m_tabs.empty()) {
+        QString filename = QFileDialog::getSaveFileName(this, tr("Save file"), "../../../saves", tr("Xml files(*.xml)"));
+        QFile file(filename);
 
-    if (filename.length() == 0) {
-        return;
+        if (filename.length() == 0) {
+            return;
+        }
+
+        if (!file.open(QFile::WriteOnly | QFile::Text)) {
+            return;
+        }
+
+        auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];        
+        currentTab->getTopologyMap().saveElements(file, currentTab->getName());
     }
-
-    if (!file.open(QFile::WriteOnly | QFile::Text)) {
-        return;
-    }
-
-    auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
-    currentTab->getTopologyMap().saveElements(file, m_filename.toStdString());
 }
 
 void TopologyMapWindow::saveFile()
 {
-    if (m_filename.length() == 0) {
-        return;
+    if (!m_tabs.empty()) {
+        auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];        
+        
+        QString filepath = ("../../../saves/" + currentTab->getName() + ".xml").c_str();
+        QFile file(filepath);
+
+        if (!file.open(QFile::WriteOnly | QFile::Text)) {
+            return;
+        }
+        currentTab->getTopologyMap().saveElements(file, currentTab->getName());
     }
-
-    QString filepath = "../../../saves/" + m_filename + ".xml";
-
-    QFile file(filepath);
-
-    if (!file.open(QFile::WriteOnly | QFile::Text)) {
-        return;
-    }
-
-    auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
-    currentTab->getTopologyMap().saveElements(file, m_filename.toStdString());
 }
 
 void TopologyMapWindow::loadSceneFromFile()
 {
-    QString filename = QFileDialog::getOpenFileName(this, tr("Open file"), "../../../saves", tr("file (*.xml *.mdef)"));
-    if (filename.length() == 0) {
-        return;
+    if (!m_tabs.empty()) {
+        QString filename = QFileDialog::getOpenFileName(this, tr("Open file"), "../../../saves", tr("file (*.xml *.mdef)"));
+        if (filename.length() == 0) {
+            return;
+        }
+        QFile file(filename);
+        auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
+        currentTab->getTopologyMap().loadElements(file, currentTab->getName());
     }
-
-    QFile file(filename);
-
-    auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
-    currentTab->getTopologyMap().loadElements(file, m_filename.toStdString());
 }
 
 void TopologyMapWindow::changePerspectiveToTop()
@@ -177,39 +176,51 @@ void TopologyMapWindow::changePerspectiveForceDirected()
 
 void TopologyMapWindow::displayLegend(bool checked)
 {
-    auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
-    currentTab->displayLegend(checked);
+    if (!m_tabs.empty()) {
+        auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];    
+        currentTab->toggleLegend();
+    }
 }
 
 void TopologyMapWindow::displayInfoPanel(bool checked)
 {
-    auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
-    currentTab->displayInfoPanel(checked);
+    if (!m_tabs.empty()) {
+        auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];        
+        currentTab->toggleInfoPanel();
+    }
 }
 
 void TopologyMapWindow::openSearchWindow()
 {    
-    auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];    
-    m_searchManager->setMechanism(currentTab->getTopologyMap().getGraphicModel());
-    m_searchWindow->show();
+    if (!m_tabs.empty()) {
+        auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];    
+        m_searchManager->setMechanism(currentTab->getTopologyMap().getGraphicModel());
+        m_searchWindow->show();
+    }
 }
 
 void TopologyMapWindow::displayMotionBodyName(bool checked)
 {
-    auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
-    currentTab->getTopologyMap().displayElementName(DataModel::ElementType::MotionBody, checked);
+    if (!m_tabs.empty()) {
+        auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
+        currentTab->getTopologyMap().displayElementName(DataModel::ElementType::MotionBody, checked);
+    }
 }
 
 void TopologyMapWindow::displayJointName(bool checked)
 {
-    auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
-    currentTab->getTopologyMap().displayElementName(DataModel::ElementType::Joint, checked);
+    if (!m_tabs.empty()) {
+        auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
+        currentTab->getTopologyMap().displayElementName(DataModel::ElementType::Joint, checked);
+    }
 }
 
 void TopologyMapWindow::displayConnectorName(bool checked)
 {
-    auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
-    currentTab->getTopologyMap().displayElementName(DataModel::ElementType::Connector, checked);
+    if (!m_tabs.empty()) {
+        auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
+        currentTab->getTopologyMap().displayElementName(DataModel::ElementType::Connector, checked);
+    }
 }
 
 void TopologyMapWindow::closeTab(int index)
@@ -221,9 +232,11 @@ void TopologyMapWindow::closeTab(int index)
 
 void TopologyMapWindow::compareModels()
 {
-    m_compareWindow->setTabs(m_tabs);
-    m_compareWindow->initComboBoxes();
-    m_compareWindow->show();
+    if (!m_tabs.empty()) {
+        m_compareWindow->setTabs(m_tabs);
+        m_compareWindow->initComboBoxes();
+        m_compareWindow->show();
+    }
 }
 
 void TopologyMapWindow::resetColors()
@@ -237,14 +250,14 @@ void TopologyMapWindow::resetColors()
 
 void TopologyMapWindow::openFile()
 {
-    m_filename = QFileDialog::getOpenFileName(this, tr("Open file"), "../../../resources", tr("file (*.xml *.mdef)"));
-    if (m_filename.length() == 0) {
+    auto filename = QFileDialog::getOpenFileName(this, tr("Open file"), "../../../resources", tr("file (*.xml *.mdef)"));
+    if (filename.length() == 0) {
         return;
     }
 
     TopologyMap map;
     
-    QFile file(m_filename);
+    QFile file(filename);
     map.openElements(file);
 
     QFileInfo fileInfo(file.fileName());
@@ -255,15 +268,13 @@ void TopologyMapWindow::openFile()
     m_ui->tabWidget->addTab(tab->getView(),tab->getName().c_str());
     m_ui->tabWidget->setCurrentIndex(m_ui->tabWidget->count() - 1);
 
-    changePerspectiveToSide();
-        
-    //m_filename = filename.substr(0, lastindex).c_str();
+    changePerspectiveToSide();        
 
     try {
-        QString savePath = "../../../saves/" + m_filename + ".xml";
+        QString savePath = ("../../../saves/" + tab->getName() + ".xml").c_str();
         QFile file(savePath);
         
-        //m_topologyMap.loadElements(file, m_filename.toStdString());
+        tab->getTopologyMap().loadElements(file, tab->getName());        
     } catch (...) {
         return;
     }

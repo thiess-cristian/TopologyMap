@@ -47,8 +47,7 @@ namespace App
         std::unique_ptr<Ui_TopologyMapWindow> m_ui;
         std::unique_ptr<SearchWindow> m_searchWindow;
         std::unique_ptr<CompareWindow> m_compareWindow;
-
-        QString m_filename;
+        
         QLabel* m_label;
 
         std::vector<std::shared_ptr<TopologyMapTab>> m_tabs;                

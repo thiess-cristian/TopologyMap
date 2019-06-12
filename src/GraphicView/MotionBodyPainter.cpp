@@ -31,7 +31,6 @@ void MotionBodyPainter::paintItem(QPainter * painter) const
     QFontMetrics metrics(textItem.font());
     int textWidth = std::max(static_cast<int>(rect.width()), metrics.width(m_motionBodyModel->getDataModel()->getName().c_str()) + 20);
     rect.setWidth(textWidth);
-
     
     painter->fillRect(rect, QBrush(m_motionBodyModel->getColor()));
     painter->drawRect(rect);

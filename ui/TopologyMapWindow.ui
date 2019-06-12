@@ -151,7 +151,7 @@
   </action>
   <action name="actionLegend">
    <property name="checkable">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>Legend</string>
@@ -197,7 +197,7 @@
   </action>
   <action name="actionInformation">
    <property name="checkable">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>Information</string>
