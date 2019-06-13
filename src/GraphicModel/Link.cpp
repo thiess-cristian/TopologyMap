@@ -64,7 +64,7 @@ void Link::setBaseConnection(const QPointF & base)
 
 bool Link::overlaps(const Link & other)
 {
-    return *m_actionGraphicModel == *other.m_actionGraphicModel && *m_baseGraphicModel == *other.m_baseGraphicModel;
+    return *m_actionGraphicModel == *other.m_actionGraphicModel && *m_baseGraphicModel == *other.m_baseGraphicModel || reverseOverlaps(other);
 }
 
 bool Link::reverseOverlaps(const Link & other)

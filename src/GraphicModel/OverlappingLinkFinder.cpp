@@ -23,26 +23,19 @@ void OverlappingLinkFinder::computeOverlappingCount()
 {
     bool firstWasInserted = false;
 
-    auto insert = [&](int& j) {
-        m_overlappingLinks.push_back(m_links[j]);
-        m_links.erase(m_links.begin() + j);
-        j--;        
-    };
-
     for (int i = 0; i < m_links.size() - 1; i++) {
         m_overlappingLinks.clear();        
         m_overlappingLinks.push_back(m_links[i]);
         
         for (int j = i + 1; j < m_links.size(); j++) {
-            
+
             if (m_links[i]->overlaps(*m_links[j])) {
-                insert(j);
-            } else if (m_links[i]->reverseOverlaps(*m_links[j])) {
-                insert(j);
-                m_links[j]->setReverseOverlaps(true);                
-            }
-        }
-        
+                m_links[j]->setReverseOverlaps(m_links[i]->reverseOverlaps(*m_links[j]));
+                m_overlappingLinks.push_back(m_links[j]);
+                m_links.erase(m_links.begin() + j);
+                j--;
+            }                          
+        }        
         setOverlappingCount();        
     }
 }
