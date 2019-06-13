@@ -42,7 +42,7 @@ namespace GM
         QColor DefaultColor;
     protected:
         QColor m_color;
-        bool m_displayName;
+        bool m_displayName = true;
         std::shared_ptr<DataModel::Element> m_elementDataModel;
         GV::Element* m_graphicViewModel;
     };

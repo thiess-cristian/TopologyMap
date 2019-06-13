@@ -11,7 +11,7 @@ Element::Element(std::shared_ptr<DataModel::Element> elementDataModel):m_element
    
 }
 
-Element:: ~Element()
+Element::~Element()
 {
     std::cout << "destroyed ";
 }
