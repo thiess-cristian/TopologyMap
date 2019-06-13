@@ -1,6 +1,4 @@
 add_subdirectory(Utils)
-add_subdirectory(Elements)
-add_subdirectory(View)
 add_subdirectory(Main)
 add_subdirectory(Test)
 

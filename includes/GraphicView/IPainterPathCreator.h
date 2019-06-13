@@ -10,7 +10,6 @@ namespace GV
     {
     public:
         virtual QPainterPath getPath(QPointF begin, QPointF end) const = 0;
-
     protected:
         //helper functions
         void drawTriangle(Turtle& turtle, double length)const;

@@ -26,8 +26,9 @@ void JointPainter::paintItem(QPainter * painter) const
         perpendicular /= length;
 
         auto overlappingCount = m_jointModel->getOverlappingCount();
-        int xPositionOffset = overlappingCount - overlappingCount % 2;
-        xPositionOffset *= overlappingCount % 2 ? 1 : -1;
+        int xPositionOffset = (overlappingCount - overlappingCount % 2)/2;        
+        xPositionOffset *= overlappingCount % 2 == 0 ? 1 : -1;
+        xPositionOffset -= overlappingCount % 2;
         int yPositionOffset = overlappingCount;
 
         if (m_jointModel->isReverseOverlap()) {

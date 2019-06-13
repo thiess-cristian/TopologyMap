@@ -23,9 +23,11 @@ void ConnectorPainter::paintItem(QPainter * painter) const
     if (length != 0) {
 
         perpendicular /= length;
-        auto overlappingCount=m_connectorModel->getOverlappingCount();
-        int xPositionOffset = overlappingCount - overlappingCount % 2;
-        xPositionOffset *= overlappingCount % 2 ? 1 : -1;
+
+        auto overlappingCount = m_connectorModel->getOverlappingCount();
+        int xPositionOffset = (overlappingCount - overlappingCount % 2) / 2;
+        xPositionOffset *= overlappingCount % 2 == 0 ? 1 : -1;
+        xPositionOffset -= overlappingCount % 2;
         int yPositionOffset = overlappingCount;
 
         if (m_connectorModel->isReverseOverlap()) {
