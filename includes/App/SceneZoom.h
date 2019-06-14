@@ -28,8 +28,10 @@ namespace App
         QGraphicsView* m_view;        
         std::shared_ptr<GM::Mechanism> m_mechanism;
 
-        double m_zoomFactor;
+        double m_zoomFactor = 1;
+        double m_oldZoomFactor = 1;
         QPointF m_targetScenePos;
         QPointF m_targetViewportPos;
+        
     };
 }

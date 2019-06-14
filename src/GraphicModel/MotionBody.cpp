@@ -59,6 +59,15 @@ void MotionBody::scale(double scaleFactor)
                     m_body.height()*scaleFactor);
 }
 
+void MotionBody::scaleOrigin(double scaleFactor)
+{
+    m_graphicViewModel->prepareViewModel();
+    m_body = QRectF(m_body.x()*scaleFactor,
+                    m_body.y()*scaleFactor,
+                    m_body.width(),
+                    m_body.height());    
+}
+
 void GM::MotionBody::setBody(const QRectF & body)
 {
     m_body = body;

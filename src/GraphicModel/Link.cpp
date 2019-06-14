@@ -86,6 +86,18 @@ void Link::scale(double scaleFactor)
     m_actionConnection *= scaleFactor;
 }
 
+void Link::scaleOrigin(double scaleFactor)
+{
+    m_graphicViewModel->prepareViewModel();
+
+    auto scaleConnection = [&scaleFactor](auto connectionPoint,auto motionBodyOrigin) {
+        return motionBodyOrigin + connectionPoint - motionBodyOrigin / scaleFactor;
+    };
+    m_baseConnection = scaleConnection(m_baseConnection, m_baseGraphicModel->boundingRect().topLeft());
+    m_actionConnection = scaleConnection(m_actionConnection, m_actionGraphicModel->boundingRect().topLeft());
+
+}
+
 void Link::offsetBasePosition(const QPointF & offset)
 {    
     m_baseConnection += offset;

@@ -16,6 +16,8 @@ namespace GM
         virtual void translate(QPointF translation) override;
         virtual void scale(double scaleFactor) override;
 
+        virtual void scaleOrigin(double scaleFactor) override;
+
         void setBody(const QRectF& body);
 
         static const size_t MinWidth = 50;

@@ -30,12 +30,12 @@ namespace GM
         bool overlaps(const Link& other);
         bool reverseOverlaps(const Link& other);
 
-
         // Inherited via Element
         virtual QRectF boundingRect() const override;
         virtual QPainterPath shape() const override;
         virtual void translate(QPointF translate) override;
         virtual void scale(double scaleFactor) override;
+        virtual void scaleOrigin(double scaleFactor) override;
 
     public slots:
         void offsetBasePosition(const QPointF& offset);

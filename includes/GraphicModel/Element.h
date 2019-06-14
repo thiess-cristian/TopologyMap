@@ -33,6 +33,7 @@ namespace GM
         virtual QPainterPath shape() const = 0;
         virtual void translate(QPointF point) = 0;
         virtual void scale(double factor) = 0;
+        virtual void scaleOrigin(double factor) = 0;
 
         bool isDisplayingName()const;
         void enableDisplayingName(bool checked);
