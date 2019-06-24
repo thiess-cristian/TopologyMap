@@ -36,6 +36,11 @@ namespace GV
 
         void resetColors();
 
+    protected:
+        virtual void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)override;
+        virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent) override;
+        virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent) override;
+
     public slots:
         void applyScale(double scaleFactor);
         void applyTranslation(QPointF translatePoint);

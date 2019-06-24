@@ -14,6 +14,9 @@ namespace GV
         void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
         void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
 
+        void highlightElement();
+        void unHighlightElement();
+
     private:
         QPointF m_shiftMouseCoords;
     };

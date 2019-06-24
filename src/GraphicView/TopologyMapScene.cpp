@@ -56,7 +56,8 @@ void TopologyMapScene::addElements(std::shared_ptr<GM::Mechanism> mechanism)
     for (auto motionBody : elements[DataModel::ElementType::MotionBody]) {
         auto model = std::dynamic_pointer_cast<GM::MotionBody>(motionBody.second);        
         auto graphicMotionBody = new MotionBody(model);
-        graphicMotionBody->setFlag(QGraphicsItem::ItemIsMovable);                
+        graphicMotionBody->setFlag(QGraphicsItem::ItemIsMovable);  
+        graphicMotionBody->setFlag(QGraphicsItem::ItemIsSelectable);
         m_elements.push_back(graphicMotionBody);        
         addItem(graphicMotionBody);
 
@@ -108,6 +109,39 @@ void TopologyMapScene::resetColors()
             element.second->setColor(element.second->DefaultColor);
         }
     }
+}
+
+void TopologyMapScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
+{
+    for (auto& item : selectedItems()) {
+        auto motionBody = dynamic_cast<GV::MotionBody*>(item);
+        if (motionBody) {
+           // motionBody->mousePressEvent(mouseEvent);
+        }
+    }
+    QGraphicsScene::mousePressEvent(mouseEvent);
+}
+
+void TopologyMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
+{
+    for (auto& item : selectedItems()) {
+        auto motionBody = dynamic_cast<GV::MotionBody*>(item);
+        if (motionBody) {
+           // motionBody->mouseMoveEvent(mouseEvent);
+        }
+    }
+    QGraphicsScene::mouseMoveEvent(mouseEvent);
+}
+
+void TopologyMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
+{
+    for (auto& item : selectedItems()) {
+        auto motionBody = dynamic_cast<GV::MotionBody*>(item);
+        if (motionBody) {
+           // motionBody->mouseReleaseEvent(mouseEvent);
+        }
+    }
+    QGraphicsScene::mouseReleaseEvent(mouseEvent);
 }
 
 double TopologyMapScene::computeScaleFactor()

@@ -29,6 +29,7 @@ TopologyMapWindow::TopologyMapWindow(QWidget *parent) :QMainWindow(parent)
 {
     m_ui = std::make_unique<Ui_TopologyMapWindow>();
     m_ui->setupUi(this);
+    
 
     QObject::connect(m_ui->actionOpen,          &QAction::triggered, this, &TopologyMapWindow::openFile);
     QObject::connect(m_ui->actionSave_as,       &QAction::triggered, this, &TopologyMapWindow::saveAsFile);
@@ -113,65 +114,81 @@ void TopologyMapWindow::loadSceneFromFile()
 
 void TopologyMapWindow::changePerspectiveToTop()
 {
-    Perspective::TopPerspective top;  
-    auto view = dynamic_cast<TopologyMapView*>(m_ui->tabWidget->currentWidget());
-    auto scene = dynamic_cast<GV::TopologyMapScene*>(view->scene());
-    scene->setViewableHeight(size().height());
-    scene->setViewableWidth(size().width());
+    if (!m_tabs.empty()) {
+        Perspective::TopPerspective top;
+        auto view = dynamic_cast<TopologyMapView*>(m_ui->tabWidget->currentWidget());            
+        auto scene = dynamic_cast<GV::TopologyMapScene*>(view->scene());
 
-    scene->changePerspective(&top);
+        
+        scene->setViewableHeight(size().height());
+        scene->setViewableWidth(size().width());
+
+        scene->changePerspective(&top);
+        view->setSceneRect(scene->itemsBoundingRect());
+    }
 }
-
 void TopologyMapWindow::changePerspectiveToSide()
 {
-    Perspective::SidePerspective side;
-    
-    auto view = dynamic_cast<TopologyMapView*>(m_ui->tabWidget->currentWidget());
-    auto scene = dynamic_cast<GV::TopologyMapScene*>(view->scene());
+    if (!m_tabs.empty()) {
 
-    scene->setViewableHeight(size().height());
-    scene->setViewableWidth(size().width());
 
-    scene->changePerspective(&side);
+        Perspective::SidePerspective side;
+        auto view = dynamic_cast<TopologyMapView*>(m_ui->tabWidget->currentWidget());
+        auto scene = dynamic_cast<GV::TopologyMapScene*>(view->scene());
+        scene->setViewableHeight(size().height());
+        scene->setViewableWidth(size().width());
+
+        scene->changePerspective(&side);
+        view->setSceneRect(scene->itemsBoundingRect());
+    }
 }
 
 void TopologyMapWindow::changePerspectiveToFront()
 {
-    Perspective::FrontPerspective front;
-    auto view = dynamic_cast<TopologyMapView*>(m_ui->tabWidget->currentWidget());
-    auto scene = dynamic_cast<GV::TopologyMapScene*>(view->scene());
+    if (!m_tabs.empty()) {
+        Perspective::FrontPerspective front;
+        auto view = dynamic_cast<TopologyMapView*>(m_ui->tabWidget->currentWidget());
+        auto scene = dynamic_cast<GV::TopologyMapScene*>(view->scene());
 
-    scene->setViewableHeight(size().height());
-    scene->setViewableWidth(size().width());
+        scene->setViewableHeight(size().height());
+        scene->setViewableWidth(size().width());
 
-    scene->changePerspective(&front);
+        scene->changePerspective(&front);
+        view->setSceneRect(scene->itemsBoundingRect());
+    }
 }
 
 void TopologyMapWindow::changePerspectiveCircle()
 {
-    auto currentTab = dynamic_cast<TopologyMapTab*>(m_ui->tabWidget->currentWidget());
-    auto view = dynamic_cast<TopologyMapView*>(m_ui->tabWidget->currentWidget());
-    auto scene = dynamic_cast<GV::TopologyMapScene*>(view->scene());
+    if (!m_tabs.empty()) {
+        auto currentTab = dynamic_cast<TopologyMapTab*>(m_ui->tabWidget->currentWidget());
+        auto view = dynamic_cast<TopologyMapView*>(m_ui->tabWidget->currentWidget());
+        auto scene = dynamic_cast<GV::TopologyMapScene*>(view->scene());
 
-    Perspective::CirclePerspective circle(currentTab->getTopologyMap().getDataModel());
-    scene->setViewableHeight(size().height());
-    scene->setViewableWidth(size().width());
+        Perspective::CirclePerspective circle(currentTab->getTopologyMap().getDataModel());
+        scene->setViewableHeight(size().height());
+        scene->setViewableWidth(size().width());
 
-    scene->changePerspective(&circle);
-
+        scene->changePerspective(&circle);
+        view->setSceneRect(scene->itemsBoundingRect());
+    }
 }
 
 void TopologyMapWindow::changePerspectiveForceDirected()
 {
-    auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
-    auto view = dynamic_cast<TopologyMapView*>(m_ui->tabWidget->currentWidget());
-    auto scene = dynamic_cast<GV::TopologyMapScene*>(view->scene());
+    if (!m_tabs.empty()) {
+        auto currentTab = m_tabs[m_ui->tabWidget->currentIndex()];
+        auto view = dynamic_cast<TopologyMapView*>(m_ui->tabWidget->currentWidget());
+        auto scene = dynamic_cast<GV::TopologyMapScene*>(view->scene());
 
-    Perspective::ForceDirectedPerspective force(currentTab->getTopologyMap().getDataModel());
-    scene->setViewableHeight(size().height());
-    scene->setViewableWidth(size().width());
+        Perspective::ForceDirectedPerspective force(currentTab->getTopologyMap().getDataModel());
+        scene->setViewableHeight(size().height());
+        scene->setViewableWidth(size().width());
 
-    scene->changePerspective(&force);
+        scene->changePerspective(&force);
+
+        view->setSceneRect(scene->itemsBoundingRect());
+    }
 }
 
 void TopologyMapWindow::displayLegend(bool checked)
@@ -274,7 +291,11 @@ void TopologyMapWindow::openFile()
         QString savePath = ("../../../saves/" + tab->getName() + ".xml").c_str();
         QFile file(savePath);
         
-        tab->getTopologyMap().loadElements(file, tab->getName());        
+        tab->getTopologyMap().loadElements(file, tab->getName()); 
+        auto view = dynamic_cast<TopologyMapView*>(m_ui->tabWidget->currentWidget());
+        auto scene = dynamic_cast<GV::TopologyMapScene*>(view->scene());
+        view->setSceneRect(scene->itemsBoundingRect());
+        
     } catch (...) {
         return;
     }

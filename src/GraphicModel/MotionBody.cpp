@@ -17,23 +17,18 @@ QRectF MotionBody::boundingRect() const
 {
     auto bounding = m_body;
     
-    double minWidth = 50;
-    double minHeight = 50;
-
-    bounding.setWidth(std::max(bounding.width(), minWidth));
-
     QGraphicsTextItem textItem;
     textItem.font();
     QFontMetrics metrics(textItem.font());
     int textWidth = std::max(static_cast<int>(bounding.width()), metrics.width(m_elementDataModel->getName().c_str()) + 20);
     bounding.setWidth(textWidth);
 
-    if (bounding.height() == 0) {
-        int textHeight = metrics.height() + 5;
-        bounding.setHeight(textHeight);
-    } else {
-        bounding.setHeight(std::max(bounding.height(), minHeight));
-    }    
+    double minWidth = textWidth;
+    double minHeight = metrics.height() + 5;
+
+    bounding.setWidth(std::max(bounding.width(), minWidth));
+    bounding.setHeight(std::max(bounding.height(),minHeight));
+    
     return bounding;
 }
 

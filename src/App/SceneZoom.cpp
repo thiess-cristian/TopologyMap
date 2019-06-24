@@ -1,5 +1,6 @@
 #include "App\SceneZoom.h"
 #include <qgraphicsview.h>
+#include <qgraphicsscene.h>
 #include <qevent.h>
 #include <qapplication.h>
 #include <GraphicModel\Mechanism.h>
@@ -39,7 +40,9 @@ void App::SceneZoom::zoom(double factor)
             for (auto element : container.second) {
                 element.second->translate(offset);
             }
-        }
+
+        }               
+        m_view->setSceneRect(m_view->scene()->itemsBoundingRect());
     }
 }
 

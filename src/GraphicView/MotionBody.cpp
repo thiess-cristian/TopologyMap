@@ -22,17 +22,33 @@ void MotionBody::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
     //TODO:
     auto model = std::dynamic_pointer_cast<GM::MotionBody>(m_elementModel);
     emit model->offsetChanged(dir);
+    
+    
 }
 
 void MotionBody::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
     m_shiftMouseCoords = event->pos();
-    m_elementModel->setColor(m_elementModel->getColor().darker(200));
+    highlightElement();
     setCursor(QCursor(Qt::ClosedHandCursor));
+
+    QGraphicsItem::mousePressEvent(event);
 }
 
 void MotionBody::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
     m_elementModel->setColor(m_elementModel->getColor().lighter(200));
     setCursor(QCursor(Qt::OpenHandCursor));
+
+    QGraphicsItem::mouseReleaseEvent(event);
+}
+
+void MotionBody::highlightElement()
+{
+    m_elementModel->setColor(m_elementModel->getColor().darker(200));
+}
+
+void GV::MotionBody::unHighlightElement()
+{
+    m_elementModel->setColor(m_elementModel->DefaultColor);
 }

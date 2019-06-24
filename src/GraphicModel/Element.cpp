@@ -13,7 +13,7 @@ Element::Element(std::shared_ptr<DataModel::Element> elementDataModel):m_element
 
 Element::~Element()
 {
-    std::cout << "destroyed ";
+    
 }
 
 void Element::setColor(const QColor & color)
