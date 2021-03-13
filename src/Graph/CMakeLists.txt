@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(Graph)
 
+
+
 file(GLOB srcs "*.cpp" "*.h" "*.hpp")
 file(GLOB includes
 	"${CMAKE_SOURCE_DIR}/includes/${PROJECT_NAME}/*.h"
@@ -15,7 +17,11 @@ include_directories("${CMAKE_SOURCE_DIR}/bin")
 
 add_library(${PROJECT_NAME} ${srcs} ${includes})
 
+
+
 target_include_directories(${PROJECT_NAME} PUBLIC
 	${CMAKE_SOURCE_DIR}/includes/${PROJECT_NAME}/
 	${CMAKE_SOURCE_DIR}/includes/
 )
+
+set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
